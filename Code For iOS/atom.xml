@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Cain个人博客]]></title>
+  <link href="http://Cain.developer.io/atom.xml" rel="self"/>
+  <link href="http://Cain.developer.io/"/>
+  <updated>2016-08-22T14:17:20+08:00</updated>
+  <id>http://Cain.developer.io/</id>
+  <author>
+    <name><![CDATA[]]></name>
+    
+  </author>
+  <generator uri="http://www.coderforart.com/">CoderForArt</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：开发文档]]></title>
+    <link href="http://Cain.developer.io/14718465813935.html"/>
+    <updated>2016-08-22T14:16:21+08:00</updated>
+    <id>http://Cain.developer.io/14718465813935.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>之所以写这些文档, 除了分享自己的心得, 其实还有一个就是为了给自己写笔记, 记录自己研究过的东西, 一开始是非常的不习惯, 各种蛋疼, 不知道从哪里开始入手, 但后来慢慢的, 就着手了, 越写越顺, 姿势也长了, 感谢努力过的自己.</p>
+
+<p>最后:</p>
+
+<p>如果你有更好的建议或者对这些文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>DeveloperDocument</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+</blockquote>
+
+<p align="right">Cain(罗家辉)</p>
+
+<p align="right">zhebushimengfei@qq.com: 联系方式</p>
+
+<p align="right">350116542: 腾讯QQ</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">目录</h3>
+
+<ul>
+<li><a href="#%E4%BD%9C%E8%80%85%E6%84%9F%E8%A8%80">作者感言</a></li>
+<li><a href="#%E7%AE%80%E4%BB%8B">简介</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7">第三方工具</a>
+
+<ul>
+<li><a href="#%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8">《CocoaPods》安装以及使用</a></li>
+<li><a href="#%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B">界面调试工具《Reveal》</a></li>
+</ul></li>
+<li><a href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F">设计模式</a>
+
+<ul>
+<li><a href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F">单例模式</a></li>
+<li><a href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F">代理模式</a></li>
+<li><a href="#%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F">工厂模式</a></li>
+</ul></li>
+<li><a href="#UI%E5%BA%93">UI库</a>
+
+<ul>
+<li><a href="#CALToolBarListView">CALToolBarListView</a></li>
+</ul></li>
+<li><a href="#%E5%8A%9F%E8%83%BD%E5%BA%93">功能库</a>
+
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8%E3%80%8AAVFoundation%E3%80%8B%E5%AE%9E%E7%8E%B0%E6%89%AB%E7%A0%81">使用《AVFoundation》实现扫码</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E3%80%8AUIActivity%E3%80%8B%E8%BF%9B%E8%A1%8C%E5%86%85%E5%AE%B9%E5%88%86%E4%BA%AB">使用自定义《UIActivity》进行内容分享</a></li>
+<li><a href="#iOS%208%E6%96%B0%E7%89%B9%E6%80%A7%E3%80%8AToday%20Extension%E3%80%8B">iOS 8新特性《Today Extension》</a></li>
+<li><a href="#iOS%208%E6%96%B0%E7%89%B9%E6%80%A7%E3%80%8AShare%20Extension%E3%80%8B">iOS 8新特性《Share Extension》</a></li>
+<li><a href="#%E6%89%93%E5%8C%85%E9%9D%99%E6%80%81%E5%BA%93">打包静态库</a></li>
+<li><a href="#%E8%84%9A%E6%9C%AC%E7%89%88%E6%9C%AC">脚本版本</a></li>
+<li><a href="#%E9%9D%9E%E8%84%9A%E6%9C%AC%E7%89%88%E6%9C%AC">非脚本版本</a></li>
+</ul></li>
+<li><a href="#%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE">开源项目</a>
+
+<ul>
+<li><a href="#MiLink%E7%9B%B4%E6%92%AD">MiLink直播</a></li>
+</ul></li>
+</ul>
+
+<hr/>
+
+<h1 id="toc_2"><p align="center">第三方工具</p></h1>
+
+<h3 id="toc_3">《CocoaPods》安装以及使用</h3>
+
+<p><a href="https://github.com/CainRun/DeveloperDocument/blob/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B.md">CocoaPods安装以及使用说明</a></p>
+
+<hr/>
+
+<h3 id="toc_4">界面调试工具《Reveal》</h3>
+
+<p><a href="https://github.com/CainRun/DeveloperDocument/blob/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B.md">界面调试工具《Reveal》说明</a></p>
+
+<hr/>
+
+<h1 id="toc_5"><p align="center">设计模式</p></h1>
+
+<h3 id="toc_6">单例模式</h3>
+
+<p><a href="https://github.com/CainRun/DesignPattern/blob/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8AiOS%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20%E2%80%94%20%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E3%80%8B.md">单例模式说明文档</a></p>
+
+<p><a href="https://github.com/CainRun/DesignPattern/tree/master/SingletonPattern/SingletonPattern%E5%B7%A5%E7%A8%8B%E6%96%87%E4%BB%B6">单例模式工程地址</a></p>
+
+<hr/>
+
+<h3 id="toc_7">代理模式</h3>
+
+<p><a href="https://github.com/CainRun/DesignPattern/blob/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8AiOS%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20%E2%80%94%20%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E3%80%8B.md">代理模式说明文档</a></p>
+
+<p><a href="https://github.com/CainRun/DesignPattern/tree/master/ProxyPattern/ProxyPattern%E5%B7%A5%E7%A8%8B%E6%96%87%E4%BB%B6">代理模式工程地址</a></p>
+
+<hr/>
+
+<h3 id="toc_8">工厂模式</h3>
+
+<p><a href="https://github.com/CainRun/DesignPattern/blob/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8AiOS%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20%E2%80%94%20%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E4%B8%8E%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E3%80%8B.md">工厂模式说明文档</a></p>
+
+<p><a href="https://github.com/CainRun/DesignPattern/tree/master/FactoryPattern/FactoryPattern%E5%B7%A5%E7%A8%8B">工厂模式工程地址</a></p>
+
+<hr/>
+
+<h1 id="toc_9"><p align="center">UI库</p></h1>
+
+<h3 id="toc_10">CALToolBarListView</h3>
+
+<p><a href="https://github.com/CainRun/CALToolBarView">CALToolBarListView工程文件</a></p>
+
+<p><a href="https://github.com/CainRun/CALToolBarView/blob/master/README.md">CALToolBarListView说明文档</a></p>
+
+<hr/>
+
+<h1 id="toc_11"><p align="center">功能库</p></h1>
+
+<h3 id="toc_12">使用《AVFoundation》实现扫码</h3>
+
+<p><a href="https://github.com/CainRun/CALScanQRCode">使用AVFoundation实现扫码工程</a></p>
+
+<p><a href="https://github.com/CainRun/CALScanQRCode/blob/master/README.md">使用AVFoundation实现扫码说明</a></p>
+
+<hr/>
+
+<h3 id="toc_13">使用自定义《UIActivity》进行内容分享</h3>
+
+<p><a href="https://github.com/CainRun/ActivityControllerDemo/tree/master/UIActivityViewControllerDemo">使用自定义《UIActivity》进行内容分享工程</a></p>
+
+<p><a href="https://github.com/CainRun/ActivityControllerDemo/blob/master/README.md">使用自定义《UIActivity》进行内容分享文档</a></p>
+
+<hr/>
+
+<h3 id="toc_14">iOS 8新特性《Today Extension》</h3>
+
+<p><a href="https://github.com/CainRun/TodayExtensionExample/tree/master/TodayExtension-Code">iOS 8新特性《Today Extension》非Storyboard工程</a></p>
+
+<p><a href="https://github.com/CainRun/TodayExtensionExample/tree/master/TodayExtension-Storyboard">iOS 8新特性《Today Extension》Storyboard工程</a></p>
+
+<p><a href="https://github.com/CainRun/TodayExtensionExample/blob/master/README.md">iOS 8新特性《Today Extension》说明</a></p>
+
+<hr/>
+
+<h3 id="toc_15">iOS 8新特性《Share Extension》</h3>
+
+<p><a href="https://github.com/CainRun/ShareExtensionDemo/tree/master/ShareExtension%E7%BA%AF%E6%96%87%E5%AD%97">iOS 8新特性《Share Extension》纯文本工程</a></p>
+
+<p><a href="https://github.com/CainRun/ShareExtensionDemo/tree/master/ShareExtension%E5%9B%BE%E7%89%87%2B%E6%96%87%E5%AD%97">iOS 8新特性《Share Extension》图片+文本工程</a></p>
+
+<p><a href="https://github.com/CainRun/ShareExtensionDemo/blob/master/README.md">iOS 8新特性《Share Extension》说明</a></p>
+
+<hr/>
+
+<h2 id="toc_16"><p align="center">打包静态库</p></h2>
+
+<h3 id="toc_17">脚本版本</h3>
+
+<p><a href="https://github.com/CainRun/CreateGeneralFramework/tree/master/AggregateFramework">Aggregate工程地址</a></p>
+
+<p><a href="https://github.com/CainRun/CreateGeneralFramework/blob/master/AggregateFramework/AggregateFramework%E8%AF%B4%E6%98%8E.md">Aggregate版本说明</a></p>
+
+<hr/>
+
+<h3 id="toc_18">非脚本版本</h3>
+
+<p><a href="https://github.com/CainRun/CreateGeneralFramework/tree/master/NotAggregateFramework">非Aggregate工程地址</a></p>
+
+<p><a href="https://github.com/CainRun/CreateGeneralFramework/blob/master/NotAggregateFramework/NotAggregateFramework%E8%AF%B4%E6%98%8E.md">非Aggregate版本说明</a></p>
+
+<hr/>
+
+<h1 id="toc_19"><p align="center">开源项目</p></h1>
+
+<h3 id="toc_20">MiLink直播</h3>
+
+<p><a href="https://github.com/CainRun/MiLink/tree/master/MiLink">MiLink直播工程文件</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：界面调试工具《Reveal》]]></title>
+    <link href="http://Cain.developer.io/14718465693146.html"/>
+    <updated>2016-08-22T14:16:09+08:00</updated>
+    <id>http://Cain.developer.io/14718465693146.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>这次的<strong><code>Reveal</code></strong>研究，让我发现调试UI再也不像会以前那么的困难, 更加不会那么的蛋疼, 不需要每次都在脑海里想象出那个画面, 自从使用了<strong><code>Reveal</code></strong>之后, 麻麻再也不用担心我调界面难过了~</p>
+
+<p>最后:<br/>
+如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>Reveal</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+</blockquote>
+
+<p align="right">Cain(罗家辉)</p>
+<p align="right">zhebushimengfei@qq.com: 联系方式</p>
+<p align="right">350116542: 腾讯QQ</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">目录</h3>
+
+<ul>
+<li><a href="#%E4%BD%9C%E8%80%85%E6%84%9F%E8%A8%80">作者感言</a></li>
+<li><a href="#%E7%96%91%E9%97%AE">疑问</a></li>
+<li><a href="#%E6%B7%BB%E5%8A%A0Debug%E5%91%BD%E4%BB%A4">添加Debug命令</a></li>
+<li><a href="#%E5%9C%A8Xcode%E4%B8%AD%E5%90%AF%E5%8A%A8Reveal">在Xcode中启动Reveal</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8BReveal%E6%95%88%E6%9E%9C">查看Reveal效果</a></li>
+<li><a href="#%E7%89%B9%E6%AE%8A%E6%95%99%E7%A8%8B(%E6%97%A0%E9%99%90%E8%AF%95%E7%94%A8)">特殊教程(无限试用)</a></li>
+<li><a href="#%E9%99%84%E4%BB%B6">附件</a></li>
+</ul>
+
+<hr/>
+
+<h3 id="toc_2">疑问</h3>
+
+<blockquote>
+<p>有童鞋可能会问, <strong><code>Xcode</code></strong>不是自带了有<a href="https://developer.apple.com/library/ios/recipes/xcode_help-debugger/using_view_debugger/using_view_debugger.html">Debug View Hierarchy in Xcode</a>么, 为啥还要用第三方的Reveal, 答案就是:<q>因为苹果所提供的<strong><code>Debug View Hierarchy in Xcode</code></strong>弱爆了, 只能看看, 啥都不能操作, 而且还容易造成<strong><code>Xcode</code></strong>的卡顿, 比如一些电脑比较低配的, 卡死, 然后<strong><code>Xcode</code></strong>就一闪而过, 直接就<strong><code>Crash</code></strong>了.</q></p>
+
+<p><a href="http://revealapp.com">Reveal</a>就不会出现这个问题, Reveal是一款图形调试工具, 支持iOS全设备的UI调试, 支持模拟器以及真机调试, 同时也支持实时UI效果的展示.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">添加Debug命令</h3>
+
+<blockquote>
+<p>打开<strong><code>Terminal</code></strong>, 输入命令</p>
+</blockquote>
+
+<pre><code class="language-vim">vim ~/.lldbinit 
+</code></pre>
+
+<p><img src="media/14718456835492/0.png" alt="0"/></p>
+
+<blockquote>
+<p>添加命令<br/>
+<code>vim<br/>
+command alias reveal_load_sim expr (void*)dlopen(&quot;/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib&quot;, 0x2);  <br/>
+command alias reveal_load_dev expr (void*)dlopen([(NSString*)[(NSBundle*)[NSBundle mainBundle] pathForResource:@&quot;libReveal&quot; ofType:@&quot;dylib&quot;] cStringUsingEncoding:0x4], 0x2);  <br/>
+command alias reveal_start expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStart&quot; object:nil];  <br/>
+command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStop&quot; object: nil nil]; <br/>
+</code></p>
+</blockquote>
+
+<p><img src="media/14718456835492/1.png" alt="1"/></p>
+
+<p>这里解释一下命令的意思</p>
+
+<blockquote>
+<p><strong><code>reveal_load_sim</code></strong> 为模拟器加载reveal调试用的动态链接库<br/>
+<strong><code>reveal_load_dev</code></strong> 为真机加载<br/>
+<strong><code>reveal_start</code></strong>       启动reveal调试功能<br/>
+<strong><code>reveal_stop</code></strong>         结束reveal调试功能</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_4">在Xcode中启动Reveal</h3>
+
+<blockquote>
+<p>首先打开<strong><code>Xcode</code></strong>的工程, 去到<strong><code>AppDelegate</code></strong></p>
+</blockquote>
+
+<p><img src="media/14718456835492/2.png" alt="2"/></p>
+
+<blockquote>
+<p>然后在<strong><code>application:didFinishLaunchingWithOptions</code></strong>方法中添加断点</p>
+</blockquote>
+
+<p><img src="media/14718456835492/3.png" alt="3"/></p>
+
+<blockquote>
+<p>编辑断点, 添加对应的代码<br/>
+<img src="media/14718456835492/4.png" alt="4"/></p>
+</blockquote>
+
+<p><img src="media/14718456835492/5.png" alt="5"/></p>
+
+<blockquote>
+<p>运行工程, 如果看到控制台里输出以下酱紫的一行字, 就代表设置成功了</p>
+</blockquote>
+
+<p><img src="media/14718456835492/6.png" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_5">查看Reveal效果</h3>
+
+<blockquote>
+<p>看完上面的操作步骤, 只要你设置的都是正确的, 那就可以打开<strong><code>Reveal</code></strong>查看效果了</p>
+</blockquote>
+
+<p><img src="media/14718456835492/7.png" alt="7"/></p>
+
+<blockquote>
+<p>如果你的模拟器切换了页面, <strong><code>Reveal</code></strong>是不会自动刷新的, 既然是酱紫, 那我们就需要做对应的操作</p>
+</blockquote>
+
+<p><img src="media/14718456835492/8.png" alt="8"/></p>
+
+<p><img src="media/14718456835492/9.png" alt="9"/></p>
+
+<p><img src="media/14718456835492/10.png" alt="10"/></p>
+
+<hr/>
+
+<h3 id="toc_6">特殊教程(无限试用)</h3>
+
+<blockquote>
+<p>打开你的<strong><code>Terminal</code></strong>, 然后输入以下命令</p>
+</blockquote>
+
+<p><img src="media/14718456835492/11.png" alt="11"/></p>
+
+<blockquote>
+<p>找到<strong><code>com.ittybittyapps.Reveal.plist</code></strong>文件删掉</p>
+
+<p>PS: 这个文件每次运行的时候<strong><code>Reveal</code></strong>都会创建一次, 每次都是从第一天开始, 每次<strong><code>Reveal</code></strong>还有几天的时候, 再删掉, 就会再次从第一天开始.</p>
+</blockquote>
+
+<p><img src="media/14718456835492/12.png" alt="12"/></p>
+
+<blockquote>
+<p><strong><font color=red>这里声明一点, 作者是希望大家都去购买正版, 而不是去寻找什么破解方法, 毕竟我们本身就是做软件的, 所以希望大家可以去支持支持正版.</font></strong></p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_7">附件</h3>
+
+<blockquote>
+<p>由于真机调试是需要修改<strong><code>Xcode</code></strong>工程配置, 不太适合团队协作, 所以这里我只提供了模拟器UI调试的方法, 如果有朋友需要真机调试, 这里有一个<a href="http://support.revealapp.com/kb/getting-started/integrating-reveal-add-reveal-to-your-xcode-project">官方教程</a>, 有兴趣的童鞋可以自行去查看</p>
+</blockquote>
+
+]]></content>
+  </entry>
+  
+</feed>
