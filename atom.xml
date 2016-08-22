@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-08-22T16:15:01+08:00</updated>
+  <updated>2016-08-22T16:35:16+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,361 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：iOS 8 新特性《Share Extension》]]></title>
+    <link href="http://Cain.developer.io/14718547536103.html"/>
+    <updated>2016-08-22T16:32:33+08:00</updated>
+    <id>http://Cain.developer.io/14718547536103.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>在前阵子我写了另外一篇文章也是关于iOS 8新特性的, 叫做<strong><a href="https://github.com/CainRun/TodayExtensionExample/blob/master/README.md">玩转iOS开发：iOS 8 新特性《Today Extension》</a></strong>, 这里面讲解就是iOS 8其中一个特性, 由于工作比较忙, 所以一直在拖着, 没有继续往下研究, 现在终于有时间抽出来可以研究一下</p>
+
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<code>Share Extension</code>, 祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p>什么是<strong><code>Share Extension</code></strong>? 在iOS 8的时候, 苹果开放了几个新特性, 其中一个就是<strong><code>Share Extension</code></strong>, 大家可以打开苹果自己自带的浏览器<strong><code>Safari</code></strong>, 随便选中一个网站, 点击分享, 就会出现一个分享界面, 中间的那条<strong><code>iCon</code></strong>栏目就是系统自带的<strong><code>Share Extension</code></strong>(如图所示), 说白了就是把<strong><code>Safari</code></strong>的网站地址分享出去罢了, 所以说<strong><code>Share Extension</code></strong>其实就是系统自带的社会化SDK罢了, 说那么多道理, 还不如直接上代码~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/1.jpg" alt="1 | center | 480x0"/></p>
+
+<hr/>
+
+<h3 id="toc_2">创建新工程</h3>
+
+<blockquote>
+<p>首先我们需要先创建一个新的工程, 由于<strong><code>Share Extension</code></strong>不是一个独立的应用, 它是需要依赖于主程序, 创建新工程的顺序我就省略了, 这里的新工程叫做<strong><code>ShareExtensionDemo</code></strong>.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/2.png" alt="2 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_3">创建Share Extension</h3>
+
+<blockquote>
+<p>创建完新工程之后, 我们现在来创建<strong><code>Share Extension</code></strong>和<strong><code>Today Extension</code></strong>一样, 系统是有自带的模板给我们自己选择</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/3.png" alt="3 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/4.png" alt="4 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/5.png" alt="5 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/6.png" alt="6 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_4">配置主应用</h3>
+
+<blockquote>
+<p>现在新工程和<strong><code>Share Extension</code></strong>已经创建完成, 现在我们可以在主应用当中调起<strong><code>Share Extension</code></strong>来看看效果, 这里我为了方便, 所以使用的是<strong><code>StoryBoard</code></strong>.</p>
+
+<p>拖一个<strong><code>UIButton</code></strong>到<strong><code>StoryBoard</code></strong>, 改名为<strong><code>Share</code></strong>, 然后关联<strong><code>Action</code></strong>事件到<strong><code>ViewController</code></strong>, 添加对应的代码.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/7.png" alt="7 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/8.png" alt="8 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/9.png" alt="9 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/10.png" alt="10 | center | 1080x0"/></p>
+
+<pre><code class="language-objectivec">- (IBAction)ShareAction:(UIButton *)sender {
+    
+    NSString *string = @&quot;您好&quot;;
+    
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:@[string]
+                                                                                     applicationActivities:nil];
+    
+    [self presentViewController:activityController
+                       animated:YES
+                     completion:nil];
+}
+</code></pre>
+
+<blockquote>
+<p>现在让我们来看看对应的效果吧~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/11.png" alt="11 | center | 480x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/12.png" alt="12 | center | 480x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/13.png" alt="13 | center | 480x0"/></p>
+
+<blockquote>
+<p>现在我们看到了<strong><code>Share Extension</code></strong>展示出来的效果, 但酱紫还是不够的, 继续继续~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_5">配置Share Extension</h3>
+
+<blockquote>
+<p>在配置<strong><code>Share Extension</code></strong>之前, 我们需要看看里面的几个方法, 不然我们完全都是蒙圈的</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/14.png" alt="14 | center | 1080x0"/></p>
+
+<pre><code class="language-objectivec">// 如果是return No, 那么发送按钮就无法点击, 如果return YES, 那么发送按钮就可以点击
+- (BOOL)isContentValid {
+    // Do validation of contentText and/or NSExtensionContext attachments here
+    return YES;
+}
+</code></pre>
+
+<pre><code class="language-objectivec">// 发送按钮的Action事件
+- (void)didSelectPost {
+    // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
+    
+    // Inform the host that we&#39;re done, so it un-blocks its UI. Note: Alternatively you could call super&#39;s -didSelectPost, which will similarly complete the extension context.
+    [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
+}
+</code></pre>
+
+<pre><code class="language-objectivec">// 这个方法是用来返回items的一个方法, 而且返回值是数组
+- (NSArray *)configurationItems {
+    // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
+    return @[];
+}
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_6">配置NSExtension</h3>
+
+<blockquote>
+<p>我们知道了上面那几个方法之后, 现在来配置一下我们可传送的内容规则, 这些规则分别是</p>
+</blockquote>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">iOS扩展插件支持媒体类型配置键</th>
+<th style="text-align: center">描述</th>
+<th style="text-align: center">说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">NSExtensionActivationSupportsAttachmentsWithMaxCount</td>
+<td style="text-align: center">附件最多限制: 20</td>
+<td style="text-align: center">附件包括下面的File、Image和Movie三大类，单一、混选总量不超过20</td>
+</tr>
+<tr>
+<td style="text-align: center">NSExtensionActivationSupportsAttachmentsWithMinCount</td>
+<td style="text-align: center">附件最多限制: 上面非零时default=1</td>
+<td style="text-align: center">默认至少选择1个附件，[Share Extension]中才显示扩展插件图标</td>
+</tr>
+<tr>
+<td style="text-align: center">NSExtensionActivationSupportsWebURLWithMaxCount</td>
+<td style="text-align: center">Web链接最多限制: default=0</td>
+<td style="text-align: center">默认不支持分享超链接，例如[Safari]</td>
+</tr>
+<tr>
+<td style="text-align: center">NSExtensionActivationSupportsFileWithMaxCount</td>
+<td style="text-align: center">文件最多限制: 20</td>
+<td style="text-align: center">单一、多选均不超过20</td>
+</tr>
+<tr>
+<td style="text-align: center">NSExtensionActivationSupportsWebPageWithMaxCount</td>
+<td style="text-align: center">Web页面最多限制: default=0</td>
+<td style="text-align: center">默认不支持Web页面分享，例如[Safari]</td>
+</tr>
+<tr>
+<td style="text-align: center">NSExtensionActivationSupportsImageWithMaxCount</td>
+<td style="text-align: center">图片最多限制: 20</td>
+<td style="text-align: center">单一、多选均不超过20</td>
+</tr>
+<tr>
+<td style="text-align: center">NSExtensionActivationSupportsVideoWithMaxCount</td>
+<td style="text-align: center">视频最多限制: 20</td>
+<td style="text-align: center">单一、多选均不超过20</td>
+</tr>
+<tr>
+<td style="text-align: center">NSExtensionActivationSupportsText</td>
+<td style="text-align: center">文本类型: default=0</td>
+<td style="text-align: center">默认不支持文本分享，例如[备忘录]</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>其实这个表格在<strong><a href="https://developer.apple.com/library/ios/documentation/Miscellaneous/Reference/UTIRef/Articles/System-DeclaredUniformTypeIdentifiers.html">官网文档</a></strong>都是可以找到的~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/15.png" alt="15 | center | 1080x0"/></p>
+
+<hr/>
+
+<h1 id="toc_7"><center>Share Extension逻辑</center></h1>
+
+<h3 id="toc_8">填写限制字数长度的逻辑</h3>
+
+<blockquote>
+<p>首先我们来填写一个东东, 就是限制<strong><code>Share Extension</code></strong>的可输入字数长度, 然后添加一个分享路径</p>
+
+<p>这里特别需要强调一点哈, 因为<strong><a href="http://requestb.in/1hx20w61">http://requestb.in/1hx20w61</a></strong>这个链接是需要自己去手动申请的, 而且是居然时效性的, 如果失效了, 那就自己去<strong><a href="http://requestb.in">http://requestb.in</a></strong>再申请一个就好了.</p>
+</blockquote>
+
+<pre><code class="language-objectivec">// 限制字数, 最多只能输入40个
+static NSInteger const maxCharactersAllowed = 40;
+// 这是一个测试连接, 并不是固定的, 你可以去http://requestb.in申请, 然后替换到你最新申请的连接即可
+static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
+</code></pre>
+
+<blockquote>
+<p>声明完了字数长度, 我们需要去<strong><code>- (BOOL)isContentValid</code></strong>方法中实现</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (BOOL)isContentValid {
+    
+    NSInteger length = self.contentText.length;
+    
+    self.charactersRemaining = @(maxCharactersAllowed - length);
+    
+    return self.charactersRemaining.integerValue &lt; 0 ? NO : YES;
+}
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_9">填写上传信息的逻辑</h3>
+
+<blockquote>
+<p>在这里我用原生的网络请求进行请求发送, 大家也可以去使用<strong><a href="https://github.com/AFNetworking/AFNetworking">AFNetWorking</a></strong>, Swift的话可以去使用另外一个网络请求框架<strong><a href="https://github.com/Alamofire/Alamofire">Alamofire</a></strong>, 作者都是同一个大神</p>
+
+<p>在写逻辑之前, 我们需要打开App的一个Group功能, 并且填写对应的参数, 不然没法传送数据.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/16.png" alt="16 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/17.png" alt="17 | center | 1080x0"/></p>
+
+<blockquote>
+<p>同样的, <strong><code>Share Extension</code></strong>也需要同样的操作, 这里就不做重复的操作了, 现在我们继续来填写对应的网络操作逻辑</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/18.png" alt="18 | center | 1080x0"/></p>
+
+<blockquote>
+<p>首先, 我们需要封装一个返回<strong><code>NSURLRequest</code></strong>的方法</p>
+</blockquote>
+
+<pre><code class="language-objectivec">/**
+ *  返回一个NSURLRequest方法, 需要传入一个NSString对象
+ *
+ *  @param string 需要发送出去的字符串
+ *
+ *  @return NSURLRequest
+ */
+- (NSURLRequest *)urlRequestWithString:(NSString *)string {
+    
+    NSURL *url = [NSURL URLWithString:uploadURL];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    
+    [request addValue:@&quot;application/json&quot; forHTTPHeaderField:@&quot;Content-Type&quot;];
+    [request addValue:@&quot;application/json&quot; forHTTPHeaderField:@&quot;Accept&quot;];
+    
+    request.HTTPMethod = @&quot;POST&quot;;
+    
+    NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
+    
+    jsonObject[@&quot;text&quot;] = string;
+    
+    NSError *jsonError;
+    NSData *jsonData;
+    
+    jsonData = [NSJSONSerialization dataWithJSONObject:jsonObject options:NSJSONWritingPrettyPrinted error:&amp;jsonError];
+    
+    if (jsonData) {
+        
+        request.HTTPBody = jsonData;
+    } else {
+        
+        NSLog(@&quot;JSON Error: %@&quot;, jsonError.localizedDescription);
+    }
+    
+    return request;
+}
+</code></pre>
+
+<blockquote>
+<p>然后在<strong><code>- (void)didSelectPost</code></strong>点击事件中去调用</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)didSelectPost {
+
+    NSString *configName = @&quot;com.shareExtension.ShareExtensionDemo.BackgroundSessionConfig&quot;;
+
+    NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:configName];
+    
+    sessionConfig.sharedContainerIdentifier = @&quot;group.ShareExtension&quot;;
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
+    
+    NSURLRequest *urlRequest = [self urlRequestWithString:self.contentText];
+    
+    NSURLSessionTask *task = [session dataTaskWithRequest:urlRequest];
+    
+    [task resume];
+    
+    [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];
+}
+</code></pre>
+
+<blockquote>
+<p>这样子就完事了, 由于我这里不知道为啥用模拟器一直没法进行网络请求, 只能用真机测试了, 不知道是不是我配置的问题, 如果有知道的大神麻烦请告知一声, 谢谢啦~~现在我们再来重复一下刚开始的操作, 发送请求到指定的<strong><code>URL</code></strong>里去.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/19.png" alt="19 | center | 480x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ShareExtensionDemo/master/images-folder/20.png" alt="20 | center | 1080x0"/></p>
+
+<blockquote>
+<p>酱紫我们就搞定了<strong><code>Share Extension</code></strong>, 灰常的简单</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_10">自定义UI</h3>
+
+<blockquote>
+<p>这里补充一点, 其实<strong><code>Share Extension</code></strong>说白了就是一个<strong><code>UIViewController</code></strong>, 所以你可以根据你的喜好来进行UI定制, 详细资料大家可以去苹果官网或者<strong><code>Google</code></strong>搜搜, 百度的话, 你们懂得</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_11">补充篇文章</h3>
+
+<blockquote>
+<p>这里再补充篇文章, 关于Share Extension的, 是用Swift写的, 里面有一些问题, 会导致<strong><code>NSURLRequest</code></strong>返回为<strong><code>nil</code></strong>, 大家单步调试一下就知道为什么了</p>
+</blockquote>
+
+<p><a href="http://letsswift.com/2014/09/ios8-day-by-day-day2/">iOS8 Day-by-Day– Day2 — 分享应用扩展</a></p>
+
+<hr/>
+
+<h3 id="toc_12">GitHub地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/ShareExtensionDemo">https://github.com/CainRun/ShareExtensionDemo</a></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS：iOS 8 新特性《Today Extension》]]></title>
