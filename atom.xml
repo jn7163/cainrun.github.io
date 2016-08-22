@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-08-22T15:41:33+08:00</updated>
+  <updated>2016-08-22T16:15:01+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -510,8 +510,6 @@
 <h3 id="toc_14">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
-
-<p><img src="https://github.com/CainRun/DesignPattern/blob/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/FactoryPatternUML.jpg" alt="工厂模式"/></p>
 
 ]]></content>
   </entry>
