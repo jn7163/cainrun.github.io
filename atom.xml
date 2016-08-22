@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-08-22T17:10:02+08:00</updated>
+  <updated>2016-08-22T17:19:13+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -369,7 +369,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[玩转iOS：iOS 8 新特性《Today Extension》]]></title>
+    <title type="html"><![CDATA[玩转iOS开发：iOS 8 新特性《Today Extension》]]></title>
     <link href="http://Cain.developer.io/14718509058148.html"/>
     <updated>2016-08-22T15:28:25+08:00</updated>
     <id>http://Cain.developer.io/14718509058148.html</id>
@@ -657,7 +657,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 
 <h3 id="toc_10">补上几篇文章</h3>
 
-<p><a href="http://www.jianshu.com/p/ab268a1ae000">iOS8Extension之Today插件</a></p>
+<p><a href="http://www.jianshu.com/p/ab268a1ae000">iOS 8 Extension之Today插件</a></p>
 
 <p><a href="https://onevcat.com/2014/08/notification-today-widget/">WWDC 2014 Session笔记 - iOS 通知中心扩展制作入门</a></p>
 
