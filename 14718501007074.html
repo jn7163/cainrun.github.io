@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	设计模式 - Cain For iOS
+  	玩转iOS开发：《iOS设计模式 — 代理模式》 - Cain For iOS
   	
 	</title>
 
@@ -123,24 +123,10 @@
 		</div>	
 		<div class="mid-col">
 			<div class="mid-col-container"> <div id="content" class="inner">
-<div itemscope itemtype="http://schema.org/Blog">
 
-
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2016-08-22T15:15:00+08:00" itemprop="datePublished">2016/8/22</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14718501007074.html" itemprop="url">
-		玩转iOS开发：《iOS设计模式 — 代理模式》</a></h1>
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：《iOS设计模式 — 代理模式》</h1>
 		<div class="entry-content" itemprop="articleBody">
-			
 			<h3 id="toc_0">作者感言</h3>
 
 <blockquote>
@@ -152,64 +138,187 @@
 如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>代理模式</code></strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
 </blockquote>
 
+<span id="more"></span><!-- more -->
 
+<hr/>
 
-			 
-			<a href="14718501007074.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
+<h3 id="toc_1">简介</h3>
 
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2016-08-22T14:58:53+08:00" itemprop="datePublished">2016/8/22</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14718491333111.html" itemprop="url">
-		玩转iOS开发：《iOS设计模式 — 单例模式》</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">作者感言</h3>
+<p><img src="media/14718501007074/ProxyPatternUML.png" alt="ProxyPatternUM"/></p>
 
 <blockquote>
-<p>有一段时间没有发简书了, 刚好现在忙完项目的需求, 现在可以闲下来写写简书, 顺便自己给自己复习巩固一下知识, 不过我在这里又要吐槽一句, 项目中遇到了一个单例的问题, 让我感到非常的蛋疼, 写这个单例的人只是单纯了为了写单例而写单例, 没有想到会发生什么, 现在让我们一起来看看什么叫单例吧.</p>
+<p>这是一张<strong><code>代理模式</code></strong>的UML图, 同样也很简单的讲解了<strong><code>代理模式</code></strong>到底是怎么回事</p>
 
-<p>最后:<br/>
-如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>单例模式</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+<p>顺序如下: <br/>
+- 1.<strong><code>Client(客户)</code></strong>向<strong><code>Subject(代理店)</code></strong>发起购买汽车的请求<br/>
+- 2.<strong><code>Subject(代理店)</code></strong>会向<strong><code>Proxy(生产商)</code></strong>进行提单<br/>
+- 3.<strong><code>Proxy(生产商)</code></strong>按照提单进行交货给<strong><code>Subject(代理店)</code></strong><br/>
+- 4.<strong><code>Subject(代理点)</code></strong>再交付给<strong><code>Client(客户)</code></strong>, </p>
 </blockquote>
 
+<hr/>
 
+<h3 id="toc_2">创建工程</h3>
 
-			 
-			<a href="14718491333111.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
+<blockquote>
+<p>打开我们自己创建的<strong><code>DesignPatternWork</code></strong>文件夹, 里面有我们之前所创建的<strong><code>DesignPatternWorkSpace</code></strong></p>
+</blockquote>
+
+<p><img src="media/14718501007074/1.png" alt="1"/></p>
+
+<blockquote>
+<p>添加我们所要创建的新工程, 命名为<strong><code>ProxyPattern</code></strong></p>
+</blockquote>
+
+<p><img src="media/14718501007074/2.png" alt="2"/></p>
+
+<p><img src="media/14718501007074/3.png" alt="3"/></p>
+
+<hr/>
+
+<h2 id="toc_3"><center>创建代理类</center></h2>
+
+<h3 id="toc_4">声明代理类</h3>
+
+<blockquote>
+<p>这里我们就拿奥迪这个汽车生产商来进行演示, 原谅我是个奥迪控~~</p>
+</blockquote>
+
+<p><img src="media/14718501007074/4.png" alt="4"/></p>
+
+<hr/>
+
+<h3 id="toc_5">声明代理方法</h3>
+
+<blockquote>
+<p>在这里声明两个代理方法, 但他们有所区别, 一个是必须实现, 一个是可选类型的, 由于方法名自注释, 我这里就不添加注释了.</p>
+</blockquote>
+
+<pre><code class="language-objectivec">@required
+- (void)audiManufacturer:(AudiManufacturer *)audiManufacturer
+           orderQuantity:(NSInteger)orderQuantity;
+</code></pre>
+
+<pre><code class="language-objectivec">@optional
+- (void)audiManufacturer:(AudiManufacturer *)audiManufacturer
+            audiDelegateInfo:(NSString *)audiDelegateInfo;
+</code></pre>
+
+<blockquote>
+<p>解释一下, 为什么我们需要在代理方法中提供代理类, 其实这个很好理解, 打个比方, 就拿奥迪来说吧, 一个品牌的车子, 肯定有不同的型号, 而每个型号不一定都是在同一家工厂里生产的, 这个时候我们就需要区分生产地, 所以我们为了提供外部去区分, 就需要在代理方法中提供代理类<strong><code>(个人理解, 不是官方语言哈)</code></strong>.</p>
+</blockquote>
+
+<p><img src="media/14718501007074/5.png" alt="5"/></p>
+
+<hr/>
+
+<h3 id="toc_6">内部实现代理方法</h3>
+
+<blockquote>
+<p>在内部实现两个对方开放的方法</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)buyCarCount:(NSInteger)count;
+- (void)buyCarModel:(NSString *)model;
+</code></pre>
+
+<p><img src="media/14718501007074/6.png" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_7">外部调用代理</h3>
+
+<blockquote>
+<p>代理类以及代理方法我们已经完成了, 接下来我们就要在外部去实现了</p>
+</blockquote>
+
+<p><img src="media/14718501007074/7.png" alt="7"/></p>
+
+<p><img src="media/14718501007074/8.png" alt="8"/></p>
+
+<hr/>
+
+<h2 id="toc_8"><center>代理与协议的区别</center></h2>
+
+<h3 id="toc_9">代理与协议</h3>
+
+<blockquote>
+<p>到这里, 我们已经完成了整个代理模式的所有要求了, 但还有一些小细节需要提提.</p>
+
+<p><strong><code>代理职能:</code></strong>降低对象与对象之间的耦合度<br/>
+ <strong><code>协议职能:</code></strong>主要是用来约束对象或筛选对象<br/>
+ <strong><code>代理与协议的相似:</code></strong>代理与协议都是使用<strong><code>@protocol</code></strong>来进行声明, 并且提供方法的一种模式, 看起来没啥不一样.<br/>
+ <strong><code>代理与协议的不同:</code></strong>其实就如同它们的职能所说, <strong><code>代理</code></strong>是为了降低对象与对象之间的耦合度, <strong><code>协议</code></strong>是用来约束对象或筛选对象</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_10">创建协议</h3>
+
+<blockquote>
+<p>这里我们用代码演示一下吧, 这样子更加的简单明了, 不过这里要注意一下, <strong><code>Protocol</code></strong>是没有<strong><code>.m</code></strong>文件的</p>
+</blockquote>
+
+<p><img src="media/14718501007074/9.png" alt="9"/></p>
+
+<hr/>
+
+<h3 id="toc_11">创建顾客类</h3>
+
+<blockquote>
+<p>创建完协议就要创建顾客了, 并且这个顾客类是必须遵守我们创建的<strong><code>Protocol</code></strong>, 然后在这个<strong><code>Protocol</code></strong>里加个判断.</p>
+</blockquote>
+
+<p><img src="media/14718501007074/10.png" alt="10"/></p>
+
+<p><img src="media/14718501007074/11.png" alt="11"/></p>
+
+<blockquote>
+<p>现在我们来初始化一下这个顾客类, 并且校验一下我们所写的<strong><code>Protocol</code></strong>是否生效.</p>
+</blockquote>
+
+<p><img src="media/14718501007074/12.png" alt="12"/></p>
+
+<blockquote>
+<p>先输入<strong><code>10000</code></strong></p>
+</blockquote>
+
+<p><img src="media/14718501007074/13.png" alt="13"/></p>
+
+<blockquote>
+<p>再输入<strong><code>1000000</code></strong></p>
+</blockquote>
+
+<p><img src="media/14718501007074/14.png" alt="14"/></p>
+
+<hr/>
+
+<h3 id="toc_12">补充一点</h3>
+
+<blockquote>
+<p>其实在iOS中, 就有一个类叫做<strong><code>NSProxy</code></strong>, 它也可以用来实现<strong><code>代理模式</code></strong>, 但在这里先不做介绍, 后面有时间再另外写一篇文章去讲解怎么用<strong><code>NSProxy</code></strong>去实现代理模式, 如果有好奇心特别重的朋友, 也可以自行去翻查一下资料~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_13">最后总结</h3>
+
+<blockquote>
+<p>经过上面的演示, 就知道<strong><code>代理模式</code></strong>并没有想象中那么复杂, 说白了, 所谓的<strong><code>代理模式</code></strong>就是为了降低对象与对象之间的耦合度, 为了方便维护罢了, 同时我们也知道了<strong><code>代理</code></strong>与<strong><code>协议</code></strong>之间的区别, 这篇文章就到了, 谢谢大家的观看~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_14">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
+
 		</div>
-
 	</article>
-  
-
-</div>
-<nav id="pagenavi">
-	 
+	<div class="share-comment">
 	
-	<div class="center"><a href="archives.html">Blog Archives</a></div>
-
-</nav>
-
-</div>
-
-
-
-        </div>
+	</div>
+</div>        </div>
 			<footer id="footer" class="inner">Copyright &copy; 2014
 Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
 Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
