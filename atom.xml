@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Cain个人博客]]></title>
+  <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-08-22T15:01:39+08:00</updated>
+  <updated>2016-08-22T15:11:16+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -27,12 +27,6 @@
 <p>最后:<br/>
 如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>单例模式</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
 </blockquote>
-
-<p align="right">Cain(罗家辉)</p>
-
-<p align="right">zhebushimengfei@qq.com: 联系方式</p>
-
-<p align="right">350116542: 腾讯QQ</p>
 
 <span id="more"></span><!-- more -->
 
@@ -181,10 +175,6 @@
 <p>最后:<br/>
 如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>CocoaPods</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
 </blockquote>
-
-<p align="right">Cain(罗家辉)</p>
-<p align="right">zhebushimengfei@qq.com: 联系方式</p>
-<p align="right">350116542: 腾讯QQ</p>
 
 <span id="more"></span><!-- more -->
 
@@ -439,10 +429,6 @@ pod --version<br/>
 <p>最后:<br/>
 如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>Reveal</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
 </blockquote>
-
-<p align="right">Cain(罗家辉)</p>
-<p align="right">zhebushimengfei@qq.com: 联系方式</p>
-<p align="right">350116542: 腾讯QQ</p>
 
 <span id="more"></span><!-- more -->
 
