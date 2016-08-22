@@ -1,0 +1,299 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	玩转iOS开发：《iOS设计模式 — 工厂模式》 - Cain For iOS
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Cain For iOS" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+					<div class="profilepic">
+						<img src="asset/icon.jpg" style="width:160px;">
+					</div>
+					<h1><a href="index.html">Cain For iOS</a></h1>
+					<p class="subtitle">如果您有更好的建议或者其他不明白的地方, 可以联系我QQ: 350116542</p>
+					<nav id="main-nav">
+						<ul class="main">
+							<li><a href="index.html">Home</a></li>
+						    <!-- <li><a href="all.html">Blog</a></li>-->	
+						    <li><a href="archives.html">Archives</a></li>
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+<!-- 
+			<a class="email" href="mailto:" title="Email">Email</a>
+			<a class="facebook" href="http://www.facebook.com/" title="Facebook">Facebook</a>
+			<a class="google" href="https://plus.google.com/" rel="author" title="Google+">Google+</a>
+			<a class="twitter" href="http://twitter.com/" title="Twitter">Twitter</a>
+			<a class="github" href="https://github.com/" title="GitHub">GitHub</a>
+			<a class="coderwall" href="https://coderwall.com/" title="Coderwall">Coderwall</a>
+		    <a class="stackoverflow" href="http://stackoverflow.com/users/" title="StackOverflow"></a>
+			<a class="linkedin" href="http://www.linkedin.com/in/" title="LinkedIn">LinkedIn</a>
+			<a class="pinterest" href="https://pinterest.com/" title="Pinterest">Pinterest</a>
+			<a class="delicious" href="http://delicious.com/" title="Delicious">Delicious</a>
+			<a class="pinboard" href="https://pinboard.in/u:" title="Pinboard">Pinboard</a>
+			<a class="douban" href="https://www.douban.com/people/" title="Douban">Douban</a>
+			<a class="quora" href="https://quora.com/" title="Quora">Quora</a>
+			<a class="instagram" href="https://instagram.com/" title="Instagram">Instagram</a>
+			<a class="behance" href="https://www.behance.net/" title="Behance">Behance</a>
+			<a class="facebook" href="http://www.facebook.com/" title="Facebook">Facebook</a>
+								<a class="twitter" href="http://twitter.com/" title="Twitter">Twitter</a>
+								<a class="github" href="https://github.com/" title="GitHub">GitHub</a>
+-->	
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：《iOS设计模式 — 工厂模式》</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>刚忙完就给我来一场大病, 多么痛的领悟, 好不容易好点了, 可以整理整理知识点了~</p>
+
+<p>最后:<br/>
+如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>工厂模式</code></strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/FactoryPatternUML.jpg" alt="UML"/></p>
+
+<blockquote>
+<p>所谓<strong><code>工厂模式</code></strong>其实显示中的工厂没啥区别, 客户下单, 工厂负责做出产品出来交货, 这样子就没了, 至于工厂里面做了什么东西, 怎么实现, 我们完全不用关注, 只要知道工厂能按时交货就可以了.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">简单工厂与抽象工厂</h3>
+
+<blockquote>
+<p>在工厂模式当中, 又有两种不同的工厂模式, 分别是<strong><code>简单工厂</code></strong>与<strong><code>抽象工厂</code></strong>, 他们之前的区别也很简单, 无非就是一个是<strong><code>实例</code></strong>一个<strong><code>抽象</code></strong>, 这么说好像不太明确, 下面我们来建个工程, 看看<strong><code>简单工厂</code></strong>和<strong><code>抽象工厂</code></strong>两者之间到底有啥不一样~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">简单工厂</h3>
+
+<blockquote>
+<p>首先我们把之前的那个<strong><code>WorkSpace</code></strong>打开, 新建一个<strong><code>FactoryPattern</code></strong>工程, 然后我们再来新建一个工厂类, 这次我们就拿一个汽车工厂作为例子~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/1.png" alt="1"/></p>
+
+<blockquote>
+<p>接下来我们创建一个汽车的基类<strong><code>BaseCar</code></strong>, 还有一个协议, 这个协议是用来限制<strong><code>BaseCar</code></strong>或者<strong><code>BaseCar</code></strong>的子类实现一些必须实现的方法, 我这里只是做演示, 所以<strong><code>BaseCar</code></strong>类里面空实现就好了, 其他的交给子类去实现.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/2.png" alt="2"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/3.png" alt="3"/></p>
+
+<blockquote>
+<p>汽车的基类我们已经有了, 现在我们来建立一个汽车工厂类, 就拿全球最大的汽车厂商通用来做例子, 在这里我们会拿通用汽车的几个旗下品牌来做例子, 且都继承与<strong><code>BaseCar</code></strong>, 然后给他们对应做一些差异化的操作就OK了~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/4.png" alt="4"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/5.png" alt="5"/></p>
+
+<blockquote>
+<p>现在我们来实现<strong><code>Protocol</code></strong>里的方法再加一些差异化, 酱紫我们就知道到时候初始化出来的汽车是哪辆了~~<br/>
+我们先拿<strong><code>Buick</code></strong>来做例子, 添加一个差异化方法, 然后再看看我们利用工厂模式初始化出来的对象是不是<strong><code>Buick</code></strong>.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/6.png" alt="6"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/7.png" alt="7"/></p>
+
+<blockquote>
+<p>其他的几个品牌车子也是同理进行就可以了, 这里就不做演示了, 代码当中我会填上去, 到时候大家去下载源码下来看看就哦了~~</p>
+
+<p><strong><code>简单工厂</code></strong>到这里就基本上搞定了, 下面就让我们来看看什么是<strong><code>抽象工厂</code></strong>.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_4">抽象工厂</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/AbstractFactoryUML.jpg" alt="AbstractFactoryUML"/></p>
+
+<blockquote>
+<p>其实所谓的<strong><code>抽象工厂</code></strong>与<strong><code>简单工厂</code></strong>最大的却别, 就是把工厂类做成一个抽象的对象, 比<strong><code>简单工厂</code></strong>多了一层抽象层, 然后使用一个管理者去管理这些对应的厂商, 用户可以根据自己的需求, 向不同的厂商拿货, 这就像是超市似得, 一个类别的商品有好几个或者是十几个不同的厂商在供货, 可以让消费者, 根据自己的消费水平或者需求来选择不同厂商的产品, 下面让我们用代码说话~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_5">新建抽象工厂目录</h3>
+
+<blockquote>
+<p>在开始之前, 我们肯定要先规划好文件夹的目录, 以免与之前的<strong><code>简单工厂</code></strong>类搞混, 下面就是我们的文件夹结构.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/8.png" alt="8"/></p>
+
+<blockquote>
+<p>接下来我们就要去新建我们的<strong><code>BaseFactory</code></strong>以及<strong><code>BaseCar</code></strong>, 但是这里由于之前已经有<strong><code>BaseCar</code></strong>这个类了, 为了区别, 我们在新建的<strong><code>BaseCar</code></strong>前面加个前缀<strong><code>Ab</code></strong>, 酱紫就好了</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/9.png" alt="9"/></p>
+
+<blockquote>
+<p>声明且实现<strong><code>AbBaseFactory</code></strong>的一个方法.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/10.png" alt="10"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/11.png" alt="11"/></p>
+
+<blockquote>
+<p>新建完成之后, 我们就需要继续, 这次我们拿<strong><code>长安</code></strong>和<strong><code>广汽</code></strong>两个厂商做例子, 车型的话, 我就随便挑两个, 一个是<strong><code>凯美瑞</code></strong>, 一个是<strong><code>昂克赛拉</code></strong>(我是随便取的两辆车啊, 百度一搜就出来这两个货了, 要怪就怪百度去吧).</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/12.png" alt="12"/></p>
+
+<hr/>
+
+<h3 id="toc_6">完善对应的工厂</h3>
+
+<blockquote>
+<p>新建完这些类之后, 我们需要分别给对应的厂商添加对应的车型, <strong><code>长安-马自达</code></strong>, <strong><code>广汽-凯美瑞</code></strong></p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/13.png" alt="13"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/14.png" alt="14"/></p>
+
+<hr/>
+
+<h3 id="toc_7">工厂管理者</h3>
+
+<blockquote>
+<p>在完成了之前的工作之后, 现在我们来看看<strong><code>抽象工厂</code></strong>的核心, 工厂管理者(FactoryManager).</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/15.png" alt="15"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/16.png" alt="16"/></p>
+
+<blockquote>
+<p>酱紫, 我们就完成了<strong><code>抽象工厂</code></strong>的所有步骤了, 下面让我们来使用一下<strong><code>抽象工厂</code></strong>.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_8">使用抽象工厂</h3>
+
+<blockquote>
+<p>完成了所有步骤之后, 我们就来使用一下<strong><code>抽象工厂</code></strong>, 看看到底是不是我们所要的东西.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/17.png" alt="17"/></p>
+
+<blockquote>
+<p>嘿嘿, 到这里, 我们就完成了<strong><code>工厂模式</code></strong>的<strong><code>简单工厂</code></strong>和<strong><code>抽象工厂</code></strong>了, 非常的简单, 如果你们需要对应的文档和代码, 请到我的<strong><code>GitHub</code></strong>里, 地址就在下面</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_9">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"><div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"><div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>
