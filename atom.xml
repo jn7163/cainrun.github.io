@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-08-22T16:35:16+08:00</updated>
+  <updated>2016-08-22T17:10:02+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -401,19 +401,19 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>开始创建Today Extension</p>
 </blockquote>
 
-<p><img src="media/14718509058148/0.png" alt="0"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/0.png" alt="0"/></p>
 
 <blockquote>
 <p>选择<strong><code>Today Extension</code></strong></p>
 </blockquote>
 
-<p><img src="media/14718509058148/1.png" alt="1"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/1.png" alt="1"/></p>
 
 <blockquote>
 <p>激活<strong><code>Today Extension</code></strong></p>
 </blockquote>
 
-<p><img src="media/14718509058148/2.png" alt="2"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/2.png" alt="2"/></p>
 
 <hr/>
 
@@ -423,17 +423,15 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>在创建好<strong><code>Today Extension</code></strong>时，<strong><code>Xcode</code></strong>会自动创建一个对应的<strong><code>MainInterface.storyboard</code></strong>文件，并且与<strong><code>Today Extension</code></strong>的<strong><code>Controller</code></strong>关联，打开<strong><code>MainInterface.storyboard</code></strong>, 我们会看到有一个内容为<strong><code>Hello World</code></strong>的<strong><code>UILabel</code></strong>，废话少说现在我们来看看运行效果。</p>
 </blockquote>
 
-<p><img src="media/14718509058148/3.png" alt="3"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/3.png" alt="3"/></p>
 
 <blockquote>
 <p>选择你需要关联启动的App</p>
 </blockquote>
 
-<p><img src="media/14718509058148/4.png" alt="4"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/4.png" alt="4"/></p>
 
-<p><img src="media/14718509058148/4.png" alt="4"/></p>
-
-<p><img src="media/14718509058148/5.png" alt="5"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/5.png" alt="5"/></p>
 
 <blockquote>
 <p>不要怀疑，就是这么简单的，<strong><code>Today Extension</code></strong>就这么出来了。</p>
@@ -449,21 +447,21 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>首先是主程序里的</p>
 </blockquote>
 
-<p><img src="media/14718509058148/6.png" alt="6"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/6.png" alt="6"/></p>
 
-<p><img src="media/14718509058148/7.png" alt="7"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/7.png" alt="7"/></p>
 
-<p><img src="media/14718509058148/8.png" alt="8"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/8.png" alt="8"/></p>
 
 <blockquote>
 <p>再者呢，就是<strong><code>Today Extension</code></strong>里的</p>
 </blockquote>
 
-<p><img src="media/14718509058148/9.png" alt="9"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/9.png" alt="9"/></p>
 
-<p><img src="media/14718509058148/10.png" alt="10"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/10.png" alt="10"/></p>
 
-<p><img src="media/14718509058148/11.png" alt="11"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/11.png" alt="11"/></p>
 
 <blockquote>
 <p>做完这两个操作之后，我们会看到多出来的两个<strong><code>证书</code></strong>。</p>
@@ -471,7 +469,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>PS：<font color=red><strong>这个证书是收费的， 如果没有去申请，一个账号可以免费测试10个证书，主应用1个，Today Extension插件1个，也就是说一个应用需要两个。</strong></font></p>
 </blockquote>
 
-<p><img src="media/14718509058148/12.png" alt="12"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/12.png" alt="12"/></p>
 
 <hr/>
 
@@ -483,25 +481,25 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>找到<strong><code>TodayI Extension</code></strong>中的<strong><code>Info.plist</code></strong>文件，看到这小样就在这，先留着先</p>
 </blockquote>
 
-<p><img src="media/14718509058148/13.png" alt="13"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/13.png" alt="13"/></p>
 
 <blockquote>
 <p>手动添加<strong><code>NSExtensionPrincipalClass</code></strong>字段 并设为<strong><code>TodayViewController</code></strong>（这个<strong><code>Controller</code></strong>你可以自己指定，我这里为了方便，就直接拿<strong><code>Xcode</code></strong>生成的）</p>
 </blockquote>
 
-<p><img src="media/14718509058148/14.png" alt="14"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/14.png" alt="14"/></p>
 
 <blockquote>
 <p>现在我们可以把<strong><code>storyboard</code></strong>这小样给删掉了</p>
 </blockquote>
 
-<p><img src="media/14718509058148/15.png" alt="15"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/15.png" alt="15"/></p>
 
 <blockquote>
 <p>再运行，你就会看到整个<strong><code>Today Extension</code></strong>是空的了，只有一个空图标和一个标题。</p>
 </blockquote>
 
-<p><img src="media/14718509058148/16.png" alt="16"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/16.png" alt="16"/></p>
 
 <hr/>
 
@@ -625,29 +623,29 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p><font color=purple><strong>PS：这里的</strong><code>Identifier</code><strong>和</strong><code>URL Schemes</code><strong>是你自己定义的，不能与其他</strong><code>Application</code><strong>的</strong><code>Identifier</code><strong>、</strong><code>URL Schemes</code><strong>相同，否则会造成冲突。</strong></font></p>
 </blockquote>
 
-<p><img src="media/14718509058148/17.png" alt="17"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/17.png" alt="17"/></p>
 
-<p><img src="media/14718509058148/18.png" alt="18"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/18.png" alt="18"/></p>
 
 <blockquote>
 <p>然后呢，我们去到主应用的<strong><code>AppDelegate.m</code></strong>文件中添加方法</p>
 </blockquote>
 
-<p><img src="media/14718509058148/19.png" alt="19"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/19.png" alt="19"/></p>
 
 <blockquote>
 <p>最后，我们去到<strong><code>TodayViewController</code></strong>里补上对应的方法就好了</p>
 </blockquote>
 
-<p><img src="media/14718509058148/20.png" alt="20"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/20.png" alt="20"/></p>
 
-<p><img src="media/14718509058148/21.png" alt="21"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/21.png" alt="21"/></p>
 
 <hr/>
 
 <h3 id="toc_8">最终效果</h3>
 
-<p><img src="media/14718509058148/22.png" alt="22"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/22.png" alt="22"/></p>
 
 <hr/>
 
