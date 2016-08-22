@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	Archives - Cain个人博客
+  	玩转iOS开发：《iOS设计模式 — 单例模式》 - Cain个人博客
   	
 	</title>
 
@@ -123,71 +123,159 @@
 		</div>	
 		<div class="mid-col">
 			<div class="mid-col-container"> <div id="content" class="inner">
-	<div itemscope itemtype="http://schema.org/Blog">
-		<section class="archives">
 
-		
-			 
-			  	<h1 style="top: auto;" class="year">2016</h1>
-			
-			
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：《iOS设计模式 — 单例模式》</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">作者感言</h3>
 
-				<article itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-					<div class="meta">
-						<span class="date"><time datetime="2016-08-22T14:58:53+08:00" itemprop="datePublished">8月 22</time></span>
-						<br>
-						 
-						<span class="tags">posted in 
-						
-						    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
-						 
-						</span>
-					    
-					</div>
-					<h1 class="title" itemprop="name"><a href="14718491333111.html">
-					玩转iOS开发：《iOS设计模式 — 单例模式》</a></h1>
-				</article>
-	 	
-			
-			
+<blockquote>
+<p>有一段时间没有发简书了, 刚好现在忙完项目的需求, 现在可以闲下来写写简书, 顺便自己给自己复习巩固一下知识, 不过我在这里又要吐槽一句, 项目中遇到了一个单例的问题, 让我感到非常的蛋疼, 写这个单例的人只是单纯了为了写单例而写单例, 没有想到会发生什么, 现在让我们一起来看看什么叫单例吧.</p>
 
-				<article itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-					<div class="meta">
-						<span class="date"><time datetime="2016-08-22T14:52:59+08:00" itemprop="datePublished">8月 22</time></span>
-						<br>
-						 
-						<span class="tags">posted in 
-						
-						    <a class='category' href='%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7.html'>第三方工具</a>&nbsp;
-						 
-						</span>
-					    
-					</div>
-					<h1 class="title" itemprop="name"><a href="14718487794778.html">
-					玩转iOS开发：《CocoaPods》安装及使用教程</a></h1>
-				</article>
-	 	
-			
-			
+<p>最后:<br/>
+如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>单例模式</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+</blockquote>
 
-				<article itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-					<div class="meta">
-						<span class="date"><time datetime="2016-08-22T14:16:09+08:00" itemprop="datePublished">8月 22</time></span>
-						<br>
-						 
-						<span class="tags">posted in 
-						
-						    <a class='category' href='%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7.html'>第三方工具</a>&nbsp;
-						 
-						</span>
-					    
-					</div>
-					<h1 class="title" itemprop="name"><a href="14718465693146.html">
-					玩转iOS开发：界面调试工具《Reveal》</a></h1>
-				</article>
-	 	
+<p align="right">Cain(罗家辉)</p>
 
-	  </section>
+<p align="right">zhebushimengfei@qq.com: 联系方式</p>
+
+<p align="right">350116542: 腾讯QQ</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">目录</h3>
+
+<ul>
+<li><a href="#%E4%BD%9C%E8%80%85%E6%84%9F%E8%A8%80">作者感言</a></li>
+<li><a href="#%E7%AE%80%E4%BB%8B">简介</a></li>
+<li><a href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">准备工作</a></li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E5%8D%95%E4%BE%8B%E5%B7%A5%E7%A8%8B">添加单例工程</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BA%E5%8D%95%E4%BE%8B%E7%B1%BB">创建单例类</a></li>
+<li><a href="#%E5%B7%A5%E7%A8%8B%E5%9C%B0%E5%9D%80">工程地址</a></li>
+</ul>
+
+<hr/>
+
+<h3 id="toc_2">简介</h3>
+
+<p><img src="media/14718491333111/SingletonUML.jpg" alt="SingletonUM"/></p>
+
+<blockquote>
+<p>这是一张单例的<strong><code>UML</code></strong>图, 非常简单明了的讲解单例类到底是怎么回事, 通常单例是用来作为管理中心, 或者是通知中心, 比如在<strong><code>iOS</code></strong>当中的<strong><code>NSNotificationCenter</code></strong>, <strong><code>[[UIApplication sharedApplication] statusBarStyle]</code></strong>, <strong><code>NSUserDefaults</code></strong>, <strong><code>[NSFileManager defaultManager]</code></strong>等等都是单例, 单例类有几个特征.</p>
+
+<ul>
+<li>系统当中只有一个实例</li>
+<li>易于外界访问</li>
+<li>防止子类继承</li>
+<li>共享信息</li>
+</ul>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">准备工作</h3>
+
+<blockquote>
+<p>首先, 我们先来建一个<strong><code>WorkSpace</code></strong>, 这样子方便我们以后多添加工程, 因为单例模式只是我们的开始.</p>
+</blockquote>
+
+<p><img src="media/14718491333111/1.png" alt="1"/></p>
+
+<hr/>
+
+<h3 id="toc_4">添加单例工程</h3>
+
+<blockquote>
+<p>创建完<strong><code>WorkingSpace</code></strong>之后, 我们就来添加<strong><code>SingletonPattern(单例)</code></strong>的工程</p>
+</blockquote>
+
+<p><img src="media/14718491333111/2.png" alt="2"/></p>
+
+<p><img src="media/14718491333111/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_5">创建单例类</h3>
+
+<blockquote>
+<p>现在我们来创建一个叫<strong><code>UserInfoManager</code></strong>单例类</p>
+</blockquote>
+
+<p><img src="media/14718491333111/4.png" alt="4"/></p>
+
+<blockquote>
+<p>声明一个类方法用于外界访问 </p>
+</blockquote>
+
+<p><img src="media/14718491333111/5.png" alt="5"/></p>
+
+<blockquote>
+<p>接下来我们去实现这个类方法就好了</p>
+</blockquote>
+
+<p><img src="media/14718491333111/6.png" alt="6"/></p>
+
+<blockquote>
+<p>看起来, 我们好像搞定了整个单例模式了, 下面让我们来试试效果.</p>
+</blockquote>
+
+<p><img src="media/14718491333111/7.png" alt="7"/></p>
+
+<blockquote>
+<p>打印出来的效果好像是只有一个, 但实际上并不是的, 我们再来看看</p>
+</blockquote>
+
+<p><img src="media/14718491333111/8.png" alt="8"/></p>
+
+<blockquote>
+<p>发现这个类还是可以初始化的, 并且是另外开辟了内存空间来存储的, 这就很尴尬了, 说好的只有一个实例呢??? </p>
+
+<p>我在这里说一句, 施主莫怕, 等贫僧跳大, 继续回到单例类当中, 添加几个判断就好了</p>
+</blockquote>
+
+<p><img src="media/14718491333111/9.png" alt="9"/></p>
+
+<blockquote>
+<p>口说无凭, 我们来看看运行效果</p>
+</blockquote>
+
+<p><img src="media/14718491333111/10.png" alt="10"/></p>
+
+<blockquote>
+<p>这下子, 可以说明是只有一个实例了吧, 下面再来看看子类是否能继承</p>
+</blockquote>
+
+<p><img src="media/14718491333111/11.png" alt="11"/></p>
+
+<p><img src="media/14718491333111/12.png" alt="12"/></p>
+
+<hr/>
+
+<blockquote>
+<p>好了, 现在单例所需的</p>
+
+<ul>
+<li>易于外界访问</li>
+<li>系统当中只有一个实例</li>
+<li>防止子类继承</li>
+</ul>
+
+<p>我们都搞定, 酱紫我们就完成了一个单例类的创建啦</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_6">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	
 	</div>
 </div>        </div>
 			<footer id="footer" class="inner">Copyright &copy; 2014
