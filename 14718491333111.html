@@ -132,8 +132,8 @@
 <blockquote>
 <p>有一段时间没有发简书了, 刚好现在忙完项目的需求, 现在可以闲下来写写简书, 顺便自己给自己复习巩固一下知识, 不过我在这里又要吐槽一句, 项目中遇到了一个单例的问题, 让我感到非常的蛋疼, 写这个单例的人只是单纯了为了写单例而写单例, 没有想到会发生什么, 现在让我们一起来看看什么叫单例吧.</p>
 
-<p>最后:<br/>
-如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>单例模式</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>单例模式</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
 </blockquote>
 
 <span id="more"></span><!-- more -->
@@ -142,7 +142,7 @@
 
 <h3 id="toc_1">简介</h3>
 
-<p><img src="media/14718491333111/SingletonUML.jpg" alt="SingletonUM"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/SingletonUML.jpg" alt="SingletonUM"/></p>
 
 <blockquote>
 <p>这是一张单例的<strong><code>UML</code></strong>图, 非常简单明了的讲解单例类到底是怎么回事, 通常单例是用来作为管理中心, 或者是通知中心, 比如在<strong><code>iOS</code></strong>当中的<strong><code>NSNotificationCenter</code></strong>, <strong><code>[[UIApplication sharedApplication] statusBarStyle]</code></strong>, <strong><code>NSUserDefaults</code></strong>, <strong><code>[NSFileManager defaultManager]</code></strong>等等都是单例, 单例类有几个特征.</p>
@@ -163,7 +163,7 @@
 <p>首先, 我们先来建一个<strong><code>WorkSpace</code></strong>, 这样子方便我们以后多添加工程, 因为单例模式只是我们的开始.</p>
 </blockquote>
 
-<p><img src="media/14718491333111/1.png" alt="1"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/1.png" alt="1"/></p>
 
 <hr/>
 
@@ -173,9 +173,9 @@
 <p>创建完<strong><code>WorkingSpace</code></strong>之后, 我们就来添加<strong><code>SingletonPattern(单例)</code></strong>的工程</p>
 </blockquote>
 
-<p><img src="media/14718491333111/2.png" alt="2"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/2.png" alt="2"/></p>
 
-<p><img src="media/14718491333111/3.png" alt="3"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/3.png" alt="3"/></p>
 
 <hr/>
 
@@ -185,31 +185,31 @@
 <p>现在我们来创建一个叫<strong><code>UserInfoManager</code></strong>单例类</p>
 </blockquote>
 
-<p><img src="media/14718491333111/4.png" alt="4"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/4.png" alt="4"/></p>
 
 <blockquote>
 <p>声明一个类方法用于外界访问 </p>
 </blockquote>
 
-<p><img src="media/14718491333111/5.png" alt="5"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/5.png" alt="5"/></p>
 
 <blockquote>
 <p>接下来我们去实现这个类方法就好了</p>
 </blockquote>
 
-<p><img src="media/14718491333111/6.png" alt="6"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/6.png" alt="6"/></p>
 
 <blockquote>
 <p>看起来, 我们好像搞定了整个单例模式了, 下面让我们来试试效果.</p>
 </blockquote>
 
-<p><img src="media/14718491333111/7.png" alt="7"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/7.png" alt="7"/></p>
 
 <blockquote>
 <p>打印出来的效果好像是只有一个, 但实际上并不是的, 我们再来看看</p>
 </blockquote>
 
-<p><img src="media/14718491333111/8.png" alt="8"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/8.png" alt="8"/></p>
 
 <blockquote>
 <p>发现这个类还是可以初始化的, 并且是另外开辟了内存空间来存储的, 这就很尴尬了, 说好的只有一个实例呢??? </p>
@@ -217,21 +217,21 @@
 <p>我在这里说一句, 施主莫怕, 等贫僧跳大, 继续回到单例类当中, 添加几个判断就好了</p>
 </blockquote>
 
-<p><img src="media/14718491333111/9.png" alt="9"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/9.png" alt="9"/></p>
 
 <blockquote>
 <p>口说无凭, 我们来看看运行效果</p>
 </blockquote>
 
-<p><img src="media/14718491333111/10.png" alt="10"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/10.png" alt="10"/></p>
 
 <blockquote>
 <p>这下子, 可以说明是只有一个实例了吧, 下面再来看看子类是否能继承</p>
 </blockquote>
 
-<p><img src="media/14718491333111/11.png" alt="11"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/11.png" alt="11"/></p>
 
-<p><img src="media/14718491333111/12.png" alt="12"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/12.png" alt="12"/></p>
 
 <hr/>
 

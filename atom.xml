@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-08-22T17:39:08+08:00</updated>
+  <updated>2016-08-22T17:40:01+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -24,8 +24,8 @@
 <blockquote>
 <p>刚忙完就给我来一场大病, 多么痛的领悟, 好不容易好点了, 可以整理整理知识点了~</p>
 
-<p>最后:<br/>
-如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>工厂模式</code></strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>工厂模式</code><strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
 </blockquote>
 
 <span id="more"></span><!-- more -->
@@ -842,12 +842,12 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <h3 id="toc_0">作者感言</h3>
 
 <blockquote>
-<p>上次我们知道了单例模式是怎么回事, 现在我们来探讨一下什么叫做<strong><code>代理模式</code></strong>.</p>
+<p>上次我们知道了<strong><code>单例模式</code></strong>是怎么回事, 现在我们来探讨一下什么叫做<strong><code>代理模式</code></strong>.</p>
 
 <p>其实所谓的代理模式在我们日常生活中非常的常见, 比如买车, 各式各样的牌子都有, 但这些汽车生产商又不可能自己掏钱在每个城市的每个角落都开一家自己的直营店, 所以他们会去招一些第三方的代理商进行分销, 而这个就是我们今天所要说的<strong><code>代理模式</code></strong>.</p>
 
-<p>最后:<br/>
-如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>代理模式</code></strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>代理模式</code><strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
 </blockquote>
 
 <span id="more"></span><!-- more -->
@@ -856,7 +856,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 
 <h3 id="toc_1">简介</h3>
 
-<p><img src="media/14718501007074/ProxyPatternUML.png" alt="ProxyPatternUM"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/ProxyPatternUML.png" alt="ProxyPatternUM"/></p>
 
 <blockquote>
 <p>这是一张<strong><code>代理模式</code></strong>的UML图, 同样也很简单的讲解了<strong><code>代理模式</code></strong>到底是怎么回事</p>
@@ -876,15 +876,15 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>打开我们自己创建的<strong><code>DesignPatternWork</code></strong>文件夹, 里面有我们之前所创建的<strong><code>DesignPatternWorkSpace</code></strong></p>
 </blockquote>
 
-<p><img src="media/14718501007074/1.png" alt="1"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/1.png" alt="1"/></p>
 
 <blockquote>
 <p>添加我们所要创建的新工程, 命名为<strong><code>ProxyPattern</code></strong></p>
 </blockquote>
 
-<p><img src="media/14718501007074/2.png" alt="2"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/2.png" alt="2"/></p>
 
-<p><img src="media/14718501007074/3.png" alt="3"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/3.png" alt="3"/></p>
 
 <hr/>
 
@@ -896,7 +896,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>这里我们就拿奥迪这个汽车生产商来进行演示, 原谅我是个奥迪控~~</p>
 </blockquote>
 
-<p><img src="media/14718501007074/4.png" alt="4"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/4.png" alt="4"/></p>
 
 <hr/>
 
@@ -920,7 +920,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>解释一下, 为什么我们需要在代理方法中提供代理类, 其实这个很好理解, 打个比方, 就拿奥迪来说吧, 一个品牌的车子, 肯定有不同的型号, 而每个型号不一定都是在同一家工厂里生产的, 这个时候我们就需要区分生产地, 所以我们为了提供外部去区分, 就需要在代理方法中提供代理类<strong><code>(个人理解, 不是官方语言哈)</code></strong>.</p>
 </blockquote>
 
-<p><img src="media/14718501007074/5.png" alt="5"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/5.png" alt="5"/></p>
 
 <hr/>
 
@@ -934,7 +934,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 - (void)buyCarModel:(NSString *)model;
 </code></pre>
 
-<p><img src="media/14718501007074/6.png" alt="6"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/6.png" alt="6"/></p>
 
 <hr/>
 
@@ -944,9 +944,9 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>代理类以及代理方法我们已经完成了, 接下来我们就要在外部去实现了</p>
 </blockquote>
 
-<p><img src="media/14718501007074/7.png" alt="7"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/7.png" alt="7"/></p>
 
-<p><img src="media/14718501007074/8.png" alt="8"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/8.png" alt="8"/></p>
 
 <hr/>
 
@@ -971,7 +971,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>这里我们用代码演示一下吧, 这样子更加的简单明了, 不过这里要注意一下, <strong><code>Protocol</code></strong>是没有<strong><code>.m</code></strong>文件的</p>
 </blockquote>
 
-<p><img src="media/14718501007074/9.png" alt="9"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/9.png" alt="9"/></p>
 
 <hr/>
 
@@ -981,27 +981,27 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>创建完协议就要创建顾客了, 并且这个顾客类是必须遵守我们创建的<strong><code>Protocol</code></strong>, 然后在这个<strong><code>Protocol</code></strong>里加个判断.</p>
 </blockquote>
 
-<p><img src="media/14718501007074/10.png" alt="10"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/10.png" alt="10"/></p>
 
-<p><img src="media/14718501007074/11.png" alt="11"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/11.png" alt="11"/></p>
 
 <blockquote>
 <p>现在我们来初始化一下这个顾客类, 并且校验一下我们所写的<strong><code>Protocol</code></strong>是否生效.</p>
 </blockquote>
 
-<p><img src="media/14718501007074/12.png" alt="12"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/12.png" alt="12"/></p>
 
 <blockquote>
 <p>先输入<strong><code>10000</code></strong></p>
 </blockquote>
 
-<p><img src="media/14718501007074/13.png" alt="13"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/13.png" alt="13"/></p>
 
 <blockquote>
 <p>再输入<strong><code>1000000</code></strong></p>
 </blockquote>
 
-<p><img src="media/14718501007074/14.png" alt="14"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/14.png" alt="14"/></p>
 
 <hr/>
 
@@ -1039,8 +1039,8 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <blockquote>
 <p>有一段时间没有发简书了, 刚好现在忙完项目的需求, 现在可以闲下来写写简书, 顺便自己给自己复习巩固一下知识, 不过我在这里又要吐槽一句, 项目中遇到了一个单例的问题, 让我感到非常的蛋疼, 写这个单例的人只是单纯了为了写单例而写单例, 没有想到会发生什么, 现在让我们一起来看看什么叫单例吧.</p>
 
-<p>最后:<br/>
-如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>单例模式</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>单例模式</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
 </blockquote>
 
 <span id="more"></span><!-- more -->
@@ -1049,7 +1049,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 
 <h3 id="toc_1">简介</h3>
 
-<p><img src="media/14718491333111/SingletonUML.jpg" alt="SingletonUM"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/SingletonUML.jpg" alt="SingletonUM"/></p>
 
 <blockquote>
 <p>这是一张单例的<strong><code>UML</code></strong>图, 非常简单明了的讲解单例类到底是怎么回事, 通常单例是用来作为管理中心, 或者是通知中心, 比如在<strong><code>iOS</code></strong>当中的<strong><code>NSNotificationCenter</code></strong>, <strong><code>[[UIApplication sharedApplication] statusBarStyle]</code></strong>, <strong><code>NSUserDefaults</code></strong>, <strong><code>[NSFileManager defaultManager]</code></strong>等等都是单例, 单例类有几个特征.</p>
@@ -1070,7 +1070,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>首先, 我们先来建一个<strong><code>WorkSpace</code></strong>, 这样子方便我们以后多添加工程, 因为单例模式只是我们的开始.</p>
 </blockquote>
 
-<p><img src="media/14718491333111/1.png" alt="1"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/1.png" alt="1"/></p>
 
 <hr/>
 
@@ -1080,9 +1080,9 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>创建完<strong><code>WorkingSpace</code></strong>之后, 我们就来添加<strong><code>SingletonPattern(单例)</code></strong>的工程</p>
 </blockquote>
 
-<p><img src="media/14718491333111/2.png" alt="2"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/2.png" alt="2"/></p>
 
-<p><img src="media/14718491333111/3.png" alt="3"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/3.png" alt="3"/></p>
 
 <hr/>
 
@@ -1092,31 +1092,31 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>现在我们来创建一个叫<strong><code>UserInfoManager</code></strong>单例类</p>
 </blockquote>
 
-<p><img src="media/14718491333111/4.png" alt="4"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/4.png" alt="4"/></p>
 
 <blockquote>
 <p>声明一个类方法用于外界访问 </p>
 </blockquote>
 
-<p><img src="media/14718491333111/5.png" alt="5"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/5.png" alt="5"/></p>
 
 <blockquote>
 <p>接下来我们去实现这个类方法就好了</p>
 </blockquote>
 
-<p><img src="media/14718491333111/6.png" alt="6"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/6.png" alt="6"/></p>
 
 <blockquote>
 <p>看起来, 我们好像搞定了整个单例模式了, 下面让我们来试试效果.</p>
 </blockquote>
 
-<p><img src="media/14718491333111/7.png" alt="7"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/7.png" alt="7"/></p>
 
 <blockquote>
 <p>打印出来的效果好像是只有一个, 但实际上并不是的, 我们再来看看</p>
 </blockquote>
 
-<p><img src="media/14718491333111/8.png" alt="8"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/8.png" alt="8"/></p>
 
 <blockquote>
 <p>发现这个类还是可以初始化的, 并且是另外开辟了内存空间来存储的, 这就很尴尬了, 说好的只有一个实例呢??? </p>
@@ -1124,21 +1124,21 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <p>我在这里说一句, 施主莫怕, 等贫僧跳大, 继续回到单例类当中, 添加几个判断就好了</p>
 </blockquote>
 
-<p><img src="media/14718491333111/9.png" alt="9"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/9.png" alt="9"/></p>
 
 <blockquote>
 <p>口说无凭, 我们来看看运行效果</p>
 </blockquote>
 
-<p><img src="media/14718491333111/10.png" alt="10"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/10.png" alt="10"/></p>
 
 <blockquote>
 <p>这下子, 可以说明是只有一个实例了吧, 下面再来看看子类是否能继承</p>
 </blockquote>
 
-<p><img src="media/14718491333111/11.png" alt="11"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/11.png" alt="11"/></p>
 
-<p><img src="media/14718491333111/12.png" alt="12"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/12.png" alt="12"/></p>
 
 <hr/>
 
@@ -1174,8 +1174,8 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <blockquote>
 <p>这次的<strong><code>CocoaPods</code></strong>的<strong><code>Review</code></strong>，让我知道了新版的<strong><code>CocoaPods</code></strong>和旧版的<strong><code>CocoaPods</code></strong>的区别, 在声明<strong><code>Podfile</code></strong>文件中, 需要加入对应的<strong><code>target</code></strong>才可以执行, 我个人感觉这个操作有些不太友好, 但他们要这么做, 我也没办法, 毕竟我只是小白用户而已.</p>
 
-<p>最后:<br/>
-如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>CocoaPods</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>CocoaPods</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
 </blockquote>
 
 <span id="more"></span><!-- more -->
@@ -1413,8 +1413,8 @@ pod --version<br/>
 <blockquote>
 <p>这次的<strong><code>Reveal</code></strong>研究，让我发现调试UI再也不像会以前那么的困难, 更加不会那么的蛋疼, 不需要每次都在脑海里想象出那个画面, 自从使用了<strong><code>Reveal</code></strong>之后, 麻麻再也不用担心我调界面难过了~</p>
 
-<p>最后:<br/>
-如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<strong><code>Reveal</code></strong> 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</p>
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Reveal</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
 </blockquote>
 
 <span id="more"></span><!-- more -->
