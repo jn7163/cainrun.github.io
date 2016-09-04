@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	玩转iOS开发：《iOS设计模式 — 单例模式》 - Cain For iOS
+  	玩转iOS开发：《iOS设计模式 — 观察者模式》 - Cain For iOS
   	
 	</title>
 
@@ -121,15 +121,15 @@
 			<div class="mid-col-container"> <div id="content" class="inner">
 
 	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-		<h1 class="title" itemprop="name">玩转iOS开发：《iOS设计模式 — 单例模式》</h1>
+		<h1 class="title" itemprop="name">玩转iOS开发：《iOS设计模式 — 观察者模式》</h1>
 		<div class="entry-content" itemprop="articleBody">
 			<h3 id="toc_0">作者感言</h3>
 
 <blockquote>
-<p>有一段时间没有发博客了, 刚好现在忙完项目的需求, 现在可以闲下来写写博客, 顺便自己给自己复习巩固一下知识, 不过我在这里又要吐槽一句, 项目中遇到了一个单例的问题, 让我感到非常的蛋疼, 写这个单例的人只是单纯了为了写单例而写单例, 没有想到会发生什么, 现在让我们一起来看看什么叫单例吧.</p>
+<p>这几天在捣鼓新项目, 在用通知中心的时候突然想到自己用了那么久的通知中心, 为啥不自己动手实现一个呢? 说干就干, 于是乎就研究通知中心的原理, 当然包括<strong><code>KVO</code></strong>, 这些都是基于<strong><code>观察者模式</code></strong>实现的, 既然知道了原理, 我们就Do It!!!</p>
 
 <p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>单例模式</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>工厂模式</code><strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
 </blockquote>
 
 <span id="more"></span><!-- more -->
@@ -138,114 +138,90 @@
 
 <h3 id="toc_1">简介</h3>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/SingletonUML.jpg" alt="SingletonUM"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/ObserverUML.jpg" alt="ObserverUML"/></p>
 
 <blockquote>
-<p>这是一张单例的<strong><code>UML</code></strong>图, 非常简单明了的讲解单例类到底是怎么回事, 通常单例是用来作为管理中心, 或者是通知中心, 比如在<strong><code>iOS</code></strong>当中的<strong><code>NSNotificationCenter</code></strong>, <strong><code>[[UIApplication sharedApplication] statusBarStyle]</code></strong>, <strong><code>NSUserDefaults</code></strong>, <strong><code>[NSFileManager defaultManager]</code></strong>等等都是单例, 单例类有几个特征.</p>
+<p>说起观察模式, 其实可以举酱紫的一个例子, 就拿实验对象来说明, 研究者是<strong><code>观察者</code></strong>, 小白鼠是<strong><code>被观察者</code></strong>, 当研究者往小白鼠身上做某些实验的时候, 小白鼠会产生某些反应, 而研究者就会记录以及反馈观察对应的现象, 这种情况就叫做<strong><code>观察者模式</code></strong>.</p>
 
-<ul>
-<li>系统当中只有一个实例</li>
-<li>易于外界访问</li>
-<li>防止子类继承</li>
-<li>共享信息</li>
-</ul>
+<p>说那么多废话, 直接上代码演示吧~~</p>
 </blockquote>
 
 <hr/>
 
-<h3 id="toc_2">准备工作</h3>
+<h3 id="toc_2">新建工程</h3>
 
 <blockquote>
-<p>首先, 我们先来建一个<strong><code>WorkSpace</code></strong>, 这样子方便我们以后多添加工程, 因为单例模式只是我们的开始.</p>
+<p>依旧打开我们之前的那个<strong><code>workSpace</code></strong>工程, 然后新建一个<strong><code>ObserverPattern</code></strong>工程.</p>
+
+<p>这里我们就拿微信公众号来举个例子, 首先我们要有一个微信公众号中心, 方便我们用来寻找我们想要的公众号.</p>
 </blockquote>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/1.png" alt="1"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/2.png" alt="2"/></p>
 
 <hr/>
 
-<h3 id="toc_3">添加单例工程</h3>
+<h3 id="toc_3">针对接口编程</h3>
 
 <blockquote>
-<p>创建完<strong><code>WorkingSpace</code></strong>之后, 我们就来添加<strong><code>SingletonPattern(单例)</code></strong>的工程</p>
+<p>这里普及一个思想, 就是<strong><code>针对接口编程</code></strong>, 说起<strong><code>针对接口编程</code></strong>, 估计会有一些道友会有迷惑, 啥是<strong><code>针对接口编程</code></strong>? 其实在我们日常开发当中, 我们就已经做到了<strong><code>针对接口编程</code></strong>, 只是我们本身没有意识到, 其实所谓的<strong><code>针对接口编程</code></strong>, 就是我们在写模块或者是在写SDK的时候, 我们会先设计对外公开的API, 然后再内部实现对应的逻辑, 这就是<strong><code>针对接口编程</code></strong>.</p>
+
+<p>这里有一篇我觉得不错的文章<a href="http://blog.chinaunix.net/uid-20478213-id-1942005.html">针对接口编程</a>, 如果觉得不好, 可以去吐槽博主, 这我是不会反对的~</p>
+
+<p>现在我们先去声明一些我们需要用到的API先.</p>
 </blockquote>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/2.png" alt="2"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/3.png" alt="3"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/3.png" alt="3"/></p>
 
 <hr/>
 
-<h3 id="toc_4">创建单例类</h3>
+<h3 id="toc_4">限制用户</h3>
 
 <blockquote>
-<p>现在我们来创建一个叫<strong><code>UserInfoManager</code></strong>单例类</p>
+<p>虽然我们声明了一些接口, 但其实是还不够的, 因为公众号并不知道你是否有没有订阅, 如果没有订阅的话, 公众号发出来的消息, 你不可能会收到, 所以在这里我们需要声明一个<strong><code>Protocol</code></strong>, 用来限制<br/>
+用户, 因为订阅号所发送的消息不是全部用户都能接收的, 只要订阅了该订阅号的用户才能收到订阅号所发出来的消息.</p>
 </blockquote>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/4.png" alt="4"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/4.png" alt="4"/></p>
 
 <blockquote>
-<p>声明一个类方法用于外界访问 </p>
+<p>记得要把对象换一下, 换成了遵守了改协议的对象才能去接收消息</p>
 </blockquote>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/5.png" alt="5"/></p>
-
-<blockquote>
-<p>接下来我们去实现这个类方法就好了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/6.png" alt="6"/></p>
-
-<blockquote>
-<p>看起来, 我们好像搞定了整个单例模式了, 下面让我们来试试效果.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/7.png" alt="7"/></p>
-
-<blockquote>
-<p>打印出来的效果好像是只有一个, 但实际上并不是的, 我们再来看看</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/8.png" alt="8"/></p>
-
-<blockquote>
-<p>发现这个类还是可以初始化的, 并且是另外开辟了内存空间来存储的, 这就很尴尬了, 说好的只有一个实例呢??? </p>
-
-<p>我在这里说一句, 施主莫怕, 等贫僧跳大, 继续回到单例类当中, 添加几个判断就好了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/9.png" alt="9"/></p>
-
-<blockquote>
-<p>口说无凭, 我们来看看运行效果</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/10.png" alt="10"/></p>
-
-<blockquote>
-<p>这下子, 可以说明是只有一个实例了吧, 下面再来看看子类是否能继承</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/11.png" alt="11"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/SingletonPattern/SingletonPattern%E8%AF%B4%E6%98%8E/12.png" alt="12"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/5.png" alt="5"/></p>
 
 <hr/>
 
+<h3 id="toc_5">实现内部方法</h3>
+
 <blockquote>
-<p>好了, 现在单例所需的</p>
+<p>现在我们对应的接口和限制用户的协议都已经写好了, 接下来我们就要去实现<strong><code>PublicNumberCenter</code></strong>里的方法, 这样子我们就可以完完整整的实现一个观察者模式了.</p>
 
-<ul>
-<li>易于外界访问</li>
-<li>系统当中只有一个实例</li>
-<li>防止子类继承</li>
-</ul>
-
-<p>我们都搞定, 酱紫我们就完成了一个单例类的创建啦</p>
+<p>由于通知中心是属于单例, 首先我们肯定是要来实现一下单例模式</p>
 </blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/6.png" alt="6"/></p>
+
+<blockquote>
+<p>实现完通知中心之后, 我们就要来实现内部的方法, 这样子我们要的通知中心就完成了</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/7.png" alt="7"/></p>
 
 <hr/>
 
-<h3 id="toc_5">工程地址</h3>
+<h3 id="toc_6">调用自定义通知中心</h3>
+
+<blockquote>
+<p>写了那么久, 现在我们来尝试调用一下通知中心, 这里我们就简单实现一下, 就让<strong><code>ViewController</code></strong>成为用户, 遵守<strong><code>PublicNumberProtocol</code></strong>就好了.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/8.png" alt="8"/></p>
+
+<hr/>
+
+<h3 id="toc_7">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
 

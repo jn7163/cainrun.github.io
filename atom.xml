@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-08-23T00:28:28+08:00</updated>
+  <updated>2016-09-04T12:37:39+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,260 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：《iOS设计模式 — 观察者模式》]]></title>
+    <link href="http://Cain.developer.io/14719369255829.html"/>
+    <updated>2016-08-23T15:22:05+08:00</updated>
+    <id>http://Cain.developer.io/14719369255829.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>这几天在捣鼓新项目, 在用通知中心的时候突然想到自己用了那么久的通知中心, 为啥不自己动手实现一个呢? 说干就干, 于是乎就研究通知中心的原理, 当然包括<strong><code>KVO</code></strong>, 这些都是基于<strong><code>观察者模式</code></strong>实现的, 既然知道了原理, 我们就Do It!!!</p>
+
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>工厂模式</code><strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/ObserverUML.jpg" alt="ObserverUML"/></p>
+
+<blockquote>
+<p>说起观察模式, 其实可以举酱紫的一个例子, 就拿实验对象来说明, 研究者是<strong><code>观察者</code></strong>, 小白鼠是<strong><code>被观察者</code></strong>, 当研究者往小白鼠身上做某些实验的时候, 小白鼠会产生某些反应, 而研究者就会记录以及反馈观察对应的现象, 这种情况就叫做<strong><code>观察者模式</code></strong>.</p>
+
+<p>说那么多废话, 直接上代码演示吧~~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">新建工程</h3>
+
+<blockquote>
+<p>依旧打开我们之前的那个<strong><code>workSpace</code></strong>工程, 然后新建一个<strong><code>ObserverPattern</code></strong>工程.</p>
+
+<p>这里我们就拿微信公众号来举个例子, 首先我们要有一个微信公众号中心, 方便我们用来寻找我们想要的公众号.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/2.png" alt="2"/></p>
+
+<hr/>
+
+<h3 id="toc_3">针对接口编程</h3>
+
+<blockquote>
+<p>这里普及一个思想, 就是<strong><code>针对接口编程</code></strong>, 说起<strong><code>针对接口编程</code></strong>, 估计会有一些道友会有迷惑, 啥是<strong><code>针对接口编程</code></strong>? 其实在我们日常开发当中, 我们就已经做到了<strong><code>针对接口编程</code></strong>, 只是我们本身没有意识到, 其实所谓的<strong><code>针对接口编程</code></strong>, 就是我们在写模块或者是在写SDK的时候, 我们会先设计对外公开的API, 然后再内部实现对应的逻辑, 这就是<strong><code>针对接口编程</code></strong>.</p>
+
+<p>这里有一篇我觉得不错的文章<a href="http://blog.chinaunix.net/uid-20478213-id-1942005.html">针对接口编程</a>, 如果觉得不好, 可以去吐槽博主, 这我是不会反对的~</p>
+
+<p>现在我们先去声明一些我们需要用到的API先.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_4">限制用户</h3>
+
+<blockquote>
+<p>虽然我们声明了一些接口, 但其实是还不够的, 因为公众号并不知道你是否有没有订阅, 如果没有订阅的话, 公众号发出来的消息, 你不可能会收到, 所以在这里我们需要声明一个<strong><code>Protocol</code></strong>, 用来限制<br/>
+用户, 因为订阅号所发送的消息不是全部用户都能接收的, 只要订阅了该订阅号的用户才能收到订阅号所发出来的消息.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/4.png" alt="4"/></p>
+
+<blockquote>
+<p>记得要把对象换一下, 换成了遵守了改协议的对象才能去接收消息</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/5.png" alt="5"/></p>
+
+<hr/>
+
+<h3 id="toc_5">实现内部方法</h3>
+
+<blockquote>
+<p>现在我们对应的接口和限制用户的协议都已经写好了, 接下来我们就要去实现<strong><code>PublicNumberCenter</code></strong>里的方法, 这样子我们就可以完完整整的实现一个观察者模式了.</p>
+
+<p>由于通知中心是属于单例, 首先我们肯定是要来实现一下单例模式</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/6.png" alt="6"/></p>
+
+<blockquote>
+<p>实现完通知中心之后, 我们就要来实现内部的方法, 这样子我们要的通知中心就完成了</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/7.png" alt="7"/></p>
+
+<hr/>
+
+<h3 id="toc_6">调用自定义通知中心</h3>
+
+<blockquote>
+<p>写了那么久, 现在我们来尝试调用一下通知中心, 这里我们就简单实现一下, 就让<strong><code>ViewController</code></strong>成为用户, 遵守<strong><code>PublicNumberProtocol</code></strong>就好了.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/8.png" alt="8"/></p>
+
+<hr/>
+
+<h3 id="toc_7">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：界面调试工具《Reveal》]]></title>
+    <link href="http://Cain.developer.io/14719229534493.html"/>
+    <updated>2016-08-23T11:29:13+08:00</updated>
+    <id>http://Cain.developer.io/14719229534493.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>这次的<strong><code>Reveal</code></strong>研究，让我发现调试UI再也不像会以前那么的困难, 更加不会那么的蛋疼, 不需要每次都在脑海里想象出那个画面, 自从使用了<strong><code>Reveal</code></strong>之后, 麻麻再也不用担心我调界面难过了~</p>
+
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Reveal</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">疑问</h3>
+
+<blockquote>
+<p>有童鞋可能会问, <strong><code>Xcode</code></strong>不是自带了有<a href="https://developer.apple.com/library/ios/recipes/xcode_help-debugger/using_view_debugger/using_view_debugger.html">Debug View Hierarchy in Xcode</a>么, 为啥还要用第三方的Reveal, 答案就是:<q>因为苹果所提供的<strong><code>Debug View Hierarchy in Xcode</code></strong>弱爆了, 只能看看, 啥都不能操作, 而且还容易造成<strong><code>Xcode</code></strong>的卡顿, 比如一些电脑比较低配的, 卡死, 然后<strong><code>Xcode</code></strong>就一闪而过, 直接就<strong><code>Crash</code></strong>了.</q></p>
+
+<p><a href="http://revealapp.com">Reveal</a>就不会出现这个问题, Reveal是一款图形调试工具, 支持iOS全设备的UI调试, 支持模拟器以及真机调试, 同时也支持实时UI效果的展示.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">添加Debug命令</h3>
+
+<blockquote>
+<p>打开<strong><code>Terminal</code></strong>, 输入命令</p>
+</blockquote>
+
+<pre><code class="language-vim">vim ~/.lldbinit 
+</code></pre>
+
+<p><img src="media/14718456835492/0.png" alt="0"/></p>
+
+<blockquote>
+<p>添加命令<br/>
+<code>vim<br/>
+command alias reveal_load_sim expr (void*)dlopen(&quot;/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib&quot;, 0x2);  <br/>
+command alias reveal_load_dev expr (void*)dlopen([(NSString*)[(NSBundle*)[NSBundle mainBundle] pathForResource:@&quot;libReveal&quot; ofType:@&quot;dylib&quot;] cStringUsingEncoding:0x4], 0x2);  <br/>
+command alias reveal_start expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStart&quot; object:nil];  <br/>
+command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStop&quot; object: nil nil]; <br/>
+</code></p>
+</blockquote>
+
+<p><img src="media/14718456835492/1.png" alt="1"/></p>
+
+<p>这里解释一下命令的意思</p>
+
+<blockquote>
+<p><strong><code>reveal_load_sim</code></strong> 为模拟器加载reveal调试用的动态链接库<br/>
+<strong><code>reveal_load_dev</code></strong> 为真机加载<br/>
+<strong><code>reveal_start</code></strong>       启动reveal调试功能<br/>
+<strong><code>reveal_stop</code></strong>         结束reveal调试功能</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">在Xcode中启动Reveal</h3>
+
+<blockquote>
+<p>首先打开<strong><code>Xcode</code></strong>的工程, 去到<strong><code>AppDelegate</code></strong></p>
+</blockquote>
+
+<p><img src="media/14718456835492/2.png" alt="2"/></p>
+
+<blockquote>
+<p>然后在<strong><code>application:didFinishLaunchingWithOptions</code></strong>方法中添加断点</p>
+</blockquote>
+
+<p><img src="media/14718456835492/3.png" alt="3"/></p>
+
+<blockquote>
+<p>编辑断点, 添加对应的代码<br/>
+<img src="media/14718456835492/4.png" alt="4"/></p>
+</blockquote>
+
+<p><img src="media/14718456835492/5.png" alt="5"/></p>
+
+<blockquote>
+<p>运行工程, 如果看到控制台里输出以下酱紫的一行字, 就代表设置成功了</p>
+</blockquote>
+
+<p><img src="media/14718456835492/6.png" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_4">查看Reveal效果</h3>
+
+<blockquote>
+<p>看完上面的操作步骤, 只要你设置的都是正确的, 那就可以打开<strong><code>Reveal</code></strong>查看效果了</p>
+</blockquote>
+
+<p><img src="media/14718456835492/7.png" alt="7"/></p>
+
+<blockquote>
+<p>如果你的模拟器切换了页面, <strong><code>Reveal</code></strong>是不会自动刷新的, 既然是酱紫, 那我们就需要做对应的操作</p>
+</blockquote>
+
+<p><img src="media/14718456835492/8.png" alt="8"/></p>
+
+<p><img src="media/14718456835492/9.png" alt="9"/></p>
+
+<p><img src="media/14718456835492/10.png" alt="10"/></p>
+
+<hr/>
+
+<h3 id="toc_5">特殊教程(无限试用)</h3>
+
+<blockquote>
+<p>打开你的<strong><code>Terminal</code></strong>, 然后输入以下命令</p>
+</blockquote>
+
+<p><img src="media/14718456835492/11.png" alt="11"/></p>
+
+<blockquote>
+<p>找到<strong><code>com.ittybittyapps.Reveal.plist</code></strong>文件删掉</p>
+
+<p>PS: 这个文件每次运行的时候<strong><code>Reveal</code></strong>都会创建一次, 每次都是从第一天开始, 每次<strong><code>Reveal</code></strong>还有几天的时候, 再删掉, 就会再次从第一天开始.</p>
+</blockquote>
+
+<p><img src="media/14718456835492/12.png" alt="12"/></p>
+
+<blockquote>
+<p><strong><font color=red>这里声明一点, 作者是希望大家都去购买正版, 而不是去寻找什么破解方法, 毕竟我们本身就是做软件的, 所以希望大家可以去支持支持正版.</font></strong></p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_6">附件</h3>
+
+<blockquote>
+<p>由于真机调试是需要修改<strong><code>Xcode</code></strong>工程配置, 不太适合团队协作, 所以这里我只提供了模拟器UI调试的方法, 如果有朋友需要真机调试, 这里有一个<a href="http://support.revealapp.com/kb/getting-started/integrating-reveal-add-reveal-to-your-xcode-project">官方教程</a>, 有兴趣的童鞋可以自行去查看</p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：《iOS设计模式 — 工厂模式》]]></title>
@@ -1037,7 +1291,7 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <h3 id="toc_0">作者感言</h3>
 
 <blockquote>
-<p>有一段时间没有发简书了, 刚好现在忙完项目的需求, 现在可以闲下来写写简书, 顺便自己给自己复习巩固一下知识, 不过我在这里又要吐槽一句, 项目中遇到了一个单例的问题, 让我感到非常的蛋疼, 写这个单例的人只是单纯了为了写单例而写单例, 没有想到会发生什么, 现在让我们一起来看看什么叫单例吧.</p>
+<p>有一段时间没有发博客了, 刚好现在忙完项目的需求, 现在可以闲下来写写博客, 顺便自己给自己复习巩固一下知识, 不过我在这里又要吐槽一句, 项目中遇到了一个单例的问题, 让我感到非常的蛋疼, 写这个单例的人只是单纯了为了写单例而写单例, 没有想到会发生什么, 现在让我们一起来看看什么叫单例吧.</p>
 
 <p><strong><font color=purple>最后:</font></strong><br/>
 <strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>单例模式</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
@@ -1397,149 +1651,6 @@ pod setup<br/>
 <code>vim<br/>
 pod --version<br/>
 </code></p>
-</blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：界面调试工具《Reveal》]]></title>
-    <link href="http://Cain.developer.io/14718465693146.html"/>
-    <updated>2016-08-22T14:16:09+08:00</updated>
-    <id>http://Cain.developer.io/14718465693146.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>这次的<strong><code>Reveal</code></strong>研究，让我发现调试UI再也不像会以前那么的困难, 更加不会那么的蛋疼, 不需要每次都在脑海里想象出那个画面, 自从使用了<strong><code>Reveal</code></strong>之后, 麻麻再也不用担心我调界面难过了~</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Reveal</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">疑问</h3>
-
-<blockquote>
-<p>有童鞋可能会问, <strong><code>Xcode</code></strong>不是自带了有<a href="https://developer.apple.com/library/ios/recipes/xcode_help-debugger/using_view_debugger/using_view_debugger.html">Debug View Hierarchy in Xcode</a>么, 为啥还要用第三方的Reveal, 答案就是:<q>因为苹果所提供的<strong><code>Debug View Hierarchy in Xcode</code></strong>弱爆了, 只能看看, 啥都不能操作, 而且还容易造成<strong><code>Xcode</code></strong>的卡顿, 比如一些电脑比较低配的, 卡死, 然后<strong><code>Xcode</code></strong>就一闪而过, 直接就<strong><code>Crash</code></strong>了.</q></p>
-
-<p><a href="http://revealapp.com">Reveal</a>就不会出现这个问题, Reveal是一款图形调试工具, 支持iOS全设备的UI调试, 支持模拟器以及真机调试, 同时也支持实时UI效果的展示.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">添加Debug命令</h3>
-
-<blockquote>
-<p>打开<strong><code>Terminal</code></strong>, 输入命令</p>
-</blockquote>
-
-<pre><code class="language-vim">vim ~/.lldbinit 
-</code></pre>
-
-<p><img src="media/14718456835492/0.png" alt="0"/></p>
-
-<blockquote>
-<p>添加命令<br/>
-<code>vim<br/>
-command alias reveal_load_sim expr (void*)dlopen(&quot;/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib&quot;, 0x2);  <br/>
-command alias reveal_load_dev expr (void*)dlopen([(NSString*)[(NSBundle*)[NSBundle mainBundle] pathForResource:@&quot;libReveal&quot; ofType:@&quot;dylib&quot;] cStringUsingEncoding:0x4], 0x2);  <br/>
-command alias reveal_start expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStart&quot; object:nil];  <br/>
-command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStop&quot; object: nil nil]; <br/>
-</code></p>
-</blockquote>
-
-<p><img src="media/14718456835492/1.png" alt="1"/></p>
-
-<p>这里解释一下命令的意思</p>
-
-<blockquote>
-<p><strong><code>reveal_load_sim</code></strong> 为模拟器加载reveal调试用的动态链接库<br/>
-<strong><code>reveal_load_dev</code></strong> 为真机加载<br/>
-<strong><code>reveal_start</code></strong>       启动reveal调试功能<br/>
-<strong><code>reveal_stop</code></strong>         结束reveal调试功能</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_3">在Xcode中启动Reveal</h3>
-
-<blockquote>
-<p>首先打开<strong><code>Xcode</code></strong>的工程, 去到<strong><code>AppDelegate</code></strong></p>
-</blockquote>
-
-<p><img src="media/14718456835492/2.png" alt="2"/></p>
-
-<blockquote>
-<p>然后在<strong><code>application:didFinishLaunchingWithOptions</code></strong>方法中添加断点</p>
-</blockquote>
-
-<p><img src="media/14718456835492/3.png" alt="3"/></p>
-
-<blockquote>
-<p>编辑断点, 添加对应的代码<br/>
-<img src="media/14718456835492/4.png" alt="4"/></p>
-</blockquote>
-
-<p><img src="media/14718456835492/5.png" alt="5"/></p>
-
-<blockquote>
-<p>运行工程, 如果看到控制台里输出以下酱紫的一行字, 就代表设置成功了</p>
-</blockquote>
-
-<p><img src="media/14718456835492/6.png" alt="6"/></p>
-
-<hr/>
-
-<h3 id="toc_4">查看Reveal效果</h3>
-
-<blockquote>
-<p>看完上面的操作步骤, 只要你设置的都是正确的, 那就可以打开<strong><code>Reveal</code></strong>查看效果了</p>
-</blockquote>
-
-<p><img src="media/14718456835492/7.png" alt="7"/></p>
-
-<blockquote>
-<p>如果你的模拟器切换了页面, <strong><code>Reveal</code></strong>是不会自动刷新的, 既然是酱紫, 那我们就需要做对应的操作</p>
-</blockquote>
-
-<p><img src="media/14718456835492/8.png" alt="8"/></p>
-
-<p><img src="media/14718456835492/9.png" alt="9"/></p>
-
-<p><img src="media/14718456835492/10.png" alt="10"/></p>
-
-<hr/>
-
-<h3 id="toc_5">特殊教程(无限试用)</h3>
-
-<blockquote>
-<p>打开你的<strong><code>Terminal</code></strong>, 然后输入以下命令</p>
-</blockquote>
-
-<p><img src="media/14718456835492/11.png" alt="11"/></p>
-
-<blockquote>
-<p>找到<strong><code>com.ittybittyapps.Reveal.plist</code></strong>文件删掉</p>
-
-<p>PS: 这个文件每次运行的时候<strong><code>Reveal</code></strong>都会创建一次, 每次都是从第一天开始, 每次<strong><code>Reveal</code></strong>还有几天的时候, 再删掉, 就会再次从第一天开始.</p>
-</blockquote>
-
-<p><img src="media/14718456835492/12.png" alt="12"/></p>
-
-<blockquote>
-<p><strong><font color=red>这里声明一点, 作者是希望大家都去购买正版, 而不是去寻找什么破解方法, 毕竟我们本身就是做软件的, 所以希望大家可以去支持支持正版.</font></strong></p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_6">附件</h3>
-
-<blockquote>
-<p>由于真机调试是需要修改<strong><code>Xcode</code></strong>工程配置, 不太适合团队协作, 所以这里我只提供了模拟器UI调试的方法, 如果有朋友需要真机调试, 这里有一个<a href="http://support.revealapp.com/kb/getting-started/integrating-reveal-add-reveal-to-your-xcode-project">官方教程</a>, 有兴趣的童鞋可以自行去查看</p>
 </blockquote>
 
 ]]></content>
