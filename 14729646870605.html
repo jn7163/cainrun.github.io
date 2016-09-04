@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	玩转iOS开发：Aggregate脚本版本《模拟器与真机静态Framework合成教程》 - Cain For iOS
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Cain For iOS" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+					<div class="profilepic">
+						<img src="asset/icon.jpg" style="width:160px;">
+					</div>
+					<h1><a href="index.html">Cain For iOS</a></h1>
+					<p class="subtitle">如果您有更好的建议或者其他不明白的地方, 可以联系我QQ: 350116542</p>
+					<nav id="main-nav">
+						<ul class="main">
+							<li><a href="index.html">Home</a></li>
+						    <!-- <li><a href="all.html">Blog</a></li>-->	
+						    <li><a href="archives.html">Archives</a></li>
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+<!-- 
+			<a class="email" href="mailto:" title="Email">Email</a>
+			<a class="facebook" href="http://www.facebook.com/" title="Facebook">Facebook</a>
+			<a class="google" href="https://plus.google.com/" rel="author" title="Google+">Google+</a>
+			<a class="twitter" href="http://twitter.com/" title="Twitter">Twitter</a>
+			<a class="github" href="https://github.com/" title="GitHub">GitHub</a>
+			<a class="coderwall" href="https://coderwall.com/" title="Coderwall">Coderwall</a>
+		    <a class="stackoverflow" href="http://stackoverflow.com/users/" title="StackOverflow"></a>
+			<a class="linkedin" href="http://www.linkedin.com/in/" title="LinkedIn">LinkedIn</a>
+			<a class="pinterest" href="https://pinterest.com/" title="Pinterest">Pinterest</a>
+			<a class="delicious" href="http://delicious.com/" title="Delicious">Delicious</a>
+			<a class="pinboard" href="https://pinboard.in/u:" title="Pinboard">Pinboard</a>
+			<a class="douban" href="https://www.douban.com/people/" title="Douban">Douban</a>
+			<a class="quora" href="https://quora.com/" title="Quora">Quora</a>
+			<a class="instagram" href="https://instagram.com/" title="Instagram">Instagram</a>
+			<a class="behance" href="https://www.behance.net/" title="Behance">Behance</a>
+			<a class="facebook" href="http://www.facebook.com/" title="Facebook">Facebook</a>
+								<a class="twitter" href="http://twitter.com/" title="Twitter">Twitter</a>
+								<a class="github" href="https://github.com/" title="GitHub">GitHub</a>
+-->							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：Aggregate脚本版本《模拟器与真机静态Framework合成教程》</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>为了写这篇文章, 我翻查了许多资料, 都没有找到详细点的可参考资料, 外国的文章就不用说了, 光是看鸡肠就头晕了, 所以我自己总结了一些经验, 整理了一番, 决定分享出来, 希望大家喜欢</p>
+
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Aggregate-Framework</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p>之前我写了一个关于非<strong><code>Aggregate</code></strong>版本的<a href="http://www.jianshu.com/p/305c62fa9e2b">《模拟器与真机静态Framework合成教程》</a>, 但那个实在是太麻烦的, 所以我又出墙翻了一些歪果仁写的博客, 果然是世上无难事只怕有心人, 终于被我找到合适的<strong><code>Shell</code></strong>脚本了</p>
+
+<hr/>
+
+<h3 id="toc_2">创建静态包工程</h3>
+
+<p>新建一个Workpace文件</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/0.png" alt="0 | center | 1080x0"/></p>
+
+<blockquote>
+<p>新建Cocoa Touch Framework工程</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/1.png" alt="1 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/2.png" alt="2 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/3.png" alt="3 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/4.png" alt="4 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_3">添加测试类</h3>
+
+<blockquote>
+<p>添加一个测试类<strong><code>TestTwoClass</code></strong></p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/5.png" alt="5 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_4">配置静态包工程</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/6.png" alt="6 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/7.png" alt="7 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/8.png" alt="8 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/9.png" alt="9 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/10.png" alt="10 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/11.png" alt="11 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/12.png" alt="12 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_5">分别生成真机与模拟器的静态包</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/13.png" alt="13 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/14.png" alt="14 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_6">创建脚本选项</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/15.png" alt="15 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/16.png" alt="16 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/17.png" alt="17 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_7">配置脚本选项</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/18.png" alt="18 | center | 1080x0"/></p>
+
+<blockquote>
+<p>打开<strong><code>Run Script</code></strong>之后, 输入以下的脚本, 就可以自动合成通用的<strong><code>Framework</code></strong>库了</p>
+
+<p>PS: 脚本是我在<strong><code>Google</code></strong>上搜到的, 详细是谁写的, 我也不清楚, 很感谢这个作者提供的脚本</p>
+</blockquote>
+
+<pre><code class="language-shell">if [ &quot;${ACTION}&quot; = &quot;build&quot; ]
+then
+INSTALL_DIR=${SRCROOT}/Products/${PROJECT_NAME}.framework
+
+DEVICE_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphoneos/${PROJECT_NAME}.framework
+
+SIMULATOR_DIR=${BUILD_ROOT}/${CONFIGURATION}-iphonesimulator/${PROJECT_NAME}.framework
+
+
+if [ -d &quot;${INSTALL_DIR}&quot; ]
+then
+rm -rf &quot;${INSTALL_DIR}&quot;
+fi
+
+mkdir -p &quot;${INSTALL_DIR}&quot;
+
+cp -R &quot;${DEVICE_DIR}/&quot; &quot;${INSTALL_DIR}/&quot;
+#ditto &quot;${DEVICE_DIR}/Headers&quot; &quot;${INSTALL_DIR}/Headers&quot;
+
+lipo -create &quot;${DEVICE_DIR}/${PROJECT_NAME}&quot; &quot;${SIMULATOR_DIR}/${PROJECT_NAME}&quot; -output &quot;${INSTALL_DIR}/${PROJECT_NAME}&quot;
+
+#open &quot;${DEVICE_DIR}&quot;
+#open &quot;${SRCROOT}/Products&quot;
+fi
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/19.png" alt="19 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/20.png" alt="20 | center | 1080x0"/></p>
+
+<blockquote>
+<p>这里逮到一个错误, 不要慌, 因为我们之前是用<strong><code>Release</code></strong>模式的, 只要把<strong><code>Aggregate</code></strong>切换到<strong><code>Release</code></strong>模式, 再运行就可以了</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/21.png" alt="21 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/22.png" alt="22 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/23.png" alt="23 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/24.png" alt="24 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_8">检测静态包</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/25.png" alt="25 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/26.png" alt="26 | center | 1080x0"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/27.png" alt="27 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_9">测试静态包</h3>
+
+<blockquote>
+<p>测试的方法和<strong><a href="http://www.jianshu.com/p/305c62fa9e2b">《模拟器与真机静态Framework合成教程》</a></strong>这里面的测试方法一样, 这样就不多做解释了</p>
+
+<p>但是这里还有一点需要注意一些, 由于我们刚刚在打包的时候, 是把<strong><code>TestTwoClass.h</code></strong>是丢到<strong><code>Private</code></strong>里面去的, 哪怕我们已经把头文件丢到<strong><code>TestTwo.h</code></strong>中, 然后再引用<strong><code>TestTwo.h</code></strong>, 依旧是没办法去调用<strong><code>TestTwoClass</code></strong>内部的任何东西, 怎么办呢?</p>
+
+<p>我们只要去改改导入的头文件就可以了, 比如:</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/28.png" alt="28 | center | 1080x0"/></p>
+
+<blockquote>
+<p>PS: 这种方式只是我们来玩玩而已, 基本上我们都会吧<strong><code>.h</code></strong>文件放到<strong><code>public</code></strong>中</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_10">工程地址</h3>
+
+<p>GitHub地址: <a href="https://github.com/CainRun/CreateGeneralFramework">https://github.com/CainRun/CreateGeneralFramework</a></p>
+
+<hr/>
+
+<h3 id="toc_11">结束语</h3>
+
+<blockquote>
+<p>好啦, 教程到这里就结束了, 谢谢大家的耐心观看</p>
+</blockquote>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="http://cainrun.github.io">Cain</a> &nbsp;&nbsp; 
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"><div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"><div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>
