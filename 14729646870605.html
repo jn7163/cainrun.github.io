@@ -139,12 +139,14 @@
 <h3 id="toc_1">简介</h3>
 
 <blockquote>
-<p>之前我写了一个关于非<strong><code>Aggregate</code></strong>版本的<a href="https://cainrun.github.io/14729651532234.html">《模拟器与真机静态Framework合成教程》</a>, 但那个实在是太麻烦的, 所以我又出墙翻了一些歪果仁写的博客, 果然是世上无难事只怕有心人, 终于被我找到合适的<strong><code>Shell</code></strong>脚本了</p>
+<p>之前我写了一个关于非<strong><code>Aggregate</code></strong>版本的<a href="https://cainrun.github.io/14729651532234.html">模拟器与真机静态Framework合成教程</a>, 但那个实在是太麻烦的, 所以我又出墙翻了一些歪果仁写的博客, 果然是世上无难事只怕有心人, 终于被我找到合适的<strong><code>Shell</code></strong>脚本了</p>
+</blockquote>
 
 <hr/>
 
 <h3 id="toc_2">创建静态包工程</h3>
 
+<blockquote>
 <p>新建一个Workpace文件</p>
 </blockquote>
 
@@ -277,7 +279,7 @@ fi
 <h3 id="toc_9">测试静态包</h3>
 
 <blockquote>
-<p>测试的方法和<a href="https://cainrun.github.io/14729651532234.html">《模拟器与真机静态Framework合成教程》</a>这里面的测试方法一样, 这样就不多做解释了</p>
+<p>测试的方法和<a href="https://cainrun.github.io/14729651532234.html">模拟器与真机静态Framework合成教程</a>这里面的测试方法一样, 这样就不多做解释了</p>
 
 <p>但是这里还有一点需要注意一些, 由于我们刚刚在打包的时候, 是把<strong><code>TestTwoClass.h</code></strong>是丢到<strong><code>Private</code></strong>里面去的, 哪怕我们已经把头文件丢到<strong><code>TestTwo.h</code></strong>中, 然后再引用<strong><code>TestTwo.h</code></strong>, 依旧是没办法去调用<strong><code>TestTwoClass</code></strong>内部的任何东西, 怎么办呢?</p>
 
