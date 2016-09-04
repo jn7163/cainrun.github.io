@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-09-04T13:07:49+08:00</updated>
+  <updated>2016-09-04T13:50:18+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,580 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：横向滑动条《CALToolBarListView》]]></title>
+    <link href="http://Cain.developer.io/14729678790305.html"/>
+    <updated>2016-09-04T13:44:39+08:00</updated>
+    <id>http://Cain.developer.io/14729678790305.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>关于横向滑动条, 我一直都想自己封装一个, 但由于精力有限, 目前只能封装个比较简陋的, 如果有朋友想帮忙完善一下的话, 可以私聊我, 我给你开通一下权限哈~~</p>
+
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>CALToolBarListView</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p><strong><code>CALToolBarListView</code></strong>是一个仿<strong><code>UISegmentedControl</code></strong>的一个<strong><code>UI控件</code></strong>, 在刚开始设计的时候, 注重点就是为了灵活性, 可以自定义标题颜色, 选中提示条的颜色等等, 目前只有两个样式, 当然, 你可以根据我提供的源码来自行添加你所喜欢的样式</p>
+</blockquote>
+
+<hr/>
+
+<h2 id="toc_2"><p align="center">使用说明</p></h2>
+
+<h3 id="toc_3">初始化</h3>
+
+<blockquote>
+<p>在使用<strong><code>CALToolBarListView</code></strong>的时候必须得通过以下的初始化方法来进行初始化, 并且<strong><code>titleArray</code></strong>不能为空, 否则就会<strong><code>Crash</code></strong>.</p>
+</blockquote>
+
+<pre><code class="language-objectivec">/**
+ *  初始化TooBar
+ *
+ *  @param frame      设置TooBar的Frame
+ *
+ *  @return self
+ */
+- (instancetype)initToolBarWithFrame:(CGRect)frame;
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_4">通用属性</h3>
+
+<pre><code class="language-objectivec">/**
+ *  是否根据按钮宽度自动缩小标题, default: NO
+ */
+@property (nonatomic, assign) BOOL titleAdjustsFontSizeToFitWidth;
+
+/**
+ *  选中的按钮文字的颜色, default: redColor
+ */
+@property (nonatomic, strong) UIColor *selectedColor;
+
+/**
+ *  非选中的按钮文字的颜色, default: blackColor
+ */
+@property (nonatomic, strong) UIColor *deselectColor;
+
+/**
+ *  背景颜色, default: whiteColor
+ */
+@property (nonatomic, strong) UIColor *barBakcgroundColor;
+
+/**
+ *  底部线条的颜色, default: grayColor
+ */
+@property (nonatomic, strong) UIColor *bottomLineColor;
+
+/**
+ *  选中按钮提示条的颜色, default: cyanColor
+ */
+@property (nonatomic, strong) UIColor *selectedLineColor;
+
+/**
+ *  按钮文字大小, default: 16
+ */
+@property (nonatomic, assign) NSInteger textFont;
+
+/**
+ *  按钮之间的间距, default: 10
+ */
+@property (nonatomic, assign) CGFloat buttonSpacing;
+
+/**
+ *  是否需要底部线
+ */
+@property (nonatomic, assign) BOOL isNeedLine;
+
+/**
+ *  是否需要选中提示条
+ */
+@property (nonatomic, assign) BOOL isNeedSelectedLine;
+
+/**
+ *  当前点击的currentIndex, default: 0
+ */
+@property (nonatomic, getter=currentIndex) NSInteger currentIndex;
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_5">显示样式</h3>
+
+<blockquote>
+<p>在这里我提供了两个显示的样式</p>
+</blockquote>
+
+<pre><code class="language-objectivec">typedef NS_ENUM(NSInteger, CALToolBarStyle) {
+    CALToolBarNormalStyle = 0,
+    CALToolBarSeparationStyle
+};
+</code></pre>
+
+<blockquote>
+<p>可以通过下面这个属性进行设置, 默认是<strong><code>CALToolBarNormalStyle</code></strong></p>
+</blockquote>
+
+<pre><code class="language-objectivec">/**
+ *  设置ToolBar显示的样式, default: CALToolBarNormalStyle
+ */
+@property (nonatomic, assign) CALToolBarStyle toolBarStyle;
+</code></pre>
+
+<blockquote>
+<p><strong><code>CALToolBarNormalStyle</code></strong></p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CALToolBarView/master/images-File/CALToolBarNormalStyle.png" alt="1"/></p>
+
+<blockquote>
+<p><strong><code>CALToolBarSeparationStyle</code></strong></p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CALToolBarView/master/images-File/CALToolBarSeparationStyle.png" alt="2"/></p>
+
+<blockquote>
+<p>选择样式二的时候, 可通过以下的属性修改显示的颜色</p>
+</blockquote>
+
+<pre><code class="language-objectivec">/**
+ *  Seoaration分割线的颜色
+ *  注意: 前提是你设置了toolBarStyle为CALToolBarSeparationStyle才有效, 默认为grayColor
+ */
+@property (nonatomic, strong) UIColor *separationColor;
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_6">通用方法</h3>
+
+<blockquote>
+<p>首先肯定是最常用的方法<strong><code>reloadData</code></strong>, 是用来刷新整个<strong><code>CALToolBarListView</code></strong>数据的方法, 只有调用了这个方法, <strong><code>CALToolBarListView</code></strong>才会显示对应的数据.<br/>
+<code>objectivec<br/>
+/**<br/>
+ *  刷新整个列表<br/>
+ */<br/>
+- (void)reloadData;<br/>
+</code></p>
+
+<p>以下这个方法是默认选中指定<strong><code>Index</code></strong>的按钮, 但需要注意一点就是, 必须现有数据才能调用, 否则直接调用时无效的.<br/>
+<code>objectivec<br/>
+/**<br/>
+ *  指定当前选中的Button Index<br/>
+ *  @param 注意: 使用该方法, 必须先得实现reloadData的方法, 否则不生效<br/>
+ *  @param index 指定当前选中的Button Index<br/>
+ */<br/>
+- (void)didSelectedButton:(NSInteger)index;<br/>
+</code></p>
+
+<p>以下这个方法是获取对应按钮的点击事件, 在这里我就没有使用代理来写, 毕竟写代理会增加更多的代码, 直接用一个<strong><code>Block</code></strong>就完事<br/>
+<code>objectivec<br/>
+/**<br/>
+ *  点击事件Block<br/>
+ */<br/>
+@property (nonatomic, copy) void(^calToolBarSelectedBlock)(NSInteger index);<br/>
+</code></p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_7">演示代码</h3>
+
+<blockquote>
+<p>以下就是使用的演示代码, 方便大家直接查看代码</p>
+</blockquote>
+
+<pre><code class="language-objectivec">    NSArray *titleArray = @[@&quot;标题一&quot;, @&quot;标题二&quot;, @&quot;标题三&quot;, @&quot;标题四&quot;, @&quot;标题五&quot;];
+
+    CALToolBarListView *toolBarList = [[CALToolBarListView alloc] initToolBarWithFrame:CGRectMake(0, 250, self.view.frame.size.width, 40)
+                                                                            titleArray:titleArray];
+    toolBarList.barBakcgroundColor = [UIColor greenColor];
+    toolBarList.selectedLineColor  = [UIColor redColor];
+    toolBarList.bottomLineColor    = [UIColor blueColor];
+    toolBarList.toolBarStyle       = CALToolBarSeparationStyle;
+    toolBarList.separationColor    = [UIColor grayColor];
+    
+    [toolBarList reloadData];
+    [toolBarList didSelectedButton:3];
+    
+    NSLog(@&quot;currentIndex: %zd&quot;, toolBarList.currentIndex);
+    
+    [toolBarList setCalToolBarSelectedBlock:^(NSInteger index) {
+        NSLog(@&quot;index: %zd&quot;, index);
+    }];
+    
+    [self.view addSubview:toolBarList];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_8">展示效果</h3>
+
+<blockquote>
+<p>请原谅我用的渣渣<strong><code>GIF</code></strong>录制工具....</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CALToolBarView/master/images-File/demo.gif" alt="demo"/></p>
+
+<hr/>
+
+<h3 id="toc_9">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/CALToolBarView">https://github.com/CainRun/CALToolBarView</a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：使用自定义《UIActivity》进行内容分享]]></title>
+    <link href="http://Cain.developer.io/14729665774054.html"/>
+    <updated>2016-09-04T13:22:57+08:00</updated>
+    <id>http://Cain.developer.io/14729665774054.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>在我写这篇文章的时候, 虽然国内有一堆文章介绍<strong><code>UIActivityViewController</code></strong>和<strong><code>UIActivity</code></strong>, 但都是零零散散的, 哪怕我翻墙出去看<strong><code>YouTube</code></strong>, 或者是著名的<strong><a href="http://nshipster.com/uiactivityviewcontroller/">黑胡子博客</a></strong>, 都没有详细的讲解怎么去自定义所需的<strong><code>UIActivity</code></strong>, 最后基本上翻遍了谷歌, 才找到了所需的.</p>
+
+<p><strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>UIActivityViewController</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p>这段时间有很多朋友都问我关于怎么去集成<strong><code>ShareSDK</code></strong>或者<strong><code>友盟社会化分享SDK</code></strong>的问题, 其实我想说, <strong><code>Apple</code></strong>一开始就提供了一个类, 供我们去使用分享了, 在<strong><code>iOS 6</code></strong>之后更加增强了这个类, 使我们不再需要集成第三方的, 而且还支持自定义分享的<strong><code>item</code></strong>.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">创建新工程</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/1.png" alt="1 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/2.png" alt="2 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_3">创建一个继承与UIActivityViewController的类</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/3.png" alt="3 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/4.png" alt="4 | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_4">创建一个继承与UIActivity的类</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/5.png" alt="5 | center | 1080x0"/></p>
+
+<blockquote>
+<p>这时候我们就要来给这个自定义的<strong><code>UIActivity</code></strong>类写上我们需要的内容, 首先我们可以去到系统提供的<strong><code>UIActivity</code></strong>头文件看<strong><code>API</code></strong>, 获取我们所需的<strong><code>API</code></strong>.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/6.png" alt="6  | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_5">配置UIActivity和UIActivityViewController</h3>
+
+<blockquote>
+<p>下面是我写好的自定义<strong><code>WeiboActivity</code></strong> <strong><code>API</code></strong></p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/7.png" alt="7  | center | 1080x0"/></p>
+
+<blockquote>
+<p>具体实现的代码:</p>
+</blockquote>
+
+<pre><code class="language-Objective-c">#import &quot;WeiboActivity.h&quot;
+
+@implementation WeiboActivity
+
+- (NSString *)activityType {
+    
+    return @&quot;CustomWeiboActivity&quot;;
+}
+
+- (NSString *)activityTitle {
+    
+    return @&quot;新浪微博&quot;;
+}
+
+- (UIImage *)activityImage {
+    
+    return [UIImage imageNamed:@&quot;ShareBundle.bundle/share_icon_1&quot;];
+}
+
+- (void)performActivity {
+    [self activityDidFinish:YES];
+}
+
+@end
+</code></pre>
+
+<blockquote>
+<p>下面是我写好的自定义<strong><code>UIActivityController</code></strong></p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/8.png" alt="8  | center | 1080x0"/></p>
+
+<blockquote>
+<p>具体实现的代码:</p>
+</blockquote>
+
+<pre><code class="language-Objective-c">#import &quot;UIActivityController.h&quot;
+#import &quot;WeiboActivity.h&quot;
+
+#define CAL_GET_OBJECT(objc) if (objc) return objc
+
+@interface UIActivityController ()
+
+@property (nonatomic, strong) WeiboActivity *weiboActivity;
+
+@end
+
+@implementation UIActivityController
+
+- (instancetype)initAspActivityControllerWithContent:(NSArray *)activityContent {
+    
+    NSArray *activitys = @[self.weiboActivity];
+    
+    if (self = [super initWithActivityItems:activityContent applicationActivities:activitys]) {
+        
+        self.excludedActivityTypes = @[UIActivityTypePostToFacebook,
+                                       UIActivityTypePostToTwitter,
+                                       UIActivityTypePostToWeibo,
+                                       UIActivityTypeMail,
+                                       UIActivityTypePrint,
+                                       UIActivityTypeCopyToPasteboard,
+                                       UIActivityTypeAssignToContact,
+                                       UIActivityTypeSaveToCameraRoll,
+                                       UIActivityTypeAddToReadingList,
+                                       UIActivityTypePostToFlickr,
+                                       UIActivityTypePostToVimeo,
+                                       UIActivityTypePostToTencentWeibo,
+                                       UIActivityTypeAirDrop,
+                                       UIActivityTypeOpenInIBooks];
+    }
+    
+    return self;
+}
+
+- (WeiboActivity *)weiboActivity {
+    
+    CAL_GET_OBJECT(_weiboActivity);
+    
+    _weiboActivity = [[WeiboActivity alloc] init];
+    
+    return _weiboActivity;
+}
+
+@end
+</code></pre>
+
+<blockquote>
+<p>这里和大家说说<strong><code>excludedActivityTypes</code></strong>这个属性, 这个属性其实是一个数组属性, 代表的是, 如果我们不需要系统的服务就可以给它赋值, 这样子<strong><code>UIActivityViewController</code></strong>就不会显示对应的服务, 我这里默认全部干掉, 一个服务都不需要, 当然如果需要干掉我们自定义的<strong><code>UIActivity</code></strong>, 也可以在这里写上.</p>
+
+<p>还有一点, 就是我们给<strong><code>UIActivityViewController</code></strong>赋值自定义的<strong><code>UIActivity</code></strong></p>
+
+<p>PS: 注意一点, 这个赋值只能在<strong><code>initWithActivityItems: applicationActivities:</code></strong>这个方法的<strong><code>applicationActivities:</code></strong>赋值, 而且只能在初始化的时候赋值, 一旦赋值之后就不能再修改了.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/9.png" alt="9  | center | 1080x0"/></p>
+
+<hr/>
+
+<h3 id="toc_6">调起UIActivityViewController</h3>
+
+<blockquote>
+<p>最重要的地方来了, 就是调起我们自定义的<strong><code>UIActivityController</code></strong>.</p>
+
+<p>首先我们要在<strong><code>Main.storyboard</code></strong>中拖一个<strong><code>UIButton</code></strong>, 然后添加对应的代码.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/10.png" alt="10  | center | 1080x0"/></p>
+
+<blockquote>
+<p>代码: </p>
+</blockquote>
+
+<pre><code class="language-Objective-c">#import &quot;ViewController.h&quot;
+#import &quot;UIActivityController.h&quot;
+
+@interface ViewController ()
+
+@property (nonatomic, strong) UIActivityController *activityController;
+
+@end
+
+@implementation ViewController
+
+- (IBAction)popActivityController:(UIButton *)sender {
+    
+    [self presentViewController:self.activityController animated:YES completion:nil];
+}
+
+- (UIActivityController *)activityController {
+    
+    NSString *shareTitle = @&quot;分享的标题&quot;;
+    UIImage *shareImage = [UIImage imageNamed:@&quot;ShareBundle.bundle/share_icon_1&quot;];
+    
+    if (!_activityController) {
+        
+        _activityController = [[UIActivityController alloc] initAspActivityControllerWithContent:@[shareTitle, shareImage]];
+    }
+    
+    return _activityController;
+}
+
+@end
+</code></pre>
+
+<blockquote>
+<p>最后我们运行一下看看效果</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/11.png" alt="10  | center | 720x0"/></p>
+
+<blockquote>
+<p>发现什么都没有, 肯定在喷我, 觉得我是在耍你们, 哈哈, 其实在这里我们少了一个方法没有添加, 回到我们自定义的<strong><code>WeiboActivity</code></strong>中, 添加上就OK了</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/12.png" alt="12  | center | 1080x0"/></p>
+
+<blockquote>
+<p>具体实现的代码:</p>
+</blockquote>
+
+<pre><code class="language-Objective-c">- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
+    
+    if (activityItems.count &gt; 0) {
+        
+        return YES;
+    }
+    
+    return NO;
+}
+</code></pre>
+
+<blockquote>
+<p>再来运行看看效果</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/13.png" alt="13  | center | 720x0"/></p>
+
+<blockquote>
+<p>好了, <strong><code>item</code></strong>出来了, 但好像有什么不对, 图标呢???!!! 为啥是灰色的? 楼主你耍我, 我要去爆你菊花!!!!!</p>
+
+<p>别紧张, 在系统默认的<strong><code>UIActivityViewController</code></strong>中, 下面这部分是属于系统服务, 默认只会显示一个轮廓, 并不会显示整张图片, 下面我们把自定义的<strong><code>WeiboActivity</code></strong>显示图片的方法改改就好了.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/14.png" alt="14  | center | 1080x0"/></p>
+
+<blockquote>
+<p>代码:</p>
+</blockquote>
+
+<pre><code class="language-Objective-c">- (UIImage *)_activityImage {
+    
+    return [UIImage imageNamed:@&quot;ShareBundle.bundle/share_icon_1&quot;];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/15.png" alt="15  | center | 720x0"/></p>
+
+<blockquote>
+<p>好了, 我的菊花保住了, 图标出来了, 把我吓了一身冷汗</p>
+
+<p>图标出来了, 我们就要给这个<strong><code>item</code></strong>添加点击事件了, 做什么好呢, 总不可能让我去导个微信微博等SDK进来演示, 毕竟还要去申请<strong><code>AppID</code></strong>和<strong><code>AppKey</code></strong>呢, 我们来个弹框吧~~~</p>
+
+<p>我一般喜欢写个<strong><code>Block</code></strong>把点击事件抛出去做处理, 这次我也不例外~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/16.png" alt="16  | center | 1080x0"/></p>
+
+<blockquote>
+<p>具体实现的代码:</p>
+</blockquote>
+
+<pre><code class="language-Objective-c">- (void)performActivity {
+    [self activityDidFinish:YES];
+    
+    if (self.weiboBlock) {
+        self.weiboBlock();
+    }
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/17.png" alt="17  | center | 1080x0"/></p>
+
+<blockquote>
+<p>具体实现的代码: </p>
+</blockquote>
+
+<pre><code class="language-Objective-c">- (WeiboActivity *)weiboActivity {
+    
+    CAL_GET_OBJECT(_weiboActivity);
+    
+    _weiboActivity = [[WeiboActivity alloc] init];
+    
+    [_weiboActivity setWeiboBlock:^{
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@&quot;新浪微博&quot;
+                                                            message:@&quot;分享至新浪微博&quot;
+                                                           delegate:nil
+                                                  cancelButtonTitle:@&quot;好的&quot;
+                                                  otherButtonTitles:nil, nil];
+        
+        [alertView show];
+    }];
+
+    return _weiboActivity;
+}
+</code></pre>
+
+<blockquote>
+<p>PS: 由于我这里是做示范, 所以使用<strong><code>UIAlertView</code></strong>, 如果大家要在项目中使用的话, 尽量使用<strong><code>UIAlertController</code></strong>.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_7">最终效果</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/18.png" alt="15  | center | 720x0"/></p>
+
+<hr/>
+
+<h3 id="toc_8">GitHub工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/ActivityControllerDemo/tree/master/UIActivityViewControllerDemo">https://github.com/CainRun/ActivityControllerDemo/tree/master/UIActivityViewControllerDemo</a></p>
+
+<hr/>
+
+<h3 id="toc_9">结束语</h3>
+
+<blockquote>
+<p>好啦, 教程到这里就结束了, 谢谢大家的耐心观看</p>
+</blockquote>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：非脚本版本《模拟器与真机静态Framework合成教程》]]></title>
@@ -276,7 +850,7 @@ lipo -create (真机Framework路径) (模拟器Framework路径) -output (真机/
 
 <h3 id="toc_9">工程地址</h3>
 
-<p>GitHub地址: <a href="https://github.com/CainRun/CreateGeneralFramework">https://github.com/CainRun/CreateGeneralFramework</a></p>
+<p>项目地址: <a href="https://github.com/CainRun/CreateGeneralFramework">https://github.com/CainRun/CreateGeneralFramework</a></p>
 
 <hr/>
 
@@ -311,7 +885,7 @@ lipo -create (真机Framework路径) (模拟器Framework路径) -output (真机/
 <h3 id="toc_1">简介</h3>
 
 <blockquote>
-<p>之前我写了一个关于非<strong><code>Aggregate</code></strong>版本的<a href="http://www.jianshu.com/p/305c62fa9e2b">《模拟器与真机静态Framework合成教程》</a>, 但那个实在是太麻烦的, 所以我又出墙翻了一些歪果仁写的博客, 果然是世上无难事只怕有心人, 终于被我找到合适的<strong><code>Shell</code></strong>脚本了</p>
+<p>之前我写了一个关于非<strong><code>Aggregate</code></strong>版本的<a href="https://cainrun.github.io/14729651532234.html">《模拟器与真机静态Framework合成教程》</a>, 但那个实在是太麻烦的, 所以我又出墙翻了一些歪果仁写的博客, 果然是世上无难事只怕有心人, 终于被我找到合适的<strong><code>Shell</code></strong>脚本了</p>
 
 <hr/>
 
@@ -326,10 +900,13 @@ lipo -create (真机Framework路径) (模拟器Framework路径) -output (真机/
 <p>新建Cocoa Touch Framework工程</p>
 </blockquote>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/1.png" alt="1 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/2.png" alt="2 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/3.png" alt="3 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/4.png" alt="4 | center | 1080x0"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/1.png" alt="1 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/2.png" alt="2 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/3.png" alt="3 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/4.png" alt="4 | center | 1080x0"/></p>
 
 <hr/>
 
@@ -345,28 +922,37 @@ lipo -create (真机Framework路径) (模拟器Framework路径) -output (真机/
 
 <h3 id="toc_4">配置静态包工程</h3>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/6.png" alt="6 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/7.png" alt="7 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/8.png" alt="8 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/9.png" alt="9 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/10.png" alt="10 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/11.png" alt="11 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/12.png" alt="12 | center | 1080x0"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/6.png" alt="6 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/7.png" alt="7 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/8.png" alt="8 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/9.png" alt="9 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/10.png" alt="10 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/11.png" alt="11 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/12.png" alt="12 | center | 1080x0"/></p>
 
 <hr/>
 
 <h3 id="toc_5">分别生成真机与模拟器的静态包</h3>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/13.png" alt="13 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/14.png" alt="14 | center | 1080x0"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/13.png" alt="13 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/14.png" alt="14 | center | 1080x0"/></p>
 
 <hr/>
 
 <h3 id="toc_6">创建脚本选项</h3>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/15.png" alt="15 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/16.png" alt="16 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/17.png" alt="17 | center | 1080x0"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/15.png" alt="15 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/16.png" alt="16 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/17.png" alt="17 | center | 1080x0"/></p>
 
 <hr/>
 
@@ -414,25 +1000,30 @@ fi
 <p>这里逮到一个错误, 不要慌, 因为我们之前是用<strong><code>Release</code></strong>模式的, 只要把<strong><code>Aggregate</code></strong>切换到<strong><code>Release</code></strong>模式, 再运行就可以了</p>
 </blockquote>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/21.png" alt="21 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/22.png" alt="22 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/23.png" alt="23 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/24.png" alt="24 | center | 1080x0"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/21.png" alt="21 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/22.png" alt="22 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/23.png" alt="23 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/24.png" alt="24 | center | 1080x0"/></p>
 
 <hr/>
 
 <h3 id="toc_8">检测静态包</h3>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/25.png" alt="25 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/26.png" alt="26 | center | 1080x0"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/27.png" alt="27 | center | 1080x0"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/25.png" alt="25 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/26.png" alt="26 | center | 1080x0"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/AggregateFramework/images/27.png" alt="27 | center | 1080x0"/></p>
 
 <hr/>
 
 <h3 id="toc_9">测试静态包</h3>
 
 <blockquote>
-<p>测试的方法和<strong><a href="http://www.jianshu.com/p/305c62fa9e2b">《模拟器与真机静态Framework合成教程》</a></strong>这里面的测试方法一样, 这样就不多做解释了</p>
+<p>测试的方法和<strong><a href="https://cainrun.github.io/14729651532234.html">《模拟器与真机静态Framework合成教程》</a></strong>这里面的测试方法一样, 这样就不多做解释了</p>
 
 <p>但是这里还有一点需要注意一些, 由于我们刚刚在打包的时候, 是把<strong><code>TestTwoClass.h</code></strong>是丢到<strong><code>Private</code></strong>里面去的, 哪怕我们已经把头文件丢到<strong><code>TestTwo.h</code></strong>中, 然后再引用<strong><code>TestTwo.h</code></strong>, 依旧是没办法去调用<strong><code>TestTwoClass</code></strong>内部的任何东西, 怎么办呢?</p>
 
@@ -449,7 +1040,7 @@ fi
 
 <h3 id="toc_10">工程地址</h3>
 
-<p>GitHub地址: <a href="https://github.com/CainRun/CreateGeneralFramework">https://github.com/CainRun/CreateGeneralFramework</a></p>
+<p>项目地址: <a href="https://github.com/CainRun/CreateGeneralFramework">https://github.com/CainRun/CreateGeneralFramework</a></p>
 
 <hr/>
 
