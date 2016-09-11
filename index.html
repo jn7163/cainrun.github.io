@@ -77,6 +77,10 @@
 			<div class="intrude-less">
 				<header id="header" class="inner">
 				 
+				 	<div class="profilepic">
+						<img src="asset/images/icon.png" style="width:160px;">
+					</div>
+            	
 					
 					<h1><a href="index.html">Cain For iOS</a></h1>
 					<p class="subtitle">如果您有更好的建议或者其他不明白的地方, 可以联系我QQ: 350116542</p>
@@ -100,9 +104,9 @@
 
 
 
+<a target="_blank" class="weibo" href="http://weibo.com/1826190094" title="weibo">Weibo</a>
 
-
-
+<a target="_blank" class="github" target="_blank" href="https://github.com/CainRun" title="GitHub">GitHub</a>
 
 
 								
@@ -148,6 +152,65 @@
 			 
 			<a href="14735762460993.html#more" class="more-link">Read on &rarr;</a>
     		
+			
+		</div>
+
+	</article>
+ 
+	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+		<div class="meta">
+			<div class="date">
+				<time datetime="2016-09-05T00:16:58+08:00" itemprop="datePublished">2016/9/5</time>
+			</div>
+			<div class="tags">posted in 
+			
+			    <a class='category' href='iOS%208%E7%89%B9%E6%80%A7.html'>iOS 8特性</a>&nbsp;
+			 
+			</div>
+		</div>
+		<h1 class="title" itemprop="name"><a href="14730058185822.html" itemprop="url">
+		玩转iOS开发：iOS 8 新特性《UIVisualEffect》</a></h1>
+		<div class="entry-content" itemprop="articleBody">
+			
+			<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>在iOS 8发布的时候, <strong><code>Apple</code></strong>介绍了很多iOS 8的新特性, 比如什么<strong><code>Extensions</code></strong>,<strong><code>Photo</code></strong>,<strong><code>Siri</code></strong>等等之类的, 虽然讲了不少, 但也有很多东西被忽略掉的, 比如今天我们所讲的<strong><code>UIVisualEffect</code></strong>.<br/>
+<dr/><br/>
+有人会问, 这个类是干嘛的呢? 有人又会说, 这个类我用过, 但不好用等等之类的<br/>
+<dr/><br/>
+的确, 这个类的确是不太好用, 限制性太强了, 能使用的<strong><code>API</code></strong>也就一丢丢, 对于现在的需求逐渐多元化来说, 是远远不够的, 但我们可以期待一下, 或许以后苹果会逐渐的开放这个控件呢~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p><strong><code>UIVisualEffect</code></strong>这个控件其实就是一个高斯模糊的一个实现的类, 它继承与<strong><code>NSObject</code></strong>, 有三种样式, 分别是: </p>
+
+<ul>
+<li><strong><code>UIBlurEffectStyleExtraLight</code></strong></li>
+<li><strong><code>UIBlurEffectStyleLight</code></strong></li>
+<li><strong><code>UIBlurEffectStyleDark</code></strong></li>
+</ul>
+
+<p><dr/><br/>
+有一个子类叫做<strong><code>UIVibrancyEffect</code></strong>, 还有一个可调用<strong><code>UIVisualEffect</code></strong>的类叫做<strong><code>UIVisualEffectView</code></strong>, 下面让我们来看看怎么去使用吧.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">新建工程</h3>
+
+<blockquote>
+<p>这里我们建了一个叫做<strong><code>UIVisualEffect</code></strong>的工程</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/0.png" alt="1"/></p>
+
+
+			
 			
 		</div>
 
@@ -585,6 +648,19 @@ Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank 
 	</div>
 
   
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:'cainluo'};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
     
 <script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
