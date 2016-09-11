@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-09-11T18:47:02+08:00</updated>
+  <updated>2016-09-11T18:49:22+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -197,7 +197,10 @@
 <p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/10.png" alt="10"/></p>
 
 <blockquote>
-<p>实现代码都给你们贴出来了~这是我在以前的官方Demo中拷贝出来的~</p>
+<p>实现代码都给你们贴出来了~这是我在以前的官方Demo中拷贝出来的~ <br/>
+<br/></p>
+
+<p><strong><font color=red>PS: 这里是Demo, 所以这里拿到的神马签名啊, 商户ID, 支付链接神马的, 都是写在客户端的, 但在实际开发当中, 这是强烈不建议在客户端内自己生成, 一定一定要由服务器返回, 不然你会非常深刻的了解到蛋疼这个词语是啥意思~~</font></strong></p>
 </blockquote>
 
 <pre><code class="language-objectivec">    NSString *urlString = @&quot;http://wxpay.weixin.qq.com/pub_v2/app/app_pay.php?plat=ios&quot;;
