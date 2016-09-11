@@ -123,9 +123,9 @@
 			<h3 id="toc_0">作者感言</h3>
 
 <blockquote>
-<p>这次的<strong><code>CocoaPods</code></strong>的<strong><code>Review</code></strong>，让我知道了新版的<strong><code>CocoaPods</code></strong>和旧版的<strong><code>CocoaPods</code></strong>的区别, 在声明<strong><code>Podfile</code></strong>文件中, 需要加入对应的<strong><code>target</code></strong>才可以执行, 我个人感觉这个操作有些不太友好, 但他们要这么做, 我也没办法, 毕竟我只是小白用户而已.</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
+<p>这次的<strong><code>CocoaPods</code></strong>的<strong><code>Review</code></strong>，让我知道了新版的<strong><code>CocoaPods</code></strong>和旧版的<strong><code>CocoaPods</code></strong>的区别, 在声明<strong><code>Podfile</code></strong>文件中, 需要加入对应的<strong><code>target</code></strong>才可以执行, 我个人感觉这个操作有些不太友好, 但他们要这么做, 我也没办法, 毕竟我只是小白用户而已.<br/>
+<dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
 <strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>CocoaPods</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
 </blockquote>
 
@@ -161,22 +161,22 @@
 <h3 id="toc_3">CocoaPods的核心组件</h3>
 
 <blockquote>
-<p><strong><code>CocoaPods</code></strong>是用<strong><code>Ruby</code></strong>写的，并划分成了若干个<strong><code>Gem</code></strong>包。</p>
-
-<p><strong><code>CocoaPods</code></strong>在解析执行过程中最重要的几个包的路径分别是：<br/>
+<p><strong><code>CocoaPods</code></strong>是用<strong><code>Ruby</code></strong>写的，并划分成了若干个<strong><code>Gem</code></strong>包。<br/>
+<dr/><br/>
+<strong><code>CocoaPods</code></strong>在解析执行过程中最重要的几个包的路径分别是：<br/>
 * <strong><code>CocoaPods/CocoaPods</code></strong><br/>
 * <strong><code>CocoaPods/Core</code></strong><br/>
-* <strong><code>CocoaPods/Xcodeproj</code></strong></p>
-
-<p><strong><code>CocoaPods / CocoaPod</code></strong>：这是面向用户的组件，每当执行一个pod命令时，这个组件将被激活。它包括了所有实用<strong><code>CocoaPods</code></strong>的功能，并且还能调用其他<strong><code>gem</code></strong>包来执行任务。 </p>
-
-<p><strong><code>CocoaPods / Core</code></strong>：<strong><code>Core gem</code></strong>提供了与<strong><code>CocoaPods</code></strong>相关的文件（主要是<strong><code>podfile</code></strong>和<strong><code>podspecs</code></strong>）的处理。 </p>
-
-<p><strong><code>Podfile</code></strong>：该文件用于配置项目所需要的第三方库，它可以被高度定制。本文中我们主要在这里做动作。</p>
-
-<p><strong><code>Podspec</code></strong>：该文件描述了一个库将怎样被添加进工程中，<strong><code>.podspec</code></strong>文件可以标识该第三方库所需要的源码文件、依赖库、编译选项，以及其他第三方库需要的配置。 </p>
-
-<p><strong><code>CocoaPods / Xcodeproj</code></strong>：这个包负责处理工程文件，它能创建以及修改<strong><code>.xcodeproj</code></strong>文件和<strong><code>.xcworkspace</code></strong>文件。它也可以作为一个独立的包使用，当你要编写修改项目文件的脚本时，可以考虑使用<strong><code>CocoaPods/Xcodeproj</code></strong>。</p>
+* <strong><code>CocoaPods/Xcodeproj</code></strong><br/>
+<dr/><br/>
+<strong><code>CocoaPods / CocoaPod</code></strong>：这是面向用户的组件，每当执行一个pod命令时，这个组件将被激活。它包括了所有实用<strong><code>CocoaPods</code></strong>的功能，并且还能调用其他<strong><code>gem</code></strong>包来执行任务。 <br/>
+<dr/><br/>
+<strong><code>CocoaPods / Core</code></strong>：<strong><code>Core gem</code></strong>提供了与<strong><code>CocoaPods</code></strong>相关的文件（主要是<strong><code>podfile</code></strong>和<strong><code>podspecs</code></strong>）的处理。 <br/>
+<dr/><br/>
+<strong><code>Podfile</code></strong>：该文件用于配置项目所需要的第三方库，它可以被高度定制。本文中我们主要在这里做动作。<br/>
+<dr/><br/>
+<strong><code>Podspec</code></strong>：该文件描述了一个库将怎样被添加进工程中，<strong><code>.podspec</code></strong>文件可以标识该第三方库所需要的源码文件、依赖库、编译选项，以及其他第三方库需要的配置。 <br/>
+<dr/><br/>
+<strong><code>CocoaPods / Xcodeproj</code></strong>：这个包负责处理工程文件，它能创建以及修改<strong><code>.xcodeproj</code></strong>文件和<strong><code>.xcworkspace</code></strong>文件。它也可以作为一个独立的包使用，当你要编写修改项目文件的脚本时，可以考虑使用<strong><code>CocoaPods/Xcodeproj</code></strong>。</p>
 </blockquote>
 
 <hr/>
@@ -187,31 +187,55 @@
 <p>检查<strong><code>Ruby</code></strong>环境，一般来讲<strong><code>Mac OS</code></strong>都是自带<strong><code>Ruby</code></strong>环境的，在Terminal中输入命令即可查看<strong><code>Ruby</code></strong>的版本号</p>
 </blockquote>
 
+<p><dr/></p>
+
+<blockquote>
+<p>vim代码</p>
+</blockquote>
+
 <pre><code class="language-vim">ruby -v
 </code></pre>
 
-<p><img src="media/14718487794778/0.png" alt="0"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/0.png" alt="0"/></p>
 
 <blockquote>
 <p>切换<strong><code>Ruby</code></strong>源地址</p>
 </blockquote>
 
+<p><dr/></p>
+
+<blockquote>
+<p>vim代码</p>
+</blockquote>
+
 <pre><code class="language-vim">gem sources --remove https://rubygems.org/
 </code></pre>
 
-<p><img src="media/14718487794778/1.png" alt="1"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/1.png" alt="1"/></p>
+
+<p><dr/></p>
+
+<blockquote>
+<p>vim代码</p>
+</blockquote>
 
 <pre><code class="language-vim">#等有反应之后再敲入以下命令
 gem sources -a https://ruby.taobao.org/
 </code></pre>
 
-<p><img src="media/14718487794778/2.png" alt="2"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/2.png" alt="2"/></p>
+
+<p><dr/></p>
+
+<blockquote>
+<p>vim代码</p>
+</blockquote>
 
 <pre><code class="language-vim">#为了验证你的Ruby镜像是并且仅是taobao，可以用以下命令查看：
 gem sources -l
 </code></pre>
 
-<p><img src="media/14718487794778/3.png" alt="3"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/3.png" alt="3"/></p>
 
 <hr/>
 
@@ -221,25 +245,37 @@ gem sources -l
 <p>现在我们在<strong><code>Terminal</code></strong>中输入以下命令, 输入机子的登录密码(没有密码的直接回车, 忘记密码的也别问我, 我也不知道怎么办), 等待自动完成安装就可以了</p>
 </blockquote>
 
+<p><dr/></p>
+
+<blockquote>
+<p>vim代码</p>
+</blockquote>
+
 <pre><code class="language-vim">sudo gem install cocoapods
 </code></pre>
 
-<p><img src="media/14718487794778/4.png" alt="4"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/4.png" alt="4"/></p>
 
 <blockquote>
 <p>安装完成之后就会有以下的提示</p>
 </blockquote>
 
-<p><img src="media/14718487794778/5.png" alt="5"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/5.png" alt="5"/></p>
 
 <blockquote>
 <p>如果你不确定自己是否安装成功, 可以输入下面这个命令去查看</p>
 </blockquote>
 
+<p><dr/></p>
+
+<blockquote>
+<p>vim代码</p>
+</blockquote>
+
 <pre><code class="language-vim">pod
 </code></pre>
 
-<p><img src="media/14718487794778/6.png" alt="6"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/6.png" alt="6"/></p>
 
 <blockquote>
 <p>如果有以上的提示, 那就证明你是安装成功的, 如果安装不成功, 继续输入安装命令</p>
@@ -253,48 +289,60 @@ gem sources -l
 <p>创建<strong><code>Xcode</code></strong>项目(怎么创建<strong><code>Xcode</code></strong>项目这里我就不说了), 然后打开<strong><code>Terminal</code></strong>直接<strong><code>cd</code></strong>到工程的根目录中, 这里我使用一个<strong><code>Demo</code></strong></p>
 </blockquote>
 
-<p><img src="media/14718487794778/7.png" alt="7"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/7.png" alt="7"/></p>
 
 <blockquote>
 <p>Xcode项目中创建Podfile文件, 且编辑</p>
 </blockquote>
 
-<p><img src="media/14718487794778/8.png" alt="8"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/8.png" alt="8"/></p>
 
-<p><img src="media/14718487794778/9.png" alt="9"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/9.png" alt="9"/></p>
 
 <blockquote>
 <p>保存<strong><code>Podfile</code></strong>文件, 直接运行<strong><code>CocoaPods</code></strong>的命令, 如果该开源项目有其他项目的依赖, <strong><code>CocoaPods</code></strong>会自动下载对应的依赖项目.<br/>
 PS: 里面的两端文字并不是自己写得, 是需要去<strong><code>GitHub</code></strong>里查看该项目最高支持<strong><code>iOS版本</code></strong>是多少, 以及该开源项目是第几个版本.</p>
 </blockquote>
 
-<p><img src="media/14718487794778/10.png" alt="10"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/10.png" alt="10"/></p>
 
 <blockquote>
 <p>由于我们的<strong><code>CocoaPods</code></strong>是第一安装, 所以会提示<strong><code>Setting up CocoaPods master repo</code></strong>, 这个时候我们只要静静的等待它初始化完, 这个等待的时间会比较长, 耐心等待吧, 骚年们~~要是想知道<strong><code>CocoaPods</code></strong>初始化多少了, 我们可以进入到<strong><code>CocoaPods</code></strong>的目录, 然后输入</p>
 </blockquote>
 
+<p><dr/></p>
+
+<blockquote>
+<p>vim代码</p>
+</blockquote>
+
 <pre><code class="language-vim">du -sh
 </code></pre>
 
-<p><img src="media/14718487794778/11.png" alt="11"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/11.png" alt="11"/></p>
 
 <blockquote>
 <p><strong><font color=red>PS: 如果中途安装失败, 重复命令即可.</font></strong></p>
 </blockquote>
 
-<p><dr></p>
+<p><dr/></p>
 
 <blockquote>
 <p>初始化结束之后, 我们就可以继续捣鼓了, 但是我们发现, 出错了, 去<a href="https://cocoapods.org"><strong>CocoaPods</strong></a>官网看了一下, 原来是少添加了一个指定的<strong><code>target</code></strong>, 这个<strong><code>target</code></strong>是在哪里获取呢? 下面看图~~</p>
 </blockquote>
 
-<p><img src="media/14718487794778/12.png" alt="12"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/12.png" alt="12"/></p>
 
-<p><img src="media/14718487794778/13.png" alt="13"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/13.png" alt="13"/></p>
 
 <blockquote>
 <p>然后我们再次打开<strong><code>Podfile</code></strong>, 编辑它, 保存, 再次<strong><code>install</code></strong></p>
+</blockquote>
+
+<p><dr/></p>
+
+<blockquote>
+<p>vim代码</p>
 </blockquote>
 
 <pre><code class="language-vim">target &#39;CollectionViewDemo&#39; do
@@ -302,17 +350,17 @@ PS: 里面的两端文字并不是自己写得, 是需要去<strong><code>GitHub
 end
 </code></pre>
 
-<p><img src="media/14718487794778/14.png" alt="14"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/14.png" alt="14"/></p>
 
-<p><img src="media/14718487794778/15.png" alt="15"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/15.png" alt="15"/></p>
 
 <blockquote>
 <p>OK, 成功了, 我们会看到工程里多了一些文件, 而我们再也不会运行<strong><code>.xcodeproj</code></strong>工程文件, 而是运行<strong><code>.xcworkspace</code></strong></p>
 </blockquote>
 
-<p><img src="media/14718487794778/16.png" alt="16"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/16.png" alt="16"/></p>
 
-<p><img src="media/14718487794778/17.png" alt="17"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/17.png" alt="17"/></p>
 
 <blockquote>
 <p>关于怎么去使用第三方的库这里我就不需要再去说了, 大家都懂的</p>
@@ -323,32 +371,47 @@ end
 <h3 id="toc_7">升级CocoaPods</h3>
 
 <blockquote>
-<p>先更新gem<br/><br/>
-<code>vim<br/>
-sudo gem update —system<br/>
-</code><br/>
-删除rubygems源<br/>
-<code>vim<br/>
-gem sources --remove https://rubygems.org/<br/>
-</code><br/>
-添加ruby淘宝源<br/>
-<code>vim<br/>
-gem sources -a https://ruby.taobao.org/<br/>
-</code><br/>
-测试源是否正确, 和刚开始安装时一样<br/>
-<code>vim<br/>
-gem sources -l<br/>
-</code><br/>
-安装CocoaPods<br/>
-<code>vim<br/>
-sudo gem install cocoa pods<br/>
-pod setup<br/>
-</code><br/>
-查看CocoaPods版本<br/>
-<code>vim<br/>
-pod --version<br/>
-</code></p>
+<p>先更新gem    </p>
 </blockquote>
+
+<pre><code class="language-vim">sudo gem update —system
+</code></pre>
+
+<blockquote>
+<p>删除rubygems源</p>
+</blockquote>
+
+<pre><code class="language-vim">gem sources --remove https://rubygems.org/
+</code></pre>
+
+<blockquote>
+<p>添加ruby淘宝源</p>
+</blockquote>
+
+<pre><code class="language-vim">gem sources -a https://ruby.taobao.org/
+</code></pre>
+
+<blockquote>
+<p>测试源是否正确, 和刚开始安装时一样</p>
+</blockquote>
+
+<pre><code class="language-vim">gem sources -l
+</code></pre>
+
+<blockquote>
+<p>安装CocoaPods</p>
+</blockquote>
+
+<pre><code class="language-vim">sudo gem install cocoa pods
+pod setup
+</code></pre>
+
+<blockquote>
+<p>查看CocoaPods版本</p>
+</blockquote>
+
+<pre><code class="language-vim">pod --version
+</code></pre>
 
 		</div>
 	</article>

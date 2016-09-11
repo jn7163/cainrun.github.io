@@ -152,19 +152,19 @@
 <pre><code class="language-vim">vim ~/.lldbinit 
 </code></pre>
 
-<p><img src="media/14718456835492/0.png" alt="0"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/0.png" alt="0"/></p>
 
 <blockquote>
-<p>添加命令<br/>
-<code>vim<br/>
-command alias reveal_load_sim expr (void*)dlopen(&quot;/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib&quot;, 0x2);  <br/>
-command alias reveal_load_dev expr (void*)dlopen([(NSString*)[(NSBundle*)[NSBundle mainBundle] pathForResource:@&quot;libReveal&quot; ofType:@&quot;dylib&quot;] cStringUsingEncoding:0x4], 0x2);  <br/>
-command alias reveal_start expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStart&quot; object:nil];  <br/>
-command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStop&quot; object: nil nil]; <br/>
-</code></p>
+<p>添加命令</p>
 </blockquote>
 
-<p><img src="media/14718456835492/1.png" alt="1"/></p>
+<pre><code class="language-vim">command alias reveal_load_sim expr (void*)dlopen(&quot;/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib&quot;, 0x2);  
+command alias reveal_load_dev expr (void*)dlopen([(NSString*)[(NSBundle*)[NSBundle mainBundle] pathForResource:@&quot;libReveal&quot; ofType:@&quot;dylib&quot;] cStringUsingEncoding:0x4], 0x2);  
+command alias reveal_start expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStart&quot; object:nil];  
+command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStop&quot; object: nil nil]; 
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/1.png" alt="1"/></p>
 
 <p>这里解释一下命令的意思</p>
 
@@ -183,26 +183,27 @@ command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCent
 <p>首先打开<strong><code>Xcode</code></strong>的工程, 去到<strong><code>AppDelegate</code></strong></p>
 </blockquote>
 
-<p><img src="media/14718456835492/2.png" alt="2"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/2.png" alt="2"/></p>
 
 <blockquote>
 <p>然后在<strong><code>application:didFinishLaunchingWithOptions</code></strong>方法中添加断点</p>
 </blockquote>
 
-<p><img src="media/14718456835492/3.png" alt="3"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/3.png" alt="3"/></p>
 
 <blockquote>
-<p>编辑断点, 添加对应的代码<br/>
-<img src="media/14718456835492/4.png" alt="4"/></p>
+<p>编辑断点, 添加对应的代码</p>
 </blockquote>
 
-<p><img src="media/14718456835492/5.png" alt="5"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/4.png" alt="4"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/5.png" alt="5"/></p>
 
 <blockquote>
 <p>运行工程, 如果看到控制台里输出以下酱紫的一行字, 就代表设置成功了</p>
 </blockquote>
 
-<p><img src="media/14718456835492/6.png" alt="6"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/6.png" alt="6"/></p>
 
 <hr/>
 
@@ -212,17 +213,17 @@ command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCent
 <p>看完上面的操作步骤, 只要你设置的都是正确的, 那就可以打开<strong><code>Reveal</code></strong>查看效果了</p>
 </blockquote>
 
-<p><img src="media/14718456835492/7.png" alt="7"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/7.png" alt="7"/></p>
 
 <blockquote>
 <p>如果你的模拟器切换了页面, <strong><code>Reveal</code></strong>是不会自动刷新的, 既然是酱紫, 那我们就需要做对应的操作</p>
 </blockquote>
 
-<p><img src="media/14718456835492/8.png" alt="8"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/8.png" alt="8"/></p>
 
-<p><img src="media/14718456835492/9.png" alt="9"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/9.png" alt="9"/></p>
 
-<p><img src="media/14718456835492/10.png" alt="10"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/10.png" alt="10"/></p>
 
 <hr/>
 
@@ -232,7 +233,7 @@ command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCent
 <p>打开你的<strong><code>Terminal</code></strong>, 然后输入以下命令</p>
 </blockquote>
 
-<p><img src="media/14718456835492/11.png" alt="11"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/11.png" alt="11"/></p>
 
 <blockquote>
 <p>找到<strong><code>com.ittybittyapps.Reveal.plist</code></strong>文件删掉</p>
@@ -240,7 +241,7 @@ command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCent
 <p>PS: 这个文件每次运行的时候<strong><code>Reveal</code></strong>都会创建一次, 每次都是从第一天开始, 每次<strong><code>Reveal</code></strong>还有几天的时候, 再删掉, 就会再次从第一天开始.</p>
 </blockquote>
 
-<p><img src="media/14718456835492/12.png" alt="12"/></p>
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/12.png" alt="12"/></p>
 
 <blockquote>
 <p><strong><font color=red>这里声明一点, 作者是希望大家都去购买正版, 而不是去寻找什么破解方法, 毕竟我们本身就是做软件的, 所以希望大家可以去支持支持正版.</font></strong></p>
