@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-09-12T01:02:14+08:00</updated>
+  <updated>2016-09-16T11:47:31+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,229 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：集成 AliPay - 支付宝]]></title>
+    <link href="http://Cain.developer.io/14739456388212.html"/>
+    <updated>2016-09-15T21:20:38+08:00</updated>
+    <id>http://Cain.developer.io/14739456388212.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>前面我已经写了一篇关于<strong><code>WeChat SDK</code></strong>的支付篇, 那我们继续研究接下来的支付<strong><code>SDK</code></strong>, 这次就是国民支付软件<strong><code>支付宝</code></strong>, 下面就让我们来看看怎么集成<strong><code>AliPay SDK</code></strong>.<br/>
+<dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>AliPay SDK</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p>支付宝SDK, 只要做过支付类App的, 都百分百接触过, 至于为什么那么多人喜欢用支付宝, 这个我就不在这里做解释了, 大家都懂的, 但是呢, 由于在阿里巴巴的发展下, 支付宝慢慢与蚂蚁金服整合, 甚至连开放平台名字都改成<strong><code>蚂蚁金服开放平台</code></strong>, 但无论怎么样, 支付宝都是行业内安全性最高的,</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">准备工作</h3>
+
+<blockquote>
+<p>其实集成<strong><code>AliPay SDK</code></strong>和<strong><code>WeChat SDK</code></strong>有些类似, 就连<strong><code>商家ID</code></strong>的申请, <strong><code>App ID</code></strong>的申请, 流程都差不多, 详细这里我就不在这里讲解了, 大家可以去<strong><a href="https://b.alipay.com/">支付宝商家商户服务平台</a></strong>了解了解.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">下载SDK包</h3>
+
+<blockquote>
+<p>由于蚂蚁金服和支付宝的整合, 就连SDK的资源都改了, 大家可以去<strong><a href="https://doc.open.alipay.com/">开放平台-文档中心</a></strong>找到资源下载.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/2.png" alt="2"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_4">继续来段废话</h3>
+
+<blockquote>
+<p>SDK包下载好了之后, 我们去到之前的那个支付工程建立我们的新工程, 命名为<strong><code>AliPay-Objective-C</code></strong>, 接下来我们就可以继续集成<strong><code>AliPay SDK</code></strong>了.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/4.png" alt="4"/></p>
+
+<hr/>
+
+<h3 id="toc_5">配置文件</h3>
+
+<blockquote>
+<p>现在我们建立好了工程, 然后我们和集成<strong><code>WeChat SDK</code></strong>一样, 需要配置一下工程, 这样子我们才能让<strong><code>AliPay SDK</code></strong>正常工作.<br/>
+<dr/><br/>
+现在让我们来打开工程的<strong><code>Info.plist</code></strong>文件, 添加一些配置.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/5.png" alt="5"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/6.png" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_6">添加依赖包</h3>
+
+<blockquote>
+<p>和<strong><code>WeChat SDK</code></strong>一样, <strong><code>AliPay SDK</code></strong>一样是需要导入依赖包的, 但是这个依赖包要比<strong><code>WeChat SDK</code></strong>要多一些, 这个比较蛋疼.</p>
+
+<ul>
+<li><strong>UIKit.framework</strong></li>
+<li><strong>CoreMotion.framework</strong></li>
+<li><strong>CFNetWork.framework</strong></li>
+<li><strong>Foundation.framework</strong></li>
+<li><strong>CoreGraphics.framework</strong></li>
+<li><strong>CoreText.framework</strong></li>
+<li><strong>QuartzCore.framework</strong></li>
+<li><strong>CoreTelephony.framework</strong></li>
+<li><strong>SystemConfiguration.framework</strong></li>
+<li><strong>libz.tbd</strong></li>
+<li><strong>libc++.tbd</strong></li>
+</ul>
+
+<p><dr/><br/>
+这些都是所需的依赖库, 真的是非常的蛋疼.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/7.png" alt="7"/></p>
+
+<hr/>
+
+<h3 id="toc_7">注册App ID</h3>
+
+<blockquote>
+<p>由于<strong><code>AliPay SDK</code></strong>是不需要在<strong><code>AppDelegate.m</code></strong>文件里注册的, 所以注册<strong><code>App ID</code></strong>这个步骤我们就忽略了.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_8">布局UI界面</h3>
+
+<blockquote>
+<p>这里的UI布局界面就和<strong><code>WeChat SDK</code></strong>那样, 直接拖一个<strong><code>UIButton</code></strong>, 以及加一个<strong><code>Action</code></strong>事件就好了.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/8.png" alt="8"/></p>
+
+<hr/>
+
+<h3 id="toc_9">注意!!!</h3>
+
+<blockquote>
+<p>由于<strong><code>AliPay</code></strong>改版了, 如果是老版本的SDK需要更新到最新的话, 一定要去好好的读一下接口文档, 因为这里需要添加多两个额外库以及一些依赖的签名文件, 这两个库在<strong><code>AliPay</code></strong>的资源包里可以找到.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/9.png" alt="9"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/10.png" alt="10"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/11.png" alt="11"/></p>
+
+<blockquote>
+<p>把这些依赖文件都拖入我们的工程里, 这样子我们就能正常的完成开发了~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/12.png" alt="12"/></p>
+
+<hr/>
+
+<h3 id="toc_10">集成SDK</h3>
+
+<blockquote>
+<p>之前的所有准备工作都已经做好了, 现在重点来了, 就让我们看看怎么实现支付宝支付!</p>
+</blockquote>
+
+<p><dr/></p>
+
+<blockquote>
+<p>首先我们需要一个订单对象, 这里我们命名为<strong><code>AliPayOther</code></strong>, 还有一个<strong><code>AliPayBizContent</code></strong>, 然后声明一些属性, 并且在内部实现一些方法, 由于这里的代码比较多, 这里就不列举了, 各位童鞋们还是自行去翻翻工程吧~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/13.png" alt="13"/></p>
+
+<blockquote>
+<p>然后呢, 我们就要把两个重量级的文件拖入到工程, 一个就是<strong><code>AlipaySDK.bundle</code></strong>, 一个是<strong><code>AlipaySDK.framework</code></strong>, 这两个文件也是在<strong><code>AliPay</code></strong>的资源包里可以找到.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/14.png" alt="14"/></p>
+
+<blockquote>
+<p>导入之后编译一下, Xcode居然提示出错了!!!</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/15.png" alt="15"/></p>
+
+<blockquote>
+<p>看了一下错误信息, 提示<strong><code>NSObject</code></strong>, 我想应该是<strong><code>&lt;Foundation/Foundation.h&gt;</code></strong>没有导入到对应的文件里去吧, 试试看先</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/16.png" alt="16"/></p>
+
+<blockquote>
+<p>我屮艸芔茻, 一些问题解决了, 另一些问题又出来了, 仔细一看, 我勒个去, 原来是忘了导入刚刚所说的<strong><code>libcrypto.a</code></strong>以及<strong><code>libssl.a</code></strong>库了...我说怎么好像少了两个东西, 赶紧导入进去~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/17.png" alt="17"/></p>
+
+<blockquote>
+<p>导入完之后, 还有一个错误, 我也是醉醉哒....尼玛, 这是玩我呢....以前导入SDK那有那么麻烦啊...翻了一下文档, 发现要添加一个<strong><code>Header</code></strong>的链接....我也是醉了, 这个链接的写法是<strong><code>$(SRCROOT)/(工程名)</code></strong>, 我这里所写的是<strong><code>$(SRCROOT)/AliPay-Objective-C</code></strong></p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/18.png" alt="18"/></p>
+
+<hr/>
+
+<h3 id="toc_11">实现支付宝支付</h3>
+
+<blockquote>
+<p>好了, 我们把遇到的坑填完之后, 现在就来实现支付宝支付, 这里我们就直接把<strong><code>AliPayDemo</code></strong>里的代码直接拷贝过来, </p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/19.png" alt="19"/></p>
+
+<blockquote>
+<p>添加完之后, 别忘了处理<strong><code>AliPay</code></strong>回调回来的信息, 顺便说说, 这里的代理方法会有两个, 一个是<strong><code>iOS 9</code></strong>之后才有的新方法, 大家可以动动小脑袋, 看看怎么样封装才会比较好一些~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/20.png" alt="20"/></p>
+
+<blockquote>
+<p>到这里我们就已经集成完毕了, 由于支付宝的Demo里没有提供<strong><code>App ID</code></strong>和<strong><code>私钥</code></strong>, 所以我们这里显示的效果只能是酱紫了...需要测试的童鞋们只能自己去申请<strong><code>App ID</code></strong>和<strong><code>私钥</code></strong>了</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/21.png" alt="21"/></p>
+
+<hr/>
+
+<h3 id="toc_12">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/PayProject">https://github.com/CainRun/PayProject</a></p>
+
+<hr/>
+
+<h3 id="toc_13">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：集成 WeChat SDK - 支付篇]]></title>

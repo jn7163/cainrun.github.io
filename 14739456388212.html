@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	玩转iOS开发：集成 AliPay - 支付宝 - Cain For iOS
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Cain For iOS" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+				 
+				 	<div class="profilepic">
+						<img src="asset/images/icon.png" style="width:160px;">
+					</div>
+            	
+					
+					<h1><a href="index.html">Cain For iOS</a></h1>
+					<p class="subtitle">如果您有更好的建议或者其他不明白的地方, 可以联系我QQ: 350116542</p>
+					<nav id="main-nav">
+						<ul class="main">
+						
+						  <li id=""><a target="self" href="index.html">Home</a></li>
+						
+						  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+						
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+
+
+
+
+
+
+
+<a target="_blank" class="weibo" href="http://weibo.com/1826190094" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/CainRun" title="GitHub">GitHub</a>
+
+
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：集成 AliPay - 支付宝</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>前面我已经写了一篇关于<strong><code>WeChat SDK</code></strong>的支付篇, 那我们继续研究接下来的支付<strong><code>SDK</code></strong>, 这次就是国民支付软件<strong><code>支付宝</code></strong>, 下面就让我们来看看怎么集成<strong><code>AliPay SDK</code></strong>.<br/>
+<dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>AliPay SDK</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p>支付宝SDK, 只要做过支付类App的, 都百分百接触过, 至于为什么那么多人喜欢用支付宝, 这个我就不在这里做解释了, 大家都懂的, 但是呢, 由于在阿里巴巴的发展下, 支付宝慢慢与蚂蚁金服整合, 甚至连开放平台名字都改成<strong><code>蚂蚁金服开放平台</code></strong>, 但无论怎么样, 支付宝都是行业内安全性最高的,</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">准备工作</h3>
+
+<blockquote>
+<p>其实集成<strong><code>AliPay SDK</code></strong>和<strong><code>WeChat SDK</code></strong>有些类似, 就连<strong><code>商家ID</code></strong>的申请, <strong><code>App ID</code></strong>的申请, 流程都差不多, 详细这里我就不在这里讲解了, 大家可以去<strong><a href="https://b.alipay.com/">支付宝商家商户服务平台</a></strong>了解了解.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">下载SDK包</h3>
+
+<blockquote>
+<p>由于蚂蚁金服和支付宝的整合, 就连SDK的资源都改了, 大家可以去<strong><a href="https://doc.open.alipay.com/">开放平台-文档中心</a></strong>找到资源下载.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/2.png" alt="2"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_4">继续来段废话</h3>
+
+<blockquote>
+<p>SDK包下载好了之后, 我们去到之前的那个支付工程建立我们的新工程, 命名为<strong><code>AliPay-Objective-C</code></strong>, 接下来我们就可以继续集成<strong><code>AliPay SDK</code></strong>了.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/4.png" alt="4"/></p>
+
+<hr/>
+
+<h3 id="toc_5">配置文件</h3>
+
+<blockquote>
+<p>现在我们建立好了工程, 然后我们和集成<strong><code>WeChat SDK</code></strong>一样, 需要配置一下工程, 这样子我们才能让<strong><code>AliPay SDK</code></strong>正常工作.<br/>
+<dr/><br/>
+现在让我们来打开工程的<strong><code>Info.plist</code></strong>文件, 添加一些配置.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/5.png" alt="5"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/6.png" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_6">添加依赖包</h3>
+
+<blockquote>
+<p>和<strong><code>WeChat SDK</code></strong>一样, <strong><code>AliPay SDK</code></strong>一样是需要导入依赖包的, 但是这个依赖包要比<strong><code>WeChat SDK</code></strong>要多一些, 这个比较蛋疼.</p>
+
+<ul>
+<li><strong>UIKit.framework</strong></li>
+<li><strong>CoreMotion.framework</strong></li>
+<li><strong>CFNetWork.framework</strong></li>
+<li><strong>Foundation.framework</strong></li>
+<li><strong>CoreGraphics.framework</strong></li>
+<li><strong>CoreText.framework</strong></li>
+<li><strong>QuartzCore.framework</strong></li>
+<li><strong>CoreTelephony.framework</strong></li>
+<li><strong>SystemConfiguration.framework</strong></li>
+<li><strong>libz.tbd</strong></li>
+<li><strong>libc++.tbd</strong></li>
+</ul>
+
+<p><dr/><br/>
+这些都是所需的依赖库, 真的是非常的蛋疼.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/7.png" alt="7"/></p>
+
+<hr/>
+
+<h3 id="toc_7">注册App ID</h3>
+
+<blockquote>
+<p>由于<strong><code>AliPay SDK</code></strong>是不需要在<strong><code>AppDelegate.m</code></strong>文件里注册的, 所以注册<strong><code>App ID</code></strong>这个步骤我们就忽略了.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_8">布局UI界面</h3>
+
+<blockquote>
+<p>这里的UI布局界面就和<strong><code>WeChat SDK</code></strong>那样, 直接拖一个<strong><code>UIButton</code></strong>, 以及加一个<strong><code>Action</code></strong>事件就好了.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/8.png" alt="8"/></p>
+
+<hr/>
+
+<h3 id="toc_9">注意!!!</h3>
+
+<blockquote>
+<p>由于<strong><code>AliPay</code></strong>改版了, 如果是老版本的SDK需要更新到最新的话, 一定要去好好的读一下接口文档, 因为这里需要添加多两个额外库以及一些依赖的签名文件, 这两个库在<strong><code>AliPay</code></strong>的资源包里可以找到.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/9.png" alt="9"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/10.png" alt="10"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/11.png" alt="11"/></p>
+
+<blockquote>
+<p>把这些依赖文件都拖入我们的工程里, 这样子我们就能正常的完成开发了~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/12.png" alt="12"/></p>
+
+<hr/>
+
+<h3 id="toc_10">集成SDK</h3>
+
+<blockquote>
+<p>之前的所有准备工作都已经做好了, 现在重点来了, 就让我们看看怎么实现支付宝支付!</p>
+</blockquote>
+
+<p><dr/></p>
+
+<blockquote>
+<p>首先我们需要一个订单对象, 这里我们命名为<strong><code>AliPayOther</code></strong>, 还有一个<strong><code>AliPayBizContent</code></strong>, 然后声明一些属性, 并且在内部实现一些方法, 由于这里的代码比较多, 这里就不列举了, 各位童鞋们还是自行去翻翻工程吧~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/13.png" alt="13"/></p>
+
+<blockquote>
+<p>然后呢, 我们就要把两个重量级的文件拖入到工程, 一个就是<strong><code>AlipaySDK.bundle</code></strong>, 一个是<strong><code>AlipaySDK.framework</code></strong>, 这两个文件也是在<strong><code>AliPay</code></strong>的资源包里可以找到.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/14.png" alt="14"/></p>
+
+<blockquote>
+<p>导入之后编译一下, Xcode居然提示出错了!!!</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/15.png" alt="15"/></p>
+
+<blockquote>
+<p>看了一下错误信息, 提示<strong><code>NSObject</code></strong>, 我想应该是<strong><code>&lt;Foundation/Foundation.h&gt;</code></strong>没有导入到对应的文件里去吧, 试试看先</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/16.png" alt="16"/></p>
+
+<blockquote>
+<p>我屮艸芔茻, 一些问题解决了, 另一些问题又出来了, 仔细一看, 我勒个去, 原来是忘了导入刚刚所说的<strong><code>libcrypto.a</code></strong>以及<strong><code>libssl.a</code></strong>库了...我说怎么好像少了两个东西, 赶紧导入进去~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/17.png" alt="17"/></p>
+
+<blockquote>
+<p>导入完之后, 还有一个错误, 我也是醉醉哒....尼玛, 这是玩我呢....以前导入SDK那有那么麻烦啊...翻了一下文档, 发现要添加一个<strong><code>Header</code></strong>的链接....我也是醉了, 这个链接的写法是<strong><code>$(SRCROOT)/(工程名)</code></strong>, 我这里所写的是<strong><code>$(SRCROOT)/AliPay-Objective-C</code></strong></p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/18.png" alt="18"/></p>
+
+<hr/>
+
+<h3 id="toc_11">实现支付宝支付</h3>
+
+<blockquote>
+<p>好了, 我们把遇到的坑填完之后, 现在就来实现支付宝支付, 这里我们就直接把<strong><code>AliPayDemo</code></strong>里的代码直接拷贝过来, </p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/19.png" alt="19"/></p>
+
+<blockquote>
+<p>添加完之后, 别忘了处理<strong><code>AliPay</code></strong>回调回来的信息, 顺便说说, 这里的代理方法会有两个, 一个是<strong><code>iOS 9</code></strong>之后才有的新方法, 大家可以动动小脑袋, 看看怎么样封装才会比较好一些~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/20.png" alt="20"/></p>
+
+<blockquote>
+<p>到这里我们就已经集成完毕了, 由于支付宝的Demo里没有提供<strong><code>App ID</code></strong>和<strong><code>私钥</code></strong>, 所以我们这里显示的效果只能是酱紫了...需要测试的童鞋们只能自己去申请<strong><code>App ID</code></strong>和<strong><code>私钥</code></strong>了</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/21.png" alt="21"/></p>
+
+<hr/>
+
+<h3 id="toc_12">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/PayProject">https://github.com/CainRun/PayProject</a></p>
+
+<hr/>
+
+<h3 id="toc_13">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	 
+
+	  
+
+	  
+	      <div class="ds-thread" data-thread-key="14739456388212.html" data-url="http://Cain.developer.io/14739456388212.html" data-title="玩转iOS开发：集成 AliPay - 支付宝"></div>
+	  
+
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+  
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:'cainluo'};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+    
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+</body>
+</html>
