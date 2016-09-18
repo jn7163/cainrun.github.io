@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="http://Cain.developer.io/atom.xml" rel="self"/>
   <link href="http://Cain.developer.io/"/>
-  <updated>2016-09-16T11:49:58+08:00</updated>
+  <updated>2016-09-16T15:49:26+08:00</updated>
   <id>http://Cain.developer.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,321 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：集成 Union Pay - 银联支付]]></title>
+    <link href="http://Cain.developer.io/14740149724404.html"/>
+    <updated>2016-09-16T16:36:12+08:00</updated>
+    <id>http://Cain.developer.io/14740149724404.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>前面已经把<strong><code>WeChat SDK</code></strong>的支付, <strong><code>AliPay SDK</code></strong>搞得七七八八了, 接下来就是银联支付的<strong><code>Union Pay SDK</code></strong>.<br/>
+<dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Union Pay SDK</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p>银联嘛, 用过银行卡的人都懂的, 我们大天朝的产物, 主要是用来联合大天朝各个银行, 实现各个银行互通, 可跨行, 跨区, 跨境使用等等....其实换了一句话来说, 就是中国版的<strong><code>VISA</code></strong>, <strong><code>MasterCard</code></strong>, 虽然银联起步的比较晚, 但发展的脚步不比<strong><code>VISA</code></strong>, <strong><code>MasterCard</code></strong>要差.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">准备工作</h3>
+
+<blockquote>
+<p>在这里, 我不得不吐槽一下, 如果是第一次集成银联的童鞋, 估计一开始还真是够呛的, 或许你连<strong><code>SDK</code></strong>都找不到在哪里下载, 这网站还真的很难找, 所以我在这里贴出来给你们了, 方便各位童鞋们自行去查找下载<strong><a href="https://open.unionpay.com">商家技术服务</a></strong><br/>
+<dr/><br/>
+这里还有怎么去查找SDK的示例, 大家也看看呗</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/2.png" alt="2"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/3.png" alt="3"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/4.png" alt="4"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/5.png" alt="5"/></p>
+
+<blockquote>
+<p>这里我下载下来的是3.3.3版本, 54.8MB大小, 或许之后银联会继续更新SDK包, 这个的话, 大家看着办吧~~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">废话来一段</h3>
+
+<blockquote>
+<p>惯例, 继续来一段废话, 打开我们之前的集成<strong><code>WeChat SDK</code></strong>和<strong><code>AliPay SDk</code></strong>的工程, 新建一个工程叫做<strong><code>UnionPay-Objective-C</code></strong>的新工程</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/6.png" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_4">配置工程</h3>
+
+<blockquote>
+<p>配置工程的话, 首先我们要引入<strong><code>Union Pay SDK</code></strong>的依赖包, 一共五个, 这或许是第三方支付品台里需要导入最少依赖的.</p>
+
+<ul>
+<li><strong>LocalAuthentication.framework</strong></li>
+<li><strong>SystemConfiguration.framework</strong></li>
+<li><strong>CoreGraphics.framework</strong></li>
+<li><strong>CFNetwork.framework</strong></li>
+<li><strong>libz.tbd</strong></li>
+</ul>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/7.png" alt="7"/></p>
+
+<blockquote>
+<p>然后呢, 我们需要去到<strong><code>Info.plist</code></strong>里, 添加三个属性</p>
+
+<ul>
+<li>App Transport Security Settings
+
+<ul>
+<li>Allow Arbitrary Loads</li>
+</ul></li>
+<li>Application requires iPhone environment</li>
+<li>LSApplicationQueriesSchemes
+
+<ul>
+<li>uppaysdk</li>
+<li>uppaywallet</li>
+<li>uppayx1</li>
+<li>uppayx2</li>
+<li>uppayx3</li>
+</ul></li>
+</ul>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/8.png" alt="8"/></p>
+
+<blockquote>
+<p>接下来, 我们要去添加<strong><code>URL Schemes</code></strong>了, </p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/9.png" alt="9"/></p>
+
+<blockquote>
+<p>最后, 就是我们要把<strong><code>Union Pay SDK</code></strong>导进来了, 这样子就配置好整个工程了, 顺带说一声, 这个<strong><code>SDK</code></strong>在<strong><code>paymentcontrol</code></strong>这个目录下~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/10.png" alt="10"/></p>
+
+<blockquote>
+<p>差点别忘了把<strong><code>-ObjC</code></strong>这个宏加上, 不然没法跑</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/11.png" alt="11"/></p>
+
+<hr/>
+
+<h3 id="toc_5">布局UI界面</h3>
+
+<blockquote>
+<p>惯例, 这里我们也是只给一个<strong><code>UIButton</code></strong>以及一个<strong><code>Action</code></strong>事件.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/12.png" alt="12"/></p>
+
+<hr/>
+
+<h3 id="toc_6">补充多一个点</h3>
+
+<blockquote>
+<p>这里还需要补充一个点, 由于银联是采用<strong><code>C</code></strong>、<strong><code>C++</code></strong>以及<strong><code>Objective-C</code></strong>混编的, 所以这个有些蛋疼, 官方提供三种方式去适配, 我这里采用了最简单的一种, 直接把<strong><code>.m</code></strong>改成<strong><code>.mm</code></strong>.</p>
+</blockquote>
+
+<p><strong><font color=purple>第一种</font></strong></p>
+
+<blockquote>
+<ul>
+<li><p>由于支付控件使用到了<strong><code>C</code></strong>、<strong><code>C++</code></strong>和<strong><code>Objective-C</code></strong>混编的情况，所以商户工程引入<strong><code>UPPaymentControl.h</code></strong>头文件以后可能会出现链接错误，这个时候可以通过以下三种方式解决：</p>
+
+<ul>
+<li><p>将涉及到引用<strong><code>UPPaymentControl.h</code></strong>的源文件的后缀名都改为<strong><code>.mm</code></strong>；</p></li>
+<li><p>如果商户不想修改源文件的后缀名，可以在工程中添加一个空的继承自<strong><code>NSObject</code></strong>的类，并将文件.m后缀名该改为.mm即可方法为<strong><code>New File</code></strong> -&gt; <strong><code>Objective-C class</code></strong> -&gt; <strong><code>类名自取</code></strong> -&gt; <strong><code>保存</code></strong> -&gt; <strong><code>修改后缀名为.mm</code></strong>；</p></li>
+<li><p>将工程的<strong><code>compile source as</code></strong>选项的值设置为<strong><code>Objective–C++</code></strong>；</p></li>
+</ul></li>
+</ul>
+</blockquote>
+
+<p><strong><font color=purple>第二种</font></strong></p>
+
+<blockquote>
+<ul>
+<li>由于在Demo工程中添加了自定义的库文件<strong><code>libPaymentControl.a</code></strong>
+，当编译Demo工程时，应该检查工程设置<strong><code>Search Paths</code></strong>里的<strong><code>Framework Search Paths</code></strong>、<strong><code>Header Search Paths</code></strong>、<strong><code>Library Search Paths</code></strong>的路径设置，看设置路径是否正确，另外还要注意里边是否多余一些不确定的路径。</li>
+</ul>
+</blockquote>
+
+<p><strong><font color=purple>第三种</font></strong></p>
+
+<blockquote>
+<ul>
+<li>将<strong><code>Xcode</code></strong>工程中<strong><code>Build Setting</code></strong> -&gt; <strong><code>Apple LLVM compiler Language</code></strong>标签下的<strong><code>C++ Language Dialect</code></strong>和<strong><code>C++ Standard Library</code></strong>属性值修改为<strong><code>Compiler Default</code></strong>如实在无法解决，尝试添加<strong><code>-ObjC</code></strong>宏的地方修改为<strong><code>-force_load</code></strong> + <strong><code>空格</code></strong> + <strong><code>控件路径</code></strong>，如：<strong><code>-force_load $(PROJECT_DIR)/ libPaymentControl.a</code></strong>，如果还报错，上下文应该会有<strong><code>libPaymentControl.a</code></strong>文件找不到异常，比如<strong><code>ld: file not found: /Users/apple/Desktop/Communication 2/ libPaymentControl.a
+clang: error: linker command failed with exit code 1 (use -v to see invocation)</code></strong>
+请确定<strong><code>libPaymentControl.a</code></strong>文件确实存在于此路径，可能为上下文路径配错。</li>
+</ul>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_7">实现银联支付</h3>
+
+<blockquote>
+<p>集成的时候, 这里我们需要分为两个步骤, 一个是网络, 一个是本地操作.</p>
+</blockquote>
+
+<p><strong><font color=purple>本地部分</font></strong></p>
+
+<blockquote>
+<p>所谓的本地部分, 指的就是弹框, 灭框的一些操作, 还有发起网络一些点击事件等等.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/13.png" alt="13"/></p>
+
+<p><strong><font color=purple>网络部分</font></strong></p>
+
+<blockquote>
+<p>银联支付需要用到一个网络交互的流程, 这里的话, 我们直接引用<strong><code>Demo</code></strong>里的代码, 然后再加以修改一丢丢, 就可以了~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/14.png" alt="14"/></p>
+
+<hr/>
+
+<h3 id="toc_8">测试支付</h3>
+
+<blockquote>
+<p>在测试支付这点上, 微信和银联都做的挺不错的, 唯独支付宝这个连个测试账号都不提供, 真的是蛋疼...疼...疼, 打开银联接入指南, 里面就会有两个测试卡号.</p>
+</blockquote>
+
+<table>
+<thead>
+<tr>
+<th>测试账号</th>
+<th>测试信息</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>姓名</td>
+<td>张三</td>
+</tr>
+<tr>
+<td>手机号码</td>
+<td>18100000000</td>
+</tr>
+<tr>
+<td>证件类型</td>
+<td>01身份证</td>
+</tr>
+<tr>
+<td>证件号</td>
+<td>510265790128303</td>
+</tr>
+<tr>
+<td>招商银行卡</td>
+<td>6226090000000048</td>
+</tr>
+<tr>
+<td>密码</td>
+<td>111101</td>
+</tr>
+<tr>
+<td>验证码</td>
+<td>123456（<strong><font color=red>先点获取验证码之后再输入</font></strong>）</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>测试账号</th>
+<th>测试信息</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>姓名</td>
+<td>张三</td>
+</tr>
+<tr>
+<td>手机号码</td>
+<td>18100000000</td>
+</tr>
+<tr>
+<td>证件类型</td>
+<td>01身份证</td>
+</tr>
+<tr>
+<td>CVN2</td>
+<td>248</td>
+</tr>
+<tr>
+<td>有效期</td>
+<td>1219</td>
+</tr>
+<tr>
+<td>证件号</td>
+<td>510265790128303</td>
+</tr>
+<tr>
+<td>华夏银行贷记卡</td>
+<td>6226388000000095</td>
+</tr>
+<tr>
+<td>密码</td>
+<td>111101</td>
+</tr>
+<tr>
+<td>验证码</td>
+<td>123456（<strong><font color=red>先点获取验证码之后再输入</font></strong>）</td>
+</tr>
+</tbody>
+</table>
+
+<hr/>
+
+<h3 id="toc_9">最终效果</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/15.png" alt="15"/></p>
+
+<hr/>
+
+<h3 id="toc_10">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/PayProject">https://github.com/CainRun/PayProject</a></p>
+
+<hr/>
+
+<h3 id="toc_11">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：集成 AliPay - 支付宝]]></title>

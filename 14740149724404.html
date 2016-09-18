@@ -1,0 +1,472 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	玩转iOS开发：集成 Union Pay - 银联支付 - Cain For iOS
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Cain For iOS" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+				 
+				 	<div class="profilepic">
+						<img src="asset/images/icon.png" style="width:160px;">
+					</div>
+            	
+					
+					<h1><a href="index.html">Cain For iOS</a></h1>
+					<p class="subtitle">如果您有更好的建议或者其他不明白的地方, 可以联系我QQ: 350116542</p>
+					<nav id="main-nav">
+						<ul class="main">
+						
+						  <li id=""><a target="self" href="index.html">Home</a></li>
+						
+						  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+						
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+
+
+
+<a target="_blank" class="linkedin" href="www.linkedin.com/in/cainluo" title="LinkedIn">LinkedIn</a>
+
+
+
+<a target="_blank" class="weibo" href="http://weibo.com/1826190094" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/CainRun" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:zhebushimengfei@qq.com" title="Email">Email</a>
+
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：集成 Union Pay - 银联支付</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>前面已经把<strong><code>WeChat SDK</code></strong>的支付, <strong><code>AliPay SDK</code></strong>搞得七七八八了, 接下来就是银联支付的<strong><code>Union Pay SDK</code></strong>.<br/>
+<dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Union Pay SDK</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p>银联嘛, 用过银行卡的人都懂的, 我们大天朝的产物, 主要是用来联合大天朝各个银行, 实现各个银行互通, 可跨行, 跨区, 跨境使用等等....其实换了一句话来说, 就是中国版的<strong><code>VISA</code></strong>, <strong><code>MasterCard</code></strong>, 虽然银联起步的比较晚, 但发展的脚步不比<strong><code>VISA</code></strong>, <strong><code>MasterCard</code></strong>要差.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">准备工作</h3>
+
+<blockquote>
+<p>在这里, 我不得不吐槽一下, 如果是第一次集成银联的童鞋, 估计一开始还真是够呛的, 或许你连<strong><code>SDK</code></strong>都找不到在哪里下载, 这网站还真的很难找, 所以我在这里贴出来给你们了, 方便各位童鞋们自行去查找下载<strong><a href="https://open.unionpay.com">商家技术服务</a></strong><br/>
+<dr/><br/>
+这里还有怎么去查找SDK的示例, 大家也看看呗</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/2.png" alt="2"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/3.png" alt="3"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/4.png" alt="4"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/5.png" alt="5"/></p>
+
+<blockquote>
+<p>这里我下载下来的是3.3.3版本, 54.8MB大小, 或许之后银联会继续更新SDK包, 这个的话, 大家看着办吧~~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">废话来一段</h3>
+
+<blockquote>
+<p>惯例, 继续来一段废话, 打开我们之前的集成<strong><code>WeChat SDK</code></strong>和<strong><code>AliPay SDk</code></strong>的工程, 新建一个工程叫做<strong><code>UnionPay-Objective-C</code></strong>的新工程</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/6.png" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_4">配置工程</h3>
+
+<blockquote>
+<p>配置工程的话, 首先我们要引入<strong><code>Union Pay SDK</code></strong>的依赖包, 一共五个, 这或许是第三方支付品台里需要导入最少依赖的.</p>
+
+<ul>
+<li><strong>LocalAuthentication.framework</strong></li>
+<li><strong>SystemConfiguration.framework</strong></li>
+<li><strong>CoreGraphics.framework</strong></li>
+<li><strong>CFNetwork.framework</strong></li>
+<li><strong>libz.tbd</strong></li>
+</ul>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/7.png" alt="7"/></p>
+
+<blockquote>
+<p>然后呢, 我们需要去到<strong><code>Info.plist</code></strong>里, 添加三个属性</p>
+
+<ul>
+<li>App Transport Security Settings
+
+<ul>
+<li>Allow Arbitrary Loads</li>
+</ul></li>
+<li>Application requires iPhone environment</li>
+<li>LSApplicationQueriesSchemes
+
+<ul>
+<li>uppaysdk</li>
+<li>uppaywallet</li>
+<li>uppayx1</li>
+<li>uppayx2</li>
+<li>uppayx3</li>
+</ul></li>
+</ul>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/8.png" alt="8"/></p>
+
+<blockquote>
+<p>接下来, 我们要去添加<strong><code>URL Schemes</code></strong>了, </p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/9.png" alt="9"/></p>
+
+<blockquote>
+<p>最后, 就是我们要把<strong><code>Union Pay SDK</code></strong>导进来了, 这样子就配置好整个工程了, 顺带说一声, 这个<strong><code>SDK</code></strong>在<strong><code>paymentcontrol</code></strong>这个目录下~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/10.png" alt="10"/></p>
+
+<blockquote>
+<p>差点别忘了把<strong><code>-ObjC</code></strong>这个宏加上, 不然没法跑</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/11.png" alt="11"/></p>
+
+<hr/>
+
+<h3 id="toc_5">布局UI界面</h3>
+
+<blockquote>
+<p>惯例, 这里我们也是只给一个<strong><code>UIButton</code></strong>以及一个<strong><code>Action</code></strong>事件.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/12.png" alt="12"/></p>
+
+<hr/>
+
+<h3 id="toc_6">补充多一个点</h3>
+
+<blockquote>
+<p>这里还需要补充一个点, 由于银联是采用<strong><code>C</code></strong>、<strong><code>C++</code></strong>以及<strong><code>Objective-C</code></strong>混编的, 所以这个有些蛋疼, 官方提供三种方式去适配, 我这里采用了最简单的一种, 直接把<strong><code>.m</code></strong>改成<strong><code>.mm</code></strong>.</p>
+</blockquote>
+
+<p><strong><font color=purple>第一种</font></strong></p>
+
+<blockquote>
+<ul>
+<li><p>由于支付控件使用到了<strong><code>C</code></strong>、<strong><code>C++</code></strong>和<strong><code>Objective-C</code></strong>混编的情况，所以商户工程引入<strong><code>UPPaymentControl.h</code></strong>头文件以后可能会出现链接错误，这个时候可以通过以下三种方式解决：</p>
+
+<ul>
+<li><p>将涉及到引用<strong><code>UPPaymentControl.h</code></strong>的源文件的后缀名都改为<strong><code>.mm</code></strong>；</p></li>
+<li><p>如果商户不想修改源文件的后缀名，可以在工程中添加一个空的继承自<strong><code>NSObject</code></strong>的类，并将文件.m后缀名该改为.mm即可方法为<strong><code>New File</code></strong> -&gt; <strong><code>Objective-C class</code></strong> -&gt; <strong><code>类名自取</code></strong> -&gt; <strong><code>保存</code></strong> -&gt; <strong><code>修改后缀名为.mm</code></strong>；</p></li>
+<li><p>将工程的<strong><code>compile source as</code></strong>选项的值设置为<strong><code>Objective–C++</code></strong>；</p></li>
+</ul></li>
+</ul>
+</blockquote>
+
+<p><strong><font color=purple>第二种</font></strong></p>
+
+<blockquote>
+<ul>
+<li>由于在Demo工程中添加了自定义的库文件<strong><code>libPaymentControl.a</code></strong>
+，当编译Demo工程时，应该检查工程设置<strong><code>Search Paths</code></strong>里的<strong><code>Framework Search Paths</code></strong>、<strong><code>Header Search Paths</code></strong>、<strong><code>Library Search Paths</code></strong>的路径设置，看设置路径是否正确，另外还要注意里边是否多余一些不确定的路径。</li>
+</ul>
+</blockquote>
+
+<p><strong><font color=purple>第三种</font></strong></p>
+
+<blockquote>
+<ul>
+<li>将<strong><code>Xcode</code></strong>工程中<strong><code>Build Setting</code></strong> -&gt; <strong><code>Apple LLVM compiler Language</code></strong>标签下的<strong><code>C++ Language Dialect</code></strong>和<strong><code>C++ Standard Library</code></strong>属性值修改为<strong><code>Compiler Default</code></strong>如实在无法解决，尝试添加<strong><code>-ObjC</code></strong>宏的地方修改为<strong><code>-force_load</code></strong> + <strong><code>空格</code></strong> + <strong><code>控件路径</code></strong>，如：<strong><code>-force_load $(PROJECT_DIR)/ libPaymentControl.a</code></strong>，如果还报错，上下文应该会有<strong><code>libPaymentControl.a</code></strong>文件找不到异常，比如<strong><code>ld: file not found: /Users/apple/Desktop/Communication 2/ libPaymentControl.a
+clang: error: linker command failed with exit code 1 (use -v to see invocation)</code></strong>
+请确定<strong><code>libPaymentControl.a</code></strong>文件确实存在于此路径，可能为上下文路径配错。</li>
+</ul>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_7">实现银联支付</h3>
+
+<blockquote>
+<p>集成的时候, 这里我们需要分为两个步骤, 一个是网络, 一个是本地操作.</p>
+</blockquote>
+
+<p><strong><font color=purple>本地部分</font></strong></p>
+
+<blockquote>
+<p>所谓的本地部分, 指的就是弹框, 灭框的一些操作, 还有发起网络一些点击事件等等.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/13.png" alt="13"/></p>
+
+<p><strong><font color=purple>网络部分</font></strong></p>
+
+<blockquote>
+<p>银联支付需要用到一个网络交互的流程, 这里的话, 我们直接引用<strong><code>Demo</code></strong>里的代码, 然后再加以修改一丢丢, 就可以了~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/14.png" alt="14"/></p>
+
+<hr/>
+
+<h3 id="toc_8">测试支付</h3>
+
+<blockquote>
+<p>在测试支付这点上, 微信和银联都做的挺不错的, 唯独支付宝这个连个测试账号都不提供, 真的是蛋疼...疼...疼, 打开银联接入指南, 里面就会有两个测试卡号.</p>
+</blockquote>
+
+<table>
+<thead>
+<tr>
+<th>测试账号</th>
+<th>测试信息</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>姓名</td>
+<td>张三</td>
+</tr>
+<tr>
+<td>手机号码</td>
+<td>18100000000</td>
+</tr>
+<tr>
+<td>证件类型</td>
+<td>01身份证</td>
+</tr>
+<tr>
+<td>证件号</td>
+<td>510265790128303</td>
+</tr>
+<tr>
+<td>招商银行卡</td>
+<td>6226090000000048</td>
+</tr>
+<tr>
+<td>密码</td>
+<td>111101</td>
+</tr>
+<tr>
+<td>验证码</td>
+<td>123456（<strong><font color=red>先点获取验证码之后再输入</font></strong>）</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>测试账号</th>
+<th>测试信息</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>姓名</td>
+<td>张三</td>
+</tr>
+<tr>
+<td>手机号码</td>
+<td>18100000000</td>
+</tr>
+<tr>
+<td>证件类型</td>
+<td>01身份证</td>
+</tr>
+<tr>
+<td>CVN2</td>
+<td>248</td>
+</tr>
+<tr>
+<td>有效期</td>
+<td>1219</td>
+</tr>
+<tr>
+<td>证件号</td>
+<td>510265790128303</td>
+</tr>
+<tr>
+<td>华夏银行贷记卡</td>
+<td>6226388000000095</td>
+</tr>
+<tr>
+<td>密码</td>
+<td>111101</td>
+</tr>
+<tr>
+<td>验证码</td>
+<td>123456（<strong><font color=red>先点获取验证码之后再输入</font></strong>）</td>
+</tr>
+</tbody>
+</table>
+
+<hr/>
+
+<h3 id="toc_9">最终效果</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/UnionPay-Objective-C/images/15.png" alt="15"/></p>
+
+<hr/>
+
+<h3 id="toc_10">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/PayProject">https://github.com/CainRun/PayProject</a></p>
+
+<hr/>
+
+<h3 id="toc_11">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	 
+
+	  
+
+	  
+	      <div class="ds-thread" data-thread-key="14740149724404.html" data-url="http://Cain.developer.io/14740149724404.html" data-title="玩转iOS开发：集成 Union Pay - 银联支付"></div>
+	  
+
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+  
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:'cainluo'};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+    
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+</body>
+</html>
