@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Cain For iOS]]></title>
-  <link href="http://Cain.developer.io/atom.xml" rel="self"/>
-  <link href="http://Cain.developer.io/"/>
-  <updated>2016-09-18T09:57:51+08:00</updated>
-  <id>http://Cain.developer.io/</id>
+  <link href="https://cainrun.github.io/atom.xml" rel="self"/>
+  <link href="https://cainrun.github.io/"/>
+  <updated>2016-09-25T13:05:11+08:00</updated>
+  <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：集成 Union Pay - 银联支付]]></title>
-    <link href="http://Cain.developer.io/14740149724404.html"/>
+    <link href="https://cainrun.github.io/14740149724404.html"/>
     <updated>2016-09-16T16:36:12+08:00</updated>
-    <id>http://Cain.developer.io/14740149724404.html</id>
+    <id>https://cainrun.github.io/14740149724404.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -330,9 +330,9 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：集成 AliPay - 支付宝]]></title>
-    <link href="http://Cain.developer.io/14739456388212.html"/>
+    <link href="https://cainrun.github.io/14739456388212.html"/>
     <updated>2016-09-15T21:20:38+08:00</updated>
-    <id>http://Cain.developer.io/14739456388212.html</id>
+    <id>https://cainrun.github.io/14739456388212.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -553,9 +553,9 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：集成 WeChat SDK - 支付篇]]></title>
-    <link href="http://Cain.developer.io/14735762460993.html"/>
+    <link href="https://cainrun.github.io/14735762460993.html"/>
     <updated>2016-09-11T14:44:06+08:00</updated>
-    <id>http://Cain.developer.io/14735762460993.html</id>
+    <id>https://cainrun.github.io/14735762460993.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -894,9 +894,9 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 8 新特性《UIVisualEffect》]]></title>
-    <link href="http://Cain.developer.io/14730058185822.html"/>
+    <link href="https://cainrun.github.io/14730058185822.html"/>
     <updated>2016-09-05T00:16:58+08:00</updated>
-    <id>http://Cain.developer.io/14730058185822.html</id>
+    <id>https://cainrun.github.io/14730058185822.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -1011,9 +1011,9 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：横向滑动条《CALToolBarListView》]]></title>
-    <link href="http://Cain.developer.io/14729678790305.html"/>
+    <link href="https://cainrun.github.io/14729678790305.html"/>
     <updated>2016-09-04T13:44:39+08:00</updated>
-    <id>http://Cain.developer.io/14729678790305.html</id>
+    <id>https://cainrun.github.io/14729678790305.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -1244,9 +1244,9 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：使用自定义《UIActivity》进行内容分享]]></title>
-    <link href="http://Cain.developer.io/14729665774054.html"/>
+    <link href="https://cainrun.github.io/14729665774054.html"/>
     <updated>2016-09-04T13:22:57+08:00</updated>
-    <id>http://Cain.developer.io/14729665774054.html</id>
+    <id>https://cainrun.github.io/14729665774054.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -1577,9 +1577,9 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：非脚本版本《模拟器与真机静态Framework合成教程》]]></title>
-    <link href="http://Cain.developer.io/14729651532234.html"/>
+    <link href="https://cainrun.github.io/14729651532234.html"/>
     <updated>2016-09-04T12:59:13+08:00</updated>
-    <id>http://Cain.developer.io/14729651532234.html</id>
+    <id>https://cainrun.github.io/14729651532234.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -1853,9 +1853,9 @@ lipo -create (真机Framework路径) (模拟器Framework路径) -output (真机/
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：Aggregate脚本版本《模拟器与真机静态Framework合成教程》]]></title>
-    <link href="http://Cain.developer.io/14729646870605.html"/>
+    <link href="https://cainrun.github.io/14729646870605.html"/>
     <updated>2016-09-04T12:51:27+08:00</updated>
-    <id>http://Cain.developer.io/14729646870605.html</id>
+    <id>https://cainrun.github.io/14729646870605.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -2045,9 +2045,9 @@ fi
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：《iOS设计模式 — 观察者模式》]]></title>
-    <link href="http://Cain.developer.io/14719369255829.html"/>
+    <link href="https://cainrun.github.io/14719369255829.html"/>
     <updated>2016-08-23T15:22:05+08:00</updated>
-    <id>http://Cain.developer.io/14719369255829.html</id>
+    <id>https://cainrun.github.io/14719369255829.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -2156,9 +2156,9 @@ fi
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：界面调试工具《Reveal》]]></title>
-    <link href="http://Cain.developer.io/14719229534493.html"/>
+    <link href="https://cainrun.github.io/14719229534493.html"/>
     <updated>2016-08-23T11:29:13+08:00</updated>
-    <id>http://Cain.developer.io/14719229534493.html</id>
+    <id>https://cainrun.github.io/14719229534493.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -2300,9 +2300,9 @@ command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCent
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：《iOS设计模式 — 工厂模式》]]></title>
-    <link href="http://Cain.developer.io/14718583940487.html"/>
+    <link href="https://cainrun.github.io/14718583940487.html"/>
     <updated>2016-08-22T17:33:14+08:00</updated>
-    <id>http://Cain.developer.io/14718583940487.html</id>
+    <id>https://cainrun.github.io/14718583940487.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -2467,9 +2467,9 @@ command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCent
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 8 新特性《Share Extension》]]></title>
-    <link href="http://Cain.developer.io/14718547536103.html"/>
+    <link href="https://cainrun.github.io/14718547536103.html"/>
     <updated>2016-08-22T16:32:33+08:00</updated>
-    <id>http://Cain.developer.io/14718547536103.html</id>
+    <id>https://cainrun.github.io/14718547536103.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -2822,9 +2822,9 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 8 新特性《Today Extension》]]></title>
-    <link href="http://Cain.developer.io/14718509058148.html"/>
+    <link href="https://cainrun.github.io/14718509058148.html"/>
     <updated>2016-08-22T15:28:25+08:00</updated>
-    <id>http://Cain.developer.io/14718509058148.html</id>
+    <id>https://cainrun.github.io/14718509058148.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -3126,9 +3126,9 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：《iOS设计模式 — 代理模式》]]></title>
-    <link href="http://Cain.developer.io/14718501007074.html"/>
+    <link href="https://cainrun.github.io/14718501007074.html"/>
     <updated>2016-08-22T15:15:00+08:00</updated>
-    <id>http://Cain.developer.io/14718501007074.html</id>
+    <id>https://cainrun.github.io/14718501007074.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -3321,9 +3321,9 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：《iOS设计模式 — 单例模式》]]></title>
-    <link href="http://Cain.developer.io/14718491333111.html"/>
+    <link href="https://cainrun.github.io/14718491333111.html"/>
     <updated>2016-08-22T14:58:53+08:00</updated>
-    <id>http://Cain.developer.io/14718491333111.html</id>
+    <id>https://cainrun.github.io/14718491333111.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
@@ -3456,9 +3456,9 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：《CocoaPods》安装及使用教程]]></title>
-    <link href="http://Cain.developer.io/14718487794778.html"/>
+    <link href="https://cainrun.github.io/14718487794778.html"/>
     <updated>2016-08-22T14:52:59+08:00</updated>
-    <id>http://Cain.developer.io/14718487794778.html</id>
+    <id>https://cainrun.github.io/14718487794778.html</id>
     <content type="html"><![CDATA[
 <h3 id="toc_0">作者感言</h3>
 
