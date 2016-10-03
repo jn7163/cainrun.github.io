@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	玩转iOS开发：iOS 8 新特性《UIVisualEffect》 - Cain For iOS
+  	Cain For iOS
   	
 	</title>
 
@@ -120,131 +120,57 @@
 		</div>	
 		<div class="mid-col">
 			<div class="mid-col-container"> <div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
 
-	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-		<h1 class="title" itemprop="name">玩转iOS开发：iOS 8 新特性《UIVisualEffect》</h1>
+
+	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+		<div class="meta">
+			<div class="date">
+				<time datetime="2016-08-22T14:52:59+08:00" itemprop="datePublished">2016/8/22</time>
+			</div>
+			<div class="tags">posted in 
+			
+			    <a class='category' href='%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7.html'>第三方工具</a>&nbsp;
+			 
+			</div>
+		</div>
+		<h1 class="title" itemprop="name"><a href="14718487794778.html" itemprop="url">
+		玩转iOS开发：《CocoaPods》安装及使用教程</a></h1>
 		<div class="entry-content" itemprop="articleBody">
+			
 			<h3 id="toc_0">作者感言</h3>
 
 <blockquote>
-<p>在iOS 8发布的时候, <strong><code>Apple</code></strong>介绍了很多<strong><code>iOS 8</code></strong>的新特性, 比如什么<strong><code>Extensions</code></strong>,<strong><code>Photo</code></strong>,<strong><code>Siri</code></strong>等等之类的, 虽然讲了不少, 但也有很多东西被忽略掉的, 比如今天我们所讲的<strong><code>UIVisualEffect</code></strong>.<br/>
+<p>这次的<strong><code>CocoaPods</code></strong>的<strong><code>Review</code></strong>，让我知道了新版的<strong><code>CocoaPods</code></strong>和旧版的<strong><code>CocoaPods</code></strong>的区别, 在声明<strong><code>Podfile</code></strong>文件中, 需要加入对应的<strong><code>target</code></strong>才可以执行, 我个人感觉这个操作有些不太友好, 但他们要这么做, 我也没办法, 毕竟我只是小白用户而已.<br/>
 <dr/><br/>
-有人会问, 这个类是干嘛的呢? 有人又会说, 这个类我用过, 但不好用等等之类的<br/>
-<dr/><br/>
-的确, 这个类的确是不太好用, 限制性太强了, 能使用的<strong><code>API</code></strong>也就一丢丢, 对于现在的需求逐渐多元化来说, 是远远不够的, 但我们可以期待一下, 或许以后苹果会逐渐的开放这个控件呢~</p>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>CocoaPods</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
 </blockquote>
 
-<span id="more"></span><!-- more -->
 
-<hr/>
 
-<h3 id="toc_1">简介</h3>
-
-<blockquote>
-<p><strong><code>UIVisualEffect</code></strong>这个控件其实就是一个高斯模糊的一个实现的类, 它继承与<strong><code>NSObject</code></strong>, 有三种样式, 分别是: </p>
-
-<ul>
-<li><strong><code>UIBlurEffectStyleExtraLight</code></strong></li>
-<li><strong><code>UIBlurEffectStyleLight</code></strong></li>
-<li><strong><code>UIBlurEffectStyleDark</code></strong></li>
-</ul>
-
-<p><dr/><br/>
-有一个子类叫做<strong><code>UIVibrancyEffect</code></strong>, 还有一个可调用<strong><code>UIVisualEffect</code></strong>的类叫做<strong><code>UIVisualEffectView</code></strong>, 下面让我们来看看怎么去使用吧.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">新建工程</h3>
-
-<blockquote>
-<p>这里我们建了一个叫做<strong><code>UIVisualEffect</code></strong>的工程</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/0.png" alt="0"/></p>
-
-<hr/>
-
-<h3 id="toc_3">布局UI界面</h3>
-
-<blockquote>
-<p>建完一个工程之后, 我们来布局一下UI, 由于这个类有三种样式, 所以我们这里就建立三个<strong><code>UIButton</code></strong>, 并且新建三个<strong><code>ViewController</code></strong>, 这样子我们就能比较清晰的看到三种不同的效果了.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/1.png" alt="1"/></p>
-
-<blockquote>
-<p>这个是和<strong><code>Storyboard</code></strong>绑定好的页面, 这样子, 我们就可以根据点击自己想要的按钮就跳转到对应的页面去了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/2.png" alt="2"/></p>
-
-<blockquote>
-<p>在实现之前, 我偷偷的丢了一张图片在工程里面, 也对UI进行了一个布局, 并且关联了其中一个图片的属性, 这里大家凑合着看吧, 毕竟丑~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/3.png" alt="3"/></p>
-
-<hr/>
-
-<h3 id="toc_4">实现对应的效果</h3>
-
-<blockquote>
-<p>这里我只拿<strong><code>ExtraLight</code></strong>效果来做演示, 其他的两种效果大家可以自行去翻查一下<strong><code>Demo</code></strong>代码, 代码都是比较简单的~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/4.png" alt="4"/></p>
-
-<blockquote>
-<p>这样子就完成了, 下面是具体实现的代码:</p>
-</blockquote>
-
-<pre><code class="language-Objectivec">    self.title = NSStringFromClass(self.class);
-    
-    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    
-    UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-    
-    visualEffectView.alpha = 0.5;
-    
-    visualEffectView.frame = self.imageView.bounds;
-    
-    [self.imageView addSubview:visualEffectView];
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_5">最终效果</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/5.gif" alt="5"/></p>
-
-<hr/>
-
-<h3 id="toc_6">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/New-Features-For-iOS-8">https://github.com/CainRun/New-Features-For-iOS-8</a></p>
-
-<h3 id="toc_7">最后</h3>
-
-<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
-
+			 
+			<a href="14718487794778.html#more" class="more-link">Read on &rarr;</a>
+    		
+			
 		</div>
+
 	</article>
-	<div class="share-comment">
-	 
+  
 
-	  
+</div>
+<nav id="pagenavi">
+	 <a class="prev" href="all_1.html">Prev</a>  
+	
+	<div class="center"><a href="archives.html">Blog Archives</a></div>
 
-	  
-	      <div class="ds-thread" data-thread-key="14730058185822.html" data-url="https://cainrun.github.io/14730058185822.html" data-title="玩转iOS开发：iOS 8 新特性《UIVisualEffect》"></div>
-	  
+</nav>
 
-	</div>
-</div>        </div>
+</div>
+
+
+
+        </div>
     		<footer id="footer" class="inner">Copyright &copy; 2014
 Powered by <a target="_blank" href="https://cainrun.github.io">Cain</a>    
 Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>

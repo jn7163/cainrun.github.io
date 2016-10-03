@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	玩转iOS开发：集成 Apple Pay - Cain For iOS
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Cain For iOS" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+				 
+				 	<div class="profilepic">
+						<img src="asset/icon.png" style="width:160px;">
+					</div>
+            	
+					
+					<h1><a href="index.html">Cain For iOS</a></h1>
+					<p class="subtitle">指弹吉他演奏爱好者, 摄影爱好者, iOS 开发工程师, 如果您有更好的建议或者其他不明白的地方, 可以联系我QQ: 350116542</p>
+					<nav id="main-nav">
+						<ul class="main">
+						
+						  <li id=""><a target="self" href="index.html">Home</a></li>
+						
+						  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+						
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+
+
+
+<a target="_blank" class="linkedin" href="www.linkedin.com/in/cainluo" title="LinkedIn">LinkedIn</a>
+
+
+
+<a target="_blank" class="weibo" href="http://weibo.com/1826190094" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/CainRun" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:zhebushimengfei@qq.com" title="Email">Email</a>
+
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：集成 Apple Pay</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>在中秋过后终于把国内的三大支付平台<strong><code>SDK</code></strong>集成都搞定了, 现在我们终于可以来研究<strong><code>Apple</code></strong>自家的支付<strong><code>Apple Pay</code></strong><br/>
+<dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Apple Pay</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p><strong><code>Apple Pay</code></strong>呢, 是<strong><code>Apple</code></strong>在2014年的时候发布的功能, 是基于NFC上开发的, 所以在<strong><code>2014</code></strong>年之前的机型都是不支持的, 比如<strong><code>iPhone 5</code></strong>和<strong><code>iPhone 5s</code></strong>, 但可以通过另外的方法, 比如连接<strong><code>Apple Watch</code></strong>就可以用了, 在2016年的2月18号, 中国地区才正式上线<strong><code>Apple Pay</code></strong>, 既然已经来到了, 我们就要去看看怎么去使用<strong><code>Apple Pay</code></strong>啦.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">准备工作</h3>
+
+<blockquote>
+<p>既然是<strong><code>Apple</code></strong>自家的功能, 那我们肯定要去先查看一下<strong><a href="https://developer.apple.com/apple-pay/Getting-Started-with-Apple-Pay.pdf">Apple Pay文档</a></strong>, 了解了一下文档的内容, 它是需要去开发者中心申请一个<strong><code>Merchant ID证书</code></strong>, 那事不宜迟, 我们赶紧去申请一个.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">申请商务证书</h3>
+
+<blockquote>
+<p>其实申请商务证书和申请<strong><code>App ID</code></strong>证书的步骤没啥区别, 最大的区别就是在于一些小细节, 首先我们要去打开<strong><a href="https://developer.apple.com">开发者中心</a></strong>, 登录之后, 我们找到<strong><code>Merchant ID证书</code></strong>申请的地方, 申请一下<strong><code>Merchant ID证书</code></strong>.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/1.png" alt="1"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/2.png" alt="2"/></p>
+
+<blockquote>
+<p>找到之后, 我们输入一些信息, 比如<strong><code>Merchant ID Description</code></strong>, 然后就是<strong><code>Identifier</code></strong>.</p>
+
+<p>PS: <strong><code>Identifier</code></strong>是唯一的, 如果别人使用你所输入的<strong><code>Identifier</code></strong>, <strong><code>Apple</code></strong>就会叫你更换成另一个</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/3.png" alt="3"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/4.png" alt="4"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/5.png" alt="5"/></p>
+
+<blockquote>
+<p>现在我们已经搞定了第一步, 已经有了<strong><code>Merchant ID</code></strong>, 接下来我们需要去创建<strong><code>Merchant ID证书</code></strong>.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/6.png" alt="6"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/7.png" alt="7"/></p>
+
+<blockquote>
+<p>这里会问一个问题, 是否要设置成中国地区特有的<strong><code>Apple Pay</code></strong>, <strong><code>App</code></strong>只是面对国内的话, 那这个选择<strong><code>YES</code></strong>就好了, 如果是全球性的<strong><code>App</code></strong>, 那就选择<strong><code>NO</code></strong>, 当然这个也不是强制性, 自己看着办吧~~我这里就选择<strong><code>NO</code></strong>.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/8.png" alt="8"/></p>
+
+<blockquote>
+<p>接下来就是重头戏了, 我们这里需要仔细看一下Apple给我们的提示, 我们要生成的证书类型是<strong><code>ECC</code></strong>, 并且是<strong><code>256bits</code></strong>.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/9.png" alt="9"/></p>
+
+<blockquote>
+<p>打开系统的钥匙串, 创建我们所需的类型证书.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/10.png" alt="10"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/11.png" alt="11"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/12.png" alt="12"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/13.png" alt="13"/></p>
+
+<blockquote>
+<p>创建完成之后就可以关闭了, 然后在开发者中心点击<strong><code>Continue</code></strong>, 由于我创建的时候, 是把证书放在桌面上的, 所以开发者中心里选择的证书也是选择桌面上的这个证书, 然后再点击<strong><code>Continue</code></strong>就搞定了.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/14.png" alt="14"/></p>
+
+<blockquote>
+<p>但是别忘了我们还要下载这个证书哦, 下载完成后要双击添加到我们的钥匙串里去~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/15.png" alt="15"/></p>
+
+<blockquote>
+<p>剩下怎么去弄<strong><code>配置文件</code></strong>以及<strong><code>App ID证书</code></strong>, 我这里就不做多介绍了, 第一次尝试的童鞋可以自行到<a href="http://www.jianshu.com/p/61d1b4c33f5f">iOS APP上架流程详解</a>, <a href="http://www.jianshu.com/p/2813abee7187">完整的iOS上架App流程</a>查看哈~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_4">关联Merchant ID</h3>
+
+<blockquote>
+<p>刚刚我们已经申请好了<strong><code>Merchant ID证书</code></strong>, 在申请完成<strong><code>App ID</code></strong>之后, 我们要就要去找到刚刚创建好的<strong><code>App ID</code></strong>, 然后关联上我们的<strong><code>Merchant ID</code></strong>.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/16.png" alt="16"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/17.png" alt="17"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/18.png" alt="18"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/19.png" alt="19"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/20.png" alt="20"/></p>
+
+<blockquote>
+<p>酱紫, 我们就关联完成了, 下面来就是在之前的支付工程里添加一个新的工程, 命名为<strong><code>ApplePay-Objective-C</code></strong></p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_5">开启Apple Pay</h3>
+
+<blockquote>
+<p>打开我们新建的工程, 然后添加我们的<strong><code>Merchant ID</code></strong>, 勾上<strong><code>Apple Pay</code></strong>的选项, 然后我们就来写实现代码啦~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/21.png" alt="21"/></p>
+
+<hr/>
+
+<h3 id="toc_6">实现Apple Pay</h3>
+
+<blockquote>
+<p>实现<strong><code>Apple Pay</code></strong>的代码其实很简单, 遵循<strong><code>PKPaymentAuthorizationViewControllerDelegate</code></strong>代理, 实现两个必须实现的代理方法, 这是第一步, 第二步就是创建一个<strong><code>PKPaymentRequest</code></strong>请求, 然后再创建<strong><code>PKPaymentAuthorizationViewController</code></strong>, 最终就可以实现<strong><code>Apple Pay</code></strong>支付啦~下面是代码截图, 由于代码过多, 这里就不贴出来了, 大家需要的话, 就去看看Demo吧~~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/22.png" alt="22"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/23.png" alt="23"/></p>
+
+<blockquote>
+<p>顺便说一声, <strong><code>Apple Pay</code></strong>的国际化不需要我们去实现, 内部就已经实现了</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_7">最终效果</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/24.gif" alt="24"/></p>
+
+<hr/>
+
+<h3 id="toc_8">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/PayProject">https://github.com/CainRun/PayProject</a></p>
+
+<hr/>
+
+<h3 id="toc_9">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	 
+
+	  
+
+	  
+	      <div class="ds-thread" data-thread-key="14747805717408.html" data-url="https://cainrun.github.io/14747805717408.html" data-title="玩转iOS开发：集成 Apple Pay"></div>
+	  
+
+	</div>
+</div>        </div>
+    		<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="https://cainrun.github.io">Cain</a>    
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+    	</div>
+    </div>
+
+  
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:'cainluo'};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+    
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+</body>
+</html>
