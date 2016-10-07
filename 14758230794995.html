@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	Cain For iOS
+  	玩转iOS开发：Touch ID集成 - Cain For iOS
   	
 	</title>
 
@@ -120,91 +120,96 @@
 		</div>	
 		<div class="mid-col">
 			<div class="mid-col-container"> <div id="content" class="inner">
-<div itemscope itemtype="http://schema.org/Blog">
 
-
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2016-08-22T14:58:53+08:00" itemprop="datePublished">2016/8/22</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14718491333111.html" itemprop="url">
-		玩转iOS开发：《iOS设计模式 — 单例模式》</a></h1>
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：Touch ID集成</h1>
 		<div class="entry-content" itemprop="articleBody">
-			
 			<h3 id="toc_0">作者感言</h3>
 
 <blockquote>
-<p>有一段时间没有发博客了, 刚好现在忙完项目的需求, 现在可以闲下来写写博客, 顺便自己给自己复习巩固一下知识, 不过我在这里又要吐槽一句, 项目中遇到了一个单例的问题, 让我感到非常的蛋疼, 写这个单例的人只是单纯了为了写单例而写单例, 没有想到会发生什么, 现在让我们一起来看看什么叫单例吧.</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>单例模式</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
-</blockquote>
-
-
-
-			 
-			<a href="14718491333111.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2016-08-22T14:52:59+08:00" itemprop="datePublished">2016/8/22</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7.html'>第三方工具</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14718487794778.html" itemprop="url">
-		玩转iOS开发：《CocoaPods》安装及使用教程</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>这次的<strong><code>CocoaPods</code></strong>的<strong><code>Review</code></strong>，让我知道了新版的<strong><code>CocoaPods</code></strong>和旧版的<strong><code>CocoaPods</code></strong>的区别, 在声明<strong><code>Podfile</code></strong>文件中, 需要加入对应的<strong><code>target</code></strong>才可以执行, 我个人感觉这个操作有些不太友好, 但他们要这么做, 我也没办法, 毕竟我只是小白用户而已.<br/>
+<p>这个国庆由于种种原因, 过的不太安稳, 搬家, 办证, 东跑西跑, 忙的压根就不像是在过节....不过算了, 挑最后一天写写博文.<br/>
 <dr/><br/>
 <strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>CocoaPods</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Apple Pay</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
 </blockquote>
 
+<span id="more"></span><!-- more -->
 
+<hr/>
 
-			 
-			<a href="14718487794778.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p><strong><code>Touch ID</code></strong>是苹果公司的一种指纹识别技术。苹果把用户的指纹数据存放在处理器的<strong><code>安全区域</code></strong>中，充分保护用户的数据安全。除此之外，苹果还有另外一道指纹数据安全防线，以一种前所未有的硬件技术实现了对用户数据的保护。</p>
+
+<p>在集成的时候非常的简单, 基本上没多少东西可以写的, 这里我就简单的写写.</p>
+
+<p><strong><font color=red>PS: 由于Touch ID只能在真机上调试, 所以模拟器是没法用来调试.</font></strong></p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">创建工程</h3>
+
+<blockquote>
+<p>直接创建一个新的工程, 并且命名为<strong><code>SimpleTouchID</code></strong>, 然后在<strong><code>Storyboard</code></strong>拖一个<strong><code>UIButton</code></strong>, 然后关联到<strong><code>ViewController</code></strong>.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/1.png" alt="1"/></p>
+
+<blockquote>
+<p>关联完成之后, 导入<strong><code>LocalAuthentication</code></strong>依赖库, 在<strong><code>ViewController</code></strong>也别忘记导入.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/2.png" alt="2"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_3">实现Touch ID校验</h3>
+
+<blockquote>
+<p>这里的代码非常简单这里就不细说了, 唯一不太一样的就是, 在<strong><code>iOS 9</code></strong>之后新增了三个校验的状态, 大家可以看看<strong><code>Demo</code></strong>里的注释.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/4.png" alt="4"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/5.png" alt="5"/></p>
+
+<hr/>
+
+<h3 id="toc_4">最终效果</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/0.gif" alt="0"/></p>
+
+<hr/>
+
+<h3 id="toc_5">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/SimpleTouchID">https://github.com/CainRun/SimpleTouchID</a></p>
+
+<hr/>
+
+<h3 id="toc_6">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
 		</div>
-
 	</article>
-  
+	<div class="share-comment">
+	 
 
-</div>
-<nav id="pagenavi">
-	 <a class="prev" href="all_1.html">Prev</a>  
-	
-	<div class="center"><a href="archives.html">Blog Archives</a></div>
+	  
 
-</nav>
+	  
+	      <div class="ds-thread" data-thread-key="14758230794995.html" data-url="https://cainrun.github.io/14758230794995.html" data-title="玩转iOS开发：Touch ID集成"></div>
+	  
 
-</div>
-
-
-
-        </div>
+	</div>
+</div>        </div>
     		<footer id="footer" class="inner">Copyright &copy; 2014
 Powered by <a target="_blank" href="https://cainrun.github.io">Cain</a>    
 Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>

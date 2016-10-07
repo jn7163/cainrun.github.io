@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2016-10-03T12:07:35+08:00</updated>
+  <updated>2016-10-03T12:09:19+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,88 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：Touch ID集成]]></title>
+    <link href="https://cainrun.github.io/14758230794995.html"/>
+    <updated>2016-10-07T14:51:19+08:00</updated>
+    <id>https://cainrun.github.io/14758230794995.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>这个国庆由于种种原因, 过的不太安稳, 搬家, 办证, 东跑西跑, 忙的压根就不像是在过节....不过算了, 挑最后一天写写博文.<br/>
+<dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Apple Pay</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p><strong><code>Touch ID</code></strong>是苹果公司的一种指纹识别技术。苹果把用户的指纹数据存放在处理器的<strong><code>安全区域</code></strong>中，充分保护用户的数据安全。除此之外，苹果还有另外一道指纹数据安全防线，以一种前所未有的硬件技术实现了对用户数据的保护。</p>
+
+<p>在集成的时候非常的简单, 基本上没多少东西可以写的, 这里我就简单的写写.</p>
+
+<p><strong><font color=red>PS: 由于Touch ID只能在真机上调试, 所以模拟器是没法用来调试.</font></strong></p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">创建工程</h3>
+
+<blockquote>
+<p>直接创建一个新的工程, 并且命名为<strong><code>SimpleTouchID</code></strong>, 然后在<strong><code>Storyboard</code></strong>拖一个<strong><code>UIButton</code></strong>, 然后关联到<strong><code>ViewController</code></strong>.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/1.png" alt="1"/></p>
+
+<blockquote>
+<p>关联完成之后, 导入<strong><code>LocalAuthentication</code></strong>依赖库, 在<strong><code>ViewController</code></strong>也别忘记导入.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/2.png" alt="2"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_3">实现Touch ID校验</h3>
+
+<blockquote>
+<p>这里的代码非常简单这里就不细说了, 唯一不太一样的就是, 在<strong><code>iOS 9</code></strong>之后新增了三个校验的状态, 大家可以看看<strong><code>Demo</code></strong>里的注释.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/4.png" alt="4"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/5.png" alt="5"/></p>
+
+<hr/>
+
+<h3 id="toc_4">最终效果</h3>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/SimpleTouchID/master/images/0.gif" alt="0"/></p>
+
+<hr/>
+
+<h3 id="toc_5">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/SimpleTouchID">https://github.com/CainRun/SimpleTouchID</a></p>
+
+<hr/>
+
+<h3 id="toc_6">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：集成 Apple Pay]]></title>
