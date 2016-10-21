@@ -2,7 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
   <loc>https://cainrun.github.io/</loc>
-  <lastmod>2016-10-07T16:26:16+08:00</lastmod>
+  <lastmod>2016-10-21T17:54:16+08:00</lastmod>
+</url>
+
+<url>
+  <loc>https://cainrun.github.io/14770254062641.html</loc>
+  <lastmod>2016-10-21T12:50:06+08:00</lastmod>
 </url>
 
 <url>
@@ -119,6 +124,10 @@
 
 <url>
   <loc>https://cainrun.github.io/UI%E5%BA%93.html</loc>
+</url>
+
+<url>
+  <loc>https://cainrun.github.io/Core%20Animation.html</loc>
 </url>
 
 

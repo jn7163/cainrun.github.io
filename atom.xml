@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2016-10-03T12:09:19+08:00</updated>
+  <updated>2016-10-21T17:54:09+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,173 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：1.《Core Animation》基础概念]]></title>
+    <link href="https://cainrun.github.io/14770254062641.html"/>
+    <updated>2016-10-21T12:50:06+08:00</updated>
+    <id>https://cainrun.github.io/14770254062641.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>最近作者一直有一些迷糊, 感觉在研究上有了一些迷糊, 不知道怎么往下研究了, 咨询了一下朋友和一些前辈, 决定先玩一玩<strong>Core Animation</strong>, 毕竟是<strong>iOS</strong>的核心层之一, 也是最吸引人的地方之一, 今天就让我们先来了解一下<strong>Core Animation</strong>的一些概念知识.<br/>
+<dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Core Animation</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<ul>
+<li><strong>Core Animation</strong>是<strong>iOS</strong>与<strong>OS X</strong>平台上负责图形渲染与动画的基础设施。</li>
+<li><strong>Core Animation</strong>可以动画视图和其他的可视元素。</li>
+<li><strong>Core Animation</strong>为你完成了实现动画所需的大部分绘帧工作。</li>
+<li>你只需在配置少量的动画参数（如开始点位置和结束点位置）就可启动<strong>Core Animation</strong>。</li>
+<li><strong>Core Animation</strong>将大部分实际的绘图任务交给了图形硬件处理，图形硬件会加速图形渲染的速度。</li>
+<li>这种自动化的图形加速让动画具有更高的帧率且更加平滑，但这并不会增加<strong>CPU</strong>的负担而导致影响你应用的运行速度。</li>
+</ul>
+
+<p>以上的文字都是从官方文档里直接拷贝的, 如果有啥问题, 直接去PK<a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CoreAnimation_guide/Introduction/Introduction.html">通用官方文档</a>和<a href="https://developer.apple.com/library/content/documentation/WindowsViews/Conceptual/ViewPG_iPhoneOS/Introduction/Introduction.html">iOS官方文档</a>~~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">图层与视图结构</h3>
+
+<blockquote>
+<p>在我们日常开发<strong>iOS</strong>或者是<strong>Mac</strong>应用中, 我们都避免不了对<strong>UI</strong>的布局(不然要UI设计师干嘛), 那我们一般是怎么去看应用中的图层结构呢? 让我们直接来看一个<strong>Demo</strong>吧.</p>
+
+<p>创建一个新的项目, 然后在项目当中随意添加一个或者多个<strong>UI</strong>控件.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/1.viewLayer/images/1.png" alt="1"/></p>
+
+<blockquote>
+<p>运行了项目之后, 找到查看图层的按钮, 点击之后就会跳转到查看图层的界面.</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/1.viewLayer/images/2.png" alt="2"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/1.viewLayer/images/3.png" alt="3"/></p>
+
+<blockquote>
+<p>再换个角度看看~~</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/1.viewLayer/images/4.png" alt="4"/></p>
+
+<blockquote>
+<p>在<strong>iOS</strong>当中, 无论是神马<strong>UIButton</strong>,<strong>UIScrollView</strong>, 还是神马<strong>UITableView</strong>, 都是基于<strong>UIView</strong>基类派生而来的, 而<strong>UIView</strong>是可以处理<strong>Touch</strong>事件, 也支持<strong>Core Graphics</strong>的绘画, 也可以做仿射变换(也就是神马旋转, 缩放事件), 当然, 也可以做类似于滑动, 渐变等<strong>UIView</strong>基础动画.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">CALayer</h3>
+
+<blockquote>
+<p><strong>CALayer</strong>其实是和<strong>UIView</strong>的概念差不多, 也是同样被层级关系树所管理, 也一样有神马图片, 文本, 背景色等内容, 或者是管理一些子图层等等, 但<strong>CALayer</strong>和<strong>UIView</strong>最大的区别是在于,<strong>CALayer</strong>并不能处理用户交互, 即使<strong>CALayer</strong>提供了一些方法来判断触点是否在图层的范围之内.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_4">UIView和CALayer层级关系</h3>
+
+<blockquote>
+<p>用过<strong>UIView</strong>的朋友们其实都知道, 每一个<strong>UIView</strong>当中都有一个<strong>CALayer</strong>实例的图层属性, 也就是所谓<strong>backing layer</strong>.</p>
+
+<p><strong>UIView</strong>的职责是用来创建并管理这个图层, 以确保层级关系中添加或者被移除的时候, 所关联的<strong>Layer</strong>也会有同样的操作.</p>
+
+<p>虽然<strong>UIView</strong>是作为一个管理者, 但实际上显示在屏幕上以及做动画效果的都是<strong>Layer</strong>,<strong>UIView</strong>仅仅只是对<strong>Layer</strong>的一个封装, 提供了一些而外的方法, 比如<strong>Touch</strong>的功能,<strong>Core Animation</strong>底层方法的高级<strong>API</strong>, 所以<strong>UIView</strong>和<strong>CALayer</strong>是处于一个平级的关系.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_5">疑惑</h3>
+
+<blockquote>
+<p>说到这里, 就会有一个疑惑, 为什么苹果要把<strong>UIView</strong>和<strong>CALayer</strong>处于一个平级的关系呢?(或许有人会有这样子的疑问)</p>
+
+<p>其实原因很简单, 是为了职责分离, 也算是模块化划分吧, 因为在<strong>Mac OS</strong>当中, 并没有<strong>UIView</strong>这个类, 所以并不能处理<strong>Touch</strong>事件, 但却有<strong>CALayer</strong>, 所以苹果为了能够让<strong>Mac OS</strong>和<strong>iOS</strong>两个系统相互共享代码, 直接把<strong>CALayer</strong>给独立出来了~~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_6">CALayer的能力</h3>
+
+<blockquote>
+<p>其实在系统库当中, 苹果已经通过<strong>UIView</strong>提供了许多高级的<strong>API</strong>, 间接的使得动画变得很简单.</p>
+
+<p>但这样子就带来另外的一个问题, 就是灵活性的缺失, 打个比方, 如果你想在底层做一些额外的操作, 通过系统提供的<strong>API</strong>是没法实现的, 这个时候, 我们除了去学习和了解<strong>Core Animation</strong>之外, 再也没有其他途径了.</p>
+
+<p>那么说到底,<strong>CALayer</strong>到底能用来做什么呢? 有好几个点, 比如:</p>
+
+<ul>
+<li>阴影, 圆角, 边框</li>
+<li>3D变换(比如拉伸, 放大, 缩小等)</li>
+<li>非矩形范围</li>
+<li>透明遮罩</li>
+<li>多级非线性动画</li>
+</ul>
+
+<p>大致上就这一些, 后续我们会通过学习<strong>Core Animation</strong>, 会了解更多的<strong>Layer</strong>, 以及怎么利用<strong>Layer</strong>做出我们想做的效果.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_7">使用CALayer</h3>
+
+<blockquote>
+<p>一般来讲, 在我们日常开发中, 都是面对视图开发, 但如果某些特殊的场景, 我们还是需要面向CALayer来进行开发的, 比如</p>
+
+<ul>
+<li>开发一个可同时在Mac OS和iOS两个平台上使用的应用</li>
+<li>使用多种的CALayer子类, 并且不想创建一个UIView去封装它们</li>
+<li>做一些对性能特别挑剔的工作(暂时我也没想到, 知道的朋友可以和我说说)</li>
+</ul>
+
+<p>但总的来说, 直接面向视图开发, 要比面向<strong>CALayer</strong>开发的要简单.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_8">总结一下</h3>
+
+<blockquote>
+<p>说了那么多东西, 其实重点就那么几个: </p>
+
+<ul>
+<li>CALayer与UIView是平级关系</li>
+<li>CALayer与UIView的相同点与区别</li>
+<li>CALayer可跨平台使用</li>
+<li>CALayer不能够响应事件</li>
+<li>UIView是基于CALayer封装的一个类, 并提供<strong>Touch</strong>事件</li>
+</ul>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_9">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/CoreAnimation">https://github.com/CainRun/CoreAnimation</a></p>
+
+<hr/>
+
+<h3 id="toc_10">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：Touch ID集成]]></title>
