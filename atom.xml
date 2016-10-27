@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2016-10-21T17:54:16+08:00</updated>
+  <updated>2016-10-24T00:24:30+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,359 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：3.《Core Animation》CALayer的几何图层]]></title>
+    <link href="https://cainrun.github.io/14773198375857.html"/>
+    <updated>2016-10-24T22:37:17+08:00</updated>
+    <id>https://cainrun.github.io/14773198375857.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>前一章我们了解真正了<strong>CALayer</strong>是干嘛的, <a href="https://cainrun.github.io/14771496782021.html">《Core Animation》初识CALayer</a>今天我们就来讲讲<strong>CALayer Geometry</strong>.</p>
+
+<p><dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Core Animation</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p><strong>CALayer Geometry</strong>讲得是图层的几何, 主要内容分别有<strong>Layout</strong>, <strong>anchorPoint</strong>, <strong>Coordinate Systems</strong>, <strong>Hit Testing</strong>, <strong>Automatic Layout</strong>, <strong>Summary</strong>, 待我们一一去了解和学习~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">Layout</h3>
+
+<blockquote>
+<p><strong>Layout</strong>顾名思义就是布局的意思, 这一段讲的是视图和图层简单的布局, 比如<strong>UIView</strong>里面有<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>, <strong>CALayer</strong>里面有<strong>frame</strong>, <strong>bounds</strong>, <strong>position</strong>.</p>
+
+<p>这里对布局属性进行一下解释: </p>
+
+<p><strong>frame</strong>: 代表了的是图层外部的一个坐标轴, 也是相对于父视图.<br/>
+<strong>bounds</strong>: 代表了的是内部坐标轴, 它的原点永远都是<strong>{0, 0}</strong>, 是相对于本视图的位置和大小.<br/>
+<strong>center</strong>以及<strong>position</strong>: 代表的是现对于父视图所在的位置, 也就是我们经常所说的中心点, 但是呢, 其实这个说法不太对, 其实是应该相对于父视图<strong>anchorPoint</strong>属性所在的位置才对,<strong>anchorPoint</strong>属性我们后面再解释, 现在让它打一下酱油先.</p>
+
+<p>我们来看看Demo中的实例:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self logViewAndLayer];
+}
+
+- (void)logViewAndLayer {
+
+    NSLog(@&quot;View X: %f&quot;, self.view.center.x);
+    NSLog(@&quot;View Y: %f&quot;, self.view.center.y);
+    NSLog(@&quot;View Frame Width: %f&quot;, self.view.frame.size.width);
+    NSLog(@&quot;View Frame Height: %f&quot;, self.view.frame.size.height);
+    NSLog(@&quot;View Bounds Width: %f&quot;, self.view.bounds.size.width);
+    NSLog(@&quot;View Bounds Height: %f&quot;, self.view.bounds.size.height);
+    NSLog(@&quot;\n&quot;);
+    NSLog(@&quot;Layer X: %f&quot;, self.view.layer.position.x);
+    NSLog(@&quot;Layer Y: %f&quot;, self.view.layer.position.y);
+    NSLog(@&quot;Layer Frame Width: %f&quot;, self.view.layer.frame.size.width);
+    NSLog(@&quot;Layer Frame Height: %f&quot;, self.view.layer.frame.size.height);
+    NSLog(@&quot;Layer Bounds Width: %f&quot;, self.view.layer.bounds.size.width);
+    NSLog(@&quot;Layer Bounds Height: %f&quot;, self.view.layer.bounds.size.height);
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/1.png" alt="1"/></p>
+
+<blockquote>
+<p>在这里, 我们看到<strong>layer</strong>的<strong>frame</strong>, <strong>bounds</strong>, <strong>position</strong>和<strong>UIView</strong>的<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>都是一致的.</p>
+
+<p>但是在<strong>UIView</strong>里, <strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>这三个属性只是存取方法罢了, 当<strong>UIView</strong>对<strong>frame</strong>属性进行操作时, 其实是对<strong>CALayer</strong>的<strong>frame</strong>进行操作, 是不能够脱离了<strong>CALayer</strong>的去改变视图的<strong>frame</strong>.</p>
+
+<p><strong>frame</strong>这个属性对于<strong>UIView</strong>和<strong>CALayer</strong>来说, 它是一个比较玄的属性, 它的值是根据<strong>UIView</strong>或者是<strong>CALayer</strong>的<strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>计算所得到的一个值, 一旦你去改变了<strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>其中一个值, <strong>frame</strong>也会随之而改变, 当然啦, 你去改变<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>这三个值也会跟着改变的.</p>
+
+<p><strong><font color=red>PS: 这里还需要提一点, 如果你对</strong>CALayer<strong>进行了</strong>transform<strong>的旋转或者是缩放时,</strong> frame<strong>所显示的宽高与</strong>bounds<strong>的宽高就不会再一样了.</font></strong></p>
+
+<p>直接来看Demo吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)layerTransform {
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20, 100, 100)];
+    
+    view.backgroundColor = [UIColor redColor];
+    
+    [self.view addSubview:view];
+    
+    view.layer.transform = CATransform3DMakeRotation(M_PI_4, 1, 1, 0.5);
+    
+    NSLog(@&quot;View X: %f&quot;, view.center.x);
+    NSLog(@&quot;View Y: %f&quot;, view.center.y);
+    NSLog(@&quot;View Frame Width: %f&quot;, view.frame.size.width);
+    NSLog(@&quot;View Frame Height: %f&quot;, view.frame.size.height);
+    NSLog(@&quot;View Bounds Width: %f&quot;, view.bounds.size.width);
+    NSLog(@&quot;View Bounds Height: %f&quot;, view.bounds.size.height);
+    NSLog(@&quot;\n&quot;);
+    NSLog(@&quot;Layer X: %f&quot;, view.layer.position.x);
+    NSLog(@&quot;Layer Y: %f&quot;, view.layer.position.y);
+    NSLog(@&quot;Layer Frame Width: %f&quot;, view.layer.frame.size.width);
+    NSLog(@&quot;Layer Frame Height: %f&quot;, view.layer.frame.size.height);
+    NSLog(@&quot;Layer Bounds Width: %f&quot;, view.layer.bounds.size.width);
+    NSLog(@&quot;Layer Bounds Height: %f&quot;, view.layer.bounds.size.height);
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/2.png" alt="2"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_3">AnchorPoint</h3>
+
+<blockquote>
+<p><strong>anchorPoint</strong>这个属性名, 也叫作<strong>锚点</strong>, 指的一个<strong>UIView</strong>和<strong>CALayer</strong>相对于父视图的位置参考点, 左上角为<strong>{0, 0}</strong>, 居中为<strong>{0.5, 0.5}</strong>, 右下角为<strong>{1, 1}</strong>, 默认都是位于父视图层的中点, 也就是<strong>{0.5, 0.5}</strong>.</p>
+
+<p>在<strong>UIView</strong>当中, <strong>anchorPoint</strong>属性并没有公开出来, 你只能操作<strong>center</strong>这个值, 间接性的给<strong>anchorPoint</strong>赋值, <strong>CALayer</strong>也可以通过改变<strong>position</strong>来给<strong>anchorPoint</strong>进行赋值, 从而改变<strong>CALayer</strong>的<strong>frame</strong>.</p>
+
+<p>这里还需要提及一点, 如果你改变了<strong>CALayer</strong>的<strong>anchorPoint</strong>, 那么<strong>CALayer</strong>的<strong>frame</strong>也会被改变, 那么<strong>anchorPoint</strong>属性所显示的值再也不是该<strong>CALayer</strong>的中心点, 但<strong>bounds</strong>,<strong>position</strong>这些值并不会被改变.</p>
+
+<p>我们直接来看看Demo吧~</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewAnchorPoint {
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+
+    view.backgroundColor = [UIColor grayColor];
+
+    NSLog(@&quot;before X: %f&quot;, view.layer.frame.origin.x);
+    NSLog(@&quot;before Y: %f&quot;, view.layer.frame.origin.y);
+    
+    view.layer.anchorPoint = CGPointMake(0.1f, 0.1f);
+
+    NSLog(@&quot;After X: %f&quot;, view.layer.frame.origin.x);
+    NSLog(@&quot;After Y:%f&quot;, view.layer.frame.origin.y);
+
+    [self.view addSubview:view];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/4.png" alt="4"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/5.png" alt="5"/></p>
+
+<blockquote>
+<p>一般来讲, 能够用到<strong>anchorPoint</strong>属性的场景, 大多数都是在与图层叠加方面, 不然基本布局就已经够用了, 当然, 这只是在简单页面的基础上来讲而已, 还是看个人需求吧.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_4">Coordinate Systems</h3>
+
+<blockquote>
+<p><strong>Coordinate Systems</strong>也叫作坐标系, 和<strong>UIView</strong>一样,<strong>CALayer</strong>也是相对于父图层并且按照层级关系来摆放, 如果父图层的位置发生了变化, 那么子图层也会随之而改变.</p>
+
+<p>但某些情况下, 你想要知道这个图层的绝对位置, 或者是相对于另一个图层的位置时, 你就可以使用CALayer所提供的几个API进行处理了:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">    - (CGPoint)convertPoint:(CGPoint)point toView:(nullable UIView *)view;
+    - (CGPoint)convertPoint:(CGPoint)point fromView:(nullable UIView *)view;
+    - (CGRect)convertRect:(CGRect)rect toView:(nullable UIView *)view;
+    - (CGRect)convertRect:(CGRect)rect fromView:(nullable UIView *)view;
+</code></pre>
+
+<blockquote>
+<p>这些方法，可以采取任何一层的坐标系中所定义的点或矩形，并将其转换到另一个坐标系。</p>
+</blockquote>
+
+<h4 id="toc_5">翻转CALayer的几何图层</h4>
+
+<blockquote>
+<p>这里再普及一个概念, 我们都知道在<strong>iOS</strong>当中<strong>CALayer</strong>的<strong>position</strong>是在父图层的左上角, 但在<strong>Mac OS</strong>当中, 一般来说是在左下角, 而<strong>Core Animation</strong>为了解决这个问题, 提供了一个<strong>BOOL</strong>属性<strong>geometryFlipped</strong>来适配这两种情况, 它决定了一个图层的坐标是否相对于父图层且垂直翻转, 如果在<strong>iOS</strong>上把<strong>geometryFlipped</strong>设置为<strong>YES</strong>的话, 那么图层的排版就会沿着底部来排版, 而不是我们通常所看到的那样, 包括它的子图层也是如此, 除非你再把子图层里的<strong>geometryFlipped</strong>属性设置为<strong>YES</strong>.</p>
+
+<p>直接看Demo吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)layerGeometryFlipped {
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    
+    view.backgroundColor = [UIColor blueColor];
+    view.layer.geometryFlipped = YES;
+    
+    CALayer *layer = [CALayer layer];
+    
+    layer.frame = CGRectMake(0, 0, 25, 25);
+    layer.backgroundColor = [UIColor redColor].CGColor;
+    
+    [view.layer addSublayer:layer];
+    
+    [self.view addSubview:view];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/6.png" alt="6"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/7.png" alt="7"/></p>
+
+<h4 id="toc_6">Z坐标轴</h4>
+
+<blockquote>
+<p>其实<strong>CALayer</strong>除了有<strong>UIView</strong>常规的二维坐标轴之外, 还有一个<strong>Z坐标轴</strong>, 也就是说<strong>CALayer</strong>存在于三维空间当中.</p>
+
+<p>除了我们之前接触过的<strong>position</strong>和<strong>anchorPoint</strong>之外, 还有两个<strong>Z坐标轴</strong>的属性, 叫做<strong>zPosition</strong>和<strong>anchorPointZ</strong>, 且都是<strong>CGFloat</strong>类型.</p>
+
+<p><strong>zPosition</strong>这个属性在通常情况下并不常用, 在后面我们涉及到一些3D转换的内容时才会去使用这个<strong>zPosition</strong>属性, <strong>zPosition</strong>属性除了用来做3D转换之外, 更多是用来改变<strong>CALayer</strong>的显示顺序了.</p>
+
+<p>来看看Demo吧</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewsZPosition {
+    
+    UIView *greenView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    
+    greenView.backgroundColor = [UIColor greenColor];
+    greenView.layer.zPosition = 1.0f;
+    
+    UIView *redView = [[UIView alloc] initWithFrame:CGRectMake(150, 150, 100, 100)];
+    
+    redView.backgroundColor = [UIColor redColor];
+    
+    [self.view addSubview:greenView];
+    [self.view addSubview:redView];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/8.png" alt="8"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/9.png" alt="9"/></p>
+
+<hr/>
+
+<h3 id="toc_7">Hit Testing</h3>
+
+<blockquote>
+<p>在之前的文章里, 我们知道CALayer并不能处理任何响应链的事件, 所以不能直接去处理触摸事件或者手势, 但是呢, CALayer提供了一些方法可以让你知道你知道你点击了这个CALayer.</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)containsPoint;
+- (void)hitTest;
+</code></pre>
+
+<blockquote>
+<p>我们直接来看看代码吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)hitTestingLayer {
+    
+    _backgroundView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    
+    _backgroundView.backgroundColor = [UIColor grayColor];
+    
+    _blueLayer = [CALayer layer];
+    
+    _blueLayer.backgroundColor = [UIColor blueColor].CGColor;
+    _blueLayer.frame = CGRectMake(25, 25, 50, 50);
+    
+    [_backgroundView.layer addSublayer:_blueLayer];
+    
+    [self.view addSubview:_backgroundView];
+}
+
+- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event {
+    
+    CGPoint point = [[touches anyObject] locationInView:self.view];
+    
+    CALayer *layer = [self.backgroundView.layer hitTest:point];
+    
+    UIAlertView *alerView = [[UIAlertView alloc] initWithTitle:@&quot;你点击了屏幕&quot;
+                                                       message:@&quot;&quot;
+                                                      delegate:nil
+                                             cancelButtonTitle:@&quot;确定&quot;
+                                             otherButtonTitles:nil, nil];
+
+    if (layer == self.blueLayer) {
+        
+        alerView.message = @&quot;你点中了蓝色的Layer&quot;;
+        
+    } else if (layer == self.backgroundView.layer){
+        
+        alerView.message = @&quot;你点中了灰色的Layer&quot;;
+        
+    } else {
+        alerView.message = @&quot;你点中了其他的Layer&quot;;
+    }
+    
+    [alerView show];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/10.png" alt="10"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/11.png" alt="11"/></p>
+
+<hr/>
+
+<h3 id="toc_8">Automatic Layout</h3>
+
+<blockquote>
+<p>所谓的<strong>Automatic Layout</strong>就是我们经常所说的自动布局, 自动布局是苹果在<strong>iOS 6</strong>的时候引入进来的一套布局机制, 但当时好像<strong>Xcode</strong>不够给力, 最终并没有得到很好的运用.</p>
+
+<p>在<strong>Mac OS</strong>当中<strong>CALayer</strong>有一个叫做<strong>layoutManager</strong>的属性, 它可以通过<strong>CALayoutManager</strong>协议和<strong>CAConstraintLayoutManger</strong>类来实现自动布局, 但这个东东在<strong>iOS</strong>上并不能使用, 详细我也不太了解.</p>
+
+<p>再补充多一点, 在我们对<strong>UIView</strong>使用自动布局的时候, 你可以直接使用<strong>UIView</strong>提供的<strong>UIViewAutoresizingMask</strong>和<strong>NSLayoutConstraint</strong>两个API进行布局, 但如果你要对一个<strong>CALayer</strong>进行布局的话, 那么最简单的方式就是使用<strong>CALayerDelegate</strong>提供的<strong>API</strong>:</p>
+</blockquote>
+
+<pre><code class="language-objectivec"> - (void)layoutSublayersOfLayer:(CALayer *)layer;
+</code></pre>
+
+<blockquote>
+<p>当<strong>CALayer</strong>的<strong>bounds</strong>发生了改变或者<strong>- (void)setNeedsLayout;</strong>方法被调用的时候, 上面所提及的<strong>API</strong>就会被调用, 这样子你就可以在上面所提及的<strong>API</strong>里手动去调整<strong>CALayer</strong>的布局.</p>
+
+<p>但这样子会有一个致命的问题, 由于<strong>CALayer</strong>并没有<strong>autoresizingMask</strong>以及<strong>constraints</strong>属性, 所以不能像<strong>UIView</strong>那样自适应屏幕旋转, 这也是为什么绝大多数人选择使用<strong>UIView</strong>进行布局的原因之一.</p>
+
+<p>这里我就不多说了, 自动布局的知识点在谷歌搜一大堆, 有神马<strong>xib</strong>的, <strong>storyboard</strong>的, 还有纯代码的, 但是呢, 纯代码的自动布局我只服<strong><a href="https://github.com/SnapKit/Masonry">Masonry</a></strong>, 也有<strong><a href="https://github.com/SnapKit/SnapKit">Swift</a></strong>版本的, 大家可以自行去了解一下, 使用教程神马的, 在谷歌搜搜也是有一堆的, 这里就不做介绍了~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_9">总结</h3>
+
+<blockquote>
+<p>说了那么多, 常规的总结一下, 这次我们更深入的了解了<strong>CALayer</strong>几何图层, 其中包括: </p>
+
+<p><strong>Layout</strong>:<strong>CALayer</strong>的常规布局<br/>
+<strong>AnchorPoint</strong>: <strong>CALayer</strong>的锚点<br/>
+<strong>Coordinate Systems</strong>: <strong>CALayer</strong>的坐标轴, 其中包括如何翻转<strong>CALayer</strong>的几何图层, 还有就是<strong>Z坐标轴</strong>.<br/>
+<strong>Hit Testing</strong>: <strong>CALayer</strong>如何知道用户是否点击该图层<br/>
+<strong>Automatic Layout</strong>: 有关于<strong>CALayer</strong>以及<strong>UIView</strong>的自动布局, 以及一个第三方的布局框架</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_10">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/CoreAnimation">https://github.com/CainRun/CoreAnimation</a></p>
+
+<hr/>
+
+<h3 id="toc_11">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：2.《Core Animation》初识CALayer]]></title>
@@ -4398,308 +4751,6 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <h3 id="toc_5">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：《CocoaPods》安装及使用教程]]></title>
-    <link href="https://cainrun.github.io/14718487794778.html"/>
-    <updated>2016-08-22T14:52:59+08:00</updated>
-    <id>https://cainrun.github.io/14718487794778.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>这次的<strong><code>CocoaPods</code></strong>的<strong><code>Review</code></strong>，让我知道了新版的<strong><code>CocoaPods</code></strong>和旧版的<strong><code>CocoaPods</code></strong>的区别, 在声明<strong><code>Podfile</code></strong>文件中, 需要加入对应的<strong><code>target</code></strong>才可以执行, 我个人感觉这个操作有些不太友好, 但他们要这么做, 我也没办法, 毕竟我只是小白用户而已.<br/>
-<dr/><br/>
-<strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>CocoaPods</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">介绍</h3>
-
-<blockquote>
-<p>在<strong><code>iOS</code></strong>项目中使用第三方类库可以说是非常常见的事，但是要正确地配置他们有时候是非常繁琐的事情，幸运的是<strong><code>CocoaPods</code></strong>是一个很好的解决方案。</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">什么是CocoaPods</h3>
-
-<blockquote>
-<p><strong><code>CocoaPods</code></strong>是<strong><code>OS X</code></strong>和<strong><code>iOS</code></strong>下的一个第三类库管理工具，通过CocoaPods工具我们可以为项目添加被称为<strong><code>Pods</code></strong>的依赖库（这些类库必须是<strong><code>CocoaPods</code></strong>本身所支持的），并且可以轻松管理其版本。</p>
-
-<p><strong><code>CocoaPods</code></strong>意义体现在两个方面。<br/>
-* 第一，在引入第三方库时它可以自动为我们完成各种各样的配置，包括配置编译阶段、连接器选项、甚至是<strong><code>ARC</code></strong>环境下的<strong><code>-fno-objc-arc</code></strong>配置等。</p>
-
-<ul>
-<li>第二，使用<strong><code>CocoaPods</code></strong>可以很方便地查找新的第三方库，这些类库是比较“标准的”，而不是网上随便找到的，这样可以让我们找到真正好用的类库。</li>
-</ul>
-
-<p>接下来我们将介绍<strong><code>CocoaPods</code></strong>的使用。</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_3">CocoaPods的核心组件</h3>
-
-<blockquote>
-<p><strong><code>CocoaPods</code></strong>是用<strong><code>Ruby</code></strong>写的，并划分成了若干个<strong><code>Gem</code></strong>包。<br/>
-<dr/><br/>
-<strong><code>CocoaPods</code></strong>在解析执行过程中最重要的几个包的路径分别是：<br/>
-* <strong><code>CocoaPods/CocoaPods</code></strong><br/>
-* <strong><code>CocoaPods/Core</code></strong><br/>
-* <strong><code>CocoaPods/Xcodeproj</code></strong><br/>
-<dr/><br/>
-<strong><code>CocoaPods / CocoaPod</code></strong>：这是面向用户的组件，每当执行一个pod命令时，这个组件将被激活。它包括了所有实用<strong><code>CocoaPods</code></strong>的功能，并且还能调用其他<strong><code>gem</code></strong>包来执行任务。 <br/>
-<dr/><br/>
-<strong><code>CocoaPods / Core</code></strong>：<strong><code>Core gem</code></strong>提供了与<strong><code>CocoaPods</code></strong>相关的文件（主要是<strong><code>podfile</code></strong>和<strong><code>podspecs</code></strong>）的处理。 <br/>
-<dr/><br/>
-<strong><code>Podfile</code></strong>：该文件用于配置项目所需要的第三方库，它可以被高度定制。本文中我们主要在这里做动作。<br/>
-<dr/><br/>
-<strong><code>Podspec</code></strong>：该文件描述了一个库将怎样被添加进工程中，<strong><code>.podspec</code></strong>文件可以标识该第三方库所需要的源码文件、依赖库、编译选项，以及其他第三方库需要的配置。 <br/>
-<dr/><br/>
-<strong><code>CocoaPods / Xcodeproj</code></strong>：这个包负责处理工程文件，它能创建以及修改<strong><code>.xcodeproj</code></strong>文件和<strong><code>.xcworkspace</code></strong>文件。它也可以作为一个独立的包使用，当你要编写修改项目文件的脚本时，可以考虑使用<strong><code>CocoaPods/Xcodeproj</code></strong>。</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_4">更换Ruby源</h3>
-
-<blockquote>
-<p>检查<strong><code>Ruby</code></strong>环境，一般来讲<strong><code>Mac OS</code></strong>都是自带<strong><code>Ruby</code></strong>环境的，在Terminal中输入命令即可查看<strong><code>Ruby</code></strong>的版本号</p>
-</blockquote>
-
-<p><dr/></p>
-
-<blockquote>
-<p>vim代码</p>
-</blockquote>
-
-<pre><code class="language-vim">ruby -v
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/0.png" alt="0"/></p>
-
-<blockquote>
-<p>切换<strong><code>Ruby</code></strong>源地址</p>
-</blockquote>
-
-<p><dr/></p>
-
-<blockquote>
-<p>vim代码</p>
-</blockquote>
-
-<pre><code class="language-vim">gem sources --remove https://rubygems.org/
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/1.png" alt="1"/></p>
-
-<p><dr/></p>
-
-<blockquote>
-<p>vim代码</p>
-</blockquote>
-
-<pre><code class="language-vim">#等有反应之后再敲入以下命令
-gem sources -a https://ruby.taobao.org/
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/2.png" alt="2"/></p>
-
-<p><dr/></p>
-
-<blockquote>
-<p>vim代码</p>
-</blockquote>
-
-<pre><code class="language-vim">#为了验证你的Ruby镜像是并且仅是taobao，可以用以下命令查看：
-gem sources -l
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/3.png" alt="3"/></p>
-
-<hr/>
-
-<h3 id="toc_5">安装CocoaPods</h3>
-
-<blockquote>
-<p>现在我们在<strong><code>Terminal</code></strong>中输入以下命令, 输入机子的登录密码(没有密码的直接回车, 忘记密码的也别问我, 我也不知道怎么办), 等待自动完成安装就可以了</p>
-</blockquote>
-
-<p><dr/></p>
-
-<blockquote>
-<p>vim代码</p>
-</blockquote>
-
-<pre><code class="language-vim">sudo gem install cocoapods
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/4.png" alt="4"/></p>
-
-<blockquote>
-<p>安装完成之后就会有以下的提示</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/5.png" alt="5"/></p>
-
-<blockquote>
-<p>如果你不确定自己是否安装成功, 可以输入下面这个命令去查看</p>
-</blockquote>
-
-<p><dr/></p>
-
-<blockquote>
-<p>vim代码</p>
-</blockquote>
-
-<pre><code class="language-vim">pod
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/6.png" alt="6"/></p>
-
-<blockquote>
-<p>如果有以上的提示, 那就证明你是安装成功的, 如果安装不成功, 继续输入安装命令</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_6">使用CocoaPods</h3>
-
-<blockquote>
-<p>创建<strong><code>Xcode</code></strong>项目(怎么创建<strong><code>Xcode</code></strong>项目这里我就不说了), 然后打开<strong><code>Terminal</code></strong>直接<strong><code>cd</code></strong>到工程的根目录中, 这里我使用一个<strong><code>Demo</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/7.png" alt="7"/></p>
-
-<blockquote>
-<p>Xcode项目中创建Podfile文件, 且编辑</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/8.png" alt="8"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/9.png" alt="9"/></p>
-
-<blockquote>
-<p>保存<strong><code>Podfile</code></strong>文件, 直接运行<strong><code>CocoaPods</code></strong>的命令, 如果该开源项目有其他项目的依赖, <strong><code>CocoaPods</code></strong>会自动下载对应的依赖项目.<br/>
-PS: 里面的两端文字并不是自己写得, 是需要去<strong><code>GitHub</code></strong>里查看该项目最高支持<strong><code>iOS版本</code></strong>是多少, 以及该开源项目是第几个版本.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/10.png" alt="10"/></p>
-
-<blockquote>
-<p>由于我们的<strong><code>CocoaPods</code></strong>是第一安装, 所以会提示<strong><code>Setting up CocoaPods master repo</code></strong>, 这个时候我们只要静静的等待它初始化完, 这个等待的时间会比较长, 耐心等待吧, 骚年们~~要是想知道<strong><code>CocoaPods</code></strong>初始化多少了, 我们可以进入到<strong><code>CocoaPods</code></strong>的目录, 然后输入</p>
-</blockquote>
-
-<p><dr/></p>
-
-<blockquote>
-<p>vim代码</p>
-</blockquote>
-
-<pre><code class="language-vim">du -sh
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/11.png" alt="11"/></p>
-
-<blockquote>
-<p><strong><font color=red>PS: 如果中途安装失败, 重复命令即可.</font></strong></p>
-</blockquote>
-
-<p><dr/></p>
-
-<blockquote>
-<p>初始化结束之后, 我们就可以继续捣鼓了, 但是我们发现, 出错了, 去<a href="https://cocoapods.org"><strong>CocoaPods</strong></a>官网看了一下, 原来是少添加了一个指定的<strong><code>target</code></strong>, 这个<strong><code>target</code></strong>是在哪里获取呢? 下面看图~~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/12.png" alt="12"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/13.png" alt="13"/></p>
-
-<blockquote>
-<p>然后我们再次打开<strong><code>Podfile</code></strong>, 编辑它, 保存, 再次<strong><code>install</code></strong></p>
-</blockquote>
-
-<p><dr/></p>
-
-<blockquote>
-<p>vim代码</p>
-</blockquote>
-
-<pre><code class="language-vim">target &#39;CollectionViewDemo&#39; do
-   pod &#39;HTHorizontalSelectionList&#39;, &#39;~&gt; 0.7.0&#39;
-end
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/14.png" alt="14"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/15.png" alt="15"/></p>
-
-<blockquote>
-<p>OK, 成功了, 我们会看到工程里多了一些文件, 而我们再也不会运行<strong><code>.xcodeproj</code></strong>工程文件, 而是运行<strong><code>.xcworkspace</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/16.png" alt="16"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E3%80%8ACocoaPods%E3%80%8B%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/17.png" alt="17"/></p>
-
-<blockquote>
-<p>关于怎么去使用第三方的库这里我就不需要再去说了, 大家都懂的</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_7">升级CocoaPods</h3>
-
-<blockquote>
-<p>先更新gem    </p>
-</blockquote>
-
-<pre><code class="language-vim">sudo gem update —system
-</code></pre>
-
-<blockquote>
-<p>删除rubygems源</p>
-</blockquote>
-
-<pre><code class="language-vim">gem sources --remove https://rubygems.org/
-</code></pre>
-
-<blockquote>
-<p>添加ruby淘宝源</p>
-</blockquote>
-
-<pre><code class="language-vim">gem sources -a https://ruby.taobao.org/
-</code></pre>
-
-<blockquote>
-<p>测试源是否正确, 和刚开始安装时一样</p>
-</blockquote>
-
-<pre><code class="language-vim">gem sources -l
-</code></pre>
-
-<blockquote>
-<p>安装CocoaPods</p>
-</blockquote>
-
-<pre><code class="language-vim">sudo gem install cocoa pods
-pod setup
-</code></pre>
-
-<blockquote>
-<p>查看CocoaPods版本</p>
-</blockquote>
-
-<pre><code class="language-vim">pod --version
-</code></pre>
 
 ]]></content>
   </entry>
