@@ -127,9 +127,8 @@
 			<h3 id="toc_0">作者感言</h3>
 
 <blockquote>
-<p>前一章我们了解真正了<strong>CALayer</strong>是干嘛的, <a href="https://cainrun.github.io/14771496782021.html">《Core Animation》初识CALayer</a>今天我们就来讲讲<strong>CALayer Geometry</strong>.</p>
-
-<p><dr/><br/>
+<p>前一章我们了解真正了<strong>CALayer</strong>是干嘛的, <a href="https://cainrun.github.io/14771496782021.html">《Core Animation》初识CALayer</a>今天我们就来讲讲<strong>CALayer Geometry</strong>.<br/>
+<dr/><br/>
 <strong><font color=purple>最后:</font></strong><br/>
 <strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Core Animation</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
 </blockquote>
@@ -141,7 +140,7 @@
 <h3 id="toc_1">简介</h3>
 
 <blockquote>
-<p><strong>CALayer Geometry</strong>讲得是图层的几何, 主要内容分别有<strong>Layout</strong>, <strong>anchorPoint</strong>, <strong>Coordinate Systems</strong>, <strong>Hit Testing</strong>, <strong>Automatic Layout</strong>, <strong>Summary</strong>, 待我们一一去了解和学习~</p>
+<p><strong>CALayer Geometry</strong>讲得是图层的几何, 主要内容分别有<strong>Layout</strong>, <strong>anchorPoint</strong>, <strong>Coordinate Systems</strong>, <strong>Hit Testing</strong>, <strong>Automatic Layout</strong>, 待我们一一去了解和学习~</p>
 </blockquote>
 
 <hr/>
@@ -149,13 +148,16 @@
 <h3 id="toc_2">Layout</h3>
 
 <blockquote>
-<p><strong>Layout</strong>顾名思义就是布局的意思, 这一段讲的是视图和图层简单的布局, 比如<strong>UIView</strong>里面有<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>, <strong>CALayer</strong>里面有<strong>frame</strong>, <strong>bounds</strong>, <strong>position</strong>.</p>
+<p><strong>Layout</strong>顾名思义就是布局的意思, 这一段讲的是视图和图层简单的布局, 比如<strong>UIView</strong>里面有<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>, <strong>CALayer</strong>里面有<strong>frame</strong>, <strong>bounds</strong>, <strong>position</strong>.<br/>
+<dr/><br/>
+这里对布局属性进行一下解释: <br/>
+<dr/></p>
 
-<p>这里对布局属性进行一下解释: </p>
-
-<p><strong>frame</strong>: 代表了的是图层外部的一个坐标轴, 也是相对于父视图.<br/>
-<strong>bounds</strong>: 代表了的是内部坐标轴, 它的原点永远都是<strong>{0, 0}</strong>, 是相对于本视图的位置和大小.<br/>
-<strong>center</strong>以及<strong>position</strong>: 代表的是现对于父视图所在的位置, 也就是我们经常所说的中心点, 但是呢, 其实这个说法不太对, 其实是应该相对于父视图<strong>anchorPoint</strong>属性所在的位置才对,<strong>anchorPoint</strong>属性我们后面再解释, 现在让它打一下酱油先.</p>
+<ul>
+<li><strong>frame</strong>: 代表了的是图层外部的一个坐标轴, 也是相对于父视图.</li>
+<li><strong>bounds</strong>: 代表了的是内部坐标轴, 它的原点永远都是<strong>{0, 0}</strong>, 是相对于本视图的位置和大小.</li>
+<li><strong>center</strong>以及<strong>position</strong>: 代表的是现对于父视图所在的位置, 也就是我们经常所说的中心点, 但是呢, 其实这个说法不太对, 其实是应该相对于父视图<strong>anchorPoint</strong>属性所在的位置才对,<strong>anchorPoint</strong>属性我们后面再解释, 现在让它打一下酱油先.</li>
+</ul>
 
 <p>我们来看看Demo中的实例:</p>
 </blockquote>
@@ -188,13 +190,13 @@
 <p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/1.png" alt="1"/></p>
 
 <blockquote>
-<p>在这里, 我们看到<strong>layer</strong>的<strong>frame</strong>, <strong>bounds</strong>, <strong>position</strong>和<strong>UIView</strong>的<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>都是一致的.</p>
-
-<p>但是在<strong>UIView</strong>里, <strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>这三个属性只是存取方法罢了, 当<strong>UIView</strong>对<strong>frame</strong>属性进行操作时, 其实是对<strong>CALayer</strong>的<strong>frame</strong>进行操作, 是不能够脱离了<strong>CALayer</strong>的去改变视图的<strong>frame</strong>.</p>
-
-<p><strong>frame</strong>这个属性对于<strong>UIView</strong>和<strong>CALayer</strong>来说, 它是一个比较玄的属性, 它的值是根据<strong>UIView</strong>或者是<strong>CALayer</strong>的<strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>计算所得到的一个值, 一旦你去改变了<strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>其中一个值, <strong>frame</strong>也会随之而改变, 当然啦, 你去改变<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>这三个值也会跟着改变的.</p>
-
-<p><strong><font color=red>PS: 这里还需要提一点, 如果你对</strong>CALayer<strong>进行了</strong>transform<strong>的旋转或者是缩放时,</strong> frame<strong>所显示的宽高与</strong>bounds<strong>的宽高就不会再一样了.</font></strong></p>
+<p>在这里, 我们看到<strong>layer</strong>的<strong>frame</strong>, <strong>bounds</strong>, <strong>position</strong>和<strong>UIView</strong>的<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>都是一致的.<br/>
+<dr/><br/>
+但是在<strong>UIView</strong>里, <strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>这三个属性只是存取方法罢了, 当<strong>UIView</strong>对<strong>frame</strong>属性进行操作时, 其实是对<strong>CALayer</strong>的<strong>frame</strong>进行操作, 是不能够脱离了<strong>CALayer</strong>的去改变视图的<strong>frame</strong>.<br/>
+<dr/><br/>
+<strong>frame</strong>这个属性对于<strong>UIView</strong>和<strong>CALayer</strong>来说, 它是一个比较玄的属性, 它的值是根据<strong>UIView</strong>或者是<strong>CALayer</strong>的<strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>计算所得到的一个值, 一旦你去改变了<strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>其中一个值, <strong>frame</strong>也会随之而改变, 当然啦, 你去改变<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>这三个值也会跟着改变的.<br/>
+<dr/><br/>
+<strong><font color=red>PS: 这里还需要提一点, 如果你对</strong>CALayer<strong>进行了</strong>transform<strong>的旋转或者是缩放时,</strong> frame<strong>所显示的宽高与</strong>bounds<strong>的宽高就不会再一样了.</font></strong></p>
 
 <p>直接来看Demo吧:</p>
 </blockquote>
@@ -234,30 +236,38 @@
 <h3 id="toc_3">AnchorPoint</h3>
 
 <blockquote>
-<p><strong>anchorPoint</strong>这个属性名, 也叫作<strong>锚点</strong>, 指的一个<strong>UIView</strong>和<strong>CALayer</strong>相对于父视图的位置参考点, 左上角为<strong>{0, 0}</strong>, 居中为<strong>{0.5, 0.5}</strong>, 右下角为<strong>{1, 1}</strong>, 默认都是位于父视图层的中点, 也就是<strong>{0.5, 0.5}</strong>.</p>
-
-<p>在<strong>UIView</strong>当中, <strong>anchorPoint</strong>属性并没有公开出来, 你只能操作<strong>center</strong>这个值, 间接性的给<strong>anchorPoint</strong>赋值, <strong>CALayer</strong>也可以通过改变<strong>position</strong>来给<strong>anchorPoint</strong>进行赋值, 从而改变<strong>CALayer</strong>的<strong>frame</strong>.</p>
-
-<p>这里还需要提及一点, 如果你改变了<strong>CALayer</strong>的<strong>anchorPoint</strong>, 那么<strong>CALayer</strong>的<strong>frame</strong>也会被改变, 那么<strong>anchorPoint</strong>属性所显示的值再也不是该<strong>CALayer</strong>的中心点, 但<strong>bounds</strong>,<strong>position</strong>这些值并不会被改变.</p>
+<p><strong>anchorPoint</strong>这个属性名, 也叫作<strong>锚点</strong>, 指的一个<strong>UIView</strong>和<strong>CALayer</strong>相对于父视图的位置参考点, 左上角为<strong>{0, 0}</strong>, 居中为<strong>{0.5, 0.5}</strong>, 右下角为<strong>{1, 1}</strong>, 默认都是位于父视图层的中点, 也就是<strong>{0.5, 0.5}</strong>.<br/>
+<dr/><br/>
+在<strong>UIView</strong>当中, <strong>anchorPoint</strong>属性并没有公开出来, 你只能操作<strong>center</strong>这个值, 间接性的给<strong>anchorPoint</strong>赋值, <strong>CALayer</strong>也可以通过改变<strong>position</strong>来给<strong>anchorPoint</strong>进行赋值, 从而改变<strong>CALayer</strong>的<strong>frame</strong>.<br/>
+<dr/><br/>
+这里还需要提及一点, 如果你改变了<strong>CALayer</strong>的<strong>anchorPoint</strong>, 那么<strong>CALayer</strong>的<strong>frame</strong>也会被改变, 那么<strong>anchorPoint</strong>属性所显示的值再也不是该<strong>CALayer</strong>的中心点, 但<strong>bounds</strong>,<strong>position</strong>这些值并不会被改变.</p>
 
 <p>我们直接来看看Demo吧~</p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewAnchorPoint {
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    UIView *viewOne = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
 
-    view.backgroundColor = [UIColor grayColor];
+    viewOne.backgroundColor = [UIColor grayColor];
 
-    NSLog(@&quot;before X: %f&quot;, view.layer.frame.origin.x);
-    NSLog(@&quot;before Y: %f&quot;, view.layer.frame.origin.y);
+    NSLog(@&quot;before X: %f&quot;, viewOne.layer.frame.origin.x);
+    NSLog(@&quot;before Y: %f&quot;, viewOne.layer.frame.origin.y);
     
-    view.layer.anchorPoint = CGPointMake(0.1f, 0.1f);
+    // change anchorPoint
+    viewOne.layer.anchorPoint = CGPointMake(0.1f, 0.1f);
 
-    NSLog(@&quot;After X: %f&quot;, view.layer.frame.origin.x);
-    NSLog(@&quot;After Y:%f&quot;, view.layer.frame.origin.y);
+    NSLog(@&quot;After X: %f&quot;, viewOne.layer.frame.origin.x);
+    NSLog(@&quot;After Y:%f&quot;, viewOne.layer.frame.origin.y);
+    
+    UIView *viewTwo = [[UIView alloc] init];
+    
+    viewTwo.backgroundColor = [UIColor redColor];
+    viewTwo.bounds = CGRectMake(0, 0, 100, 100);
+    viewTwo.center = viewOne.center;
 
-    [self.view addSubview:view];
+    [self.view addSubview:viewOne];
+    [self.view addSubview:viewTwo];
 }
 </code></pre>
 
@@ -274,9 +284,9 @@
 <h3 id="toc_4">Coordinate Systems</h3>
 
 <blockquote>
-<p><strong>Coordinate Systems</strong>也叫作坐标系, 和<strong>UIView</strong>一样,<strong>CALayer</strong>也是相对于父图层并且按照层级关系来摆放, 如果父图层的位置发生了变化, 那么子图层也会随之而改变.</p>
-
-<p>但某些情况下, 你想要知道这个图层的绝对位置, 或者是相对于另一个图层的位置时, 你就可以使用CALayer所提供的几个API进行处理了:</p>
+<p><strong>Coordinate Systems</strong>也叫作坐标系, 和<strong>UIView</strong>一样,<strong>CALayer</strong>也是相对于父图层并且按照层级关系来摆放, 如果父图层的位置发生了变化, 那么子图层也会随之而改变.<br/>
+<dr/><br/>
+但某些情况下, 你想要知道这个图层的绝对位置, 或者是相对于另一个图层的位置时, 你就可以使用CALayer所提供的几个API进行处理了:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">    - (CGPoint)convertPoint:(CGPoint)point toView:(nullable UIView *)view;
@@ -322,11 +332,11 @@
 <h4 id="toc_6">Z坐标轴</h4>
 
 <blockquote>
-<p>其实<strong>CALayer</strong>除了有<strong>UIView</strong>常规的二维坐标轴之外, 还有一个<strong>Z坐标轴</strong>, 也就是说<strong>CALayer</strong>存在于三维空间当中.</p>
-
-<p>除了我们之前接触过的<strong>position</strong>和<strong>anchorPoint</strong>之外, 还有两个<strong>Z坐标轴</strong>的属性, 叫做<strong>zPosition</strong>和<strong>anchorPointZ</strong>, 且都是<strong>CGFloat</strong>类型.</p>
-
-<p><strong>zPosition</strong>这个属性在通常情况下并不常用, 在后面我们涉及到一些3D转换的内容时才会去使用这个<strong>zPosition</strong>属性, <strong>zPosition</strong>属性除了用来做3D转换之外, 更多是用来改变<strong>CALayer</strong>的显示顺序了.</p>
+<p>其实<strong>CALayer</strong>除了有<strong>UIView</strong>常规的二维坐标轴之外, 还有一个<strong>Z坐标轴</strong>, 也就是说<strong>CALayer</strong>存在于三维空间当中.<br/>
+<dr/><br/>
+除了我们之前接触过的<strong>position</strong>和<strong>anchorPoint</strong>之外, 还有两个<strong>Z坐标轴</strong>的属性, 叫做<strong>zPosition</strong>和<strong>anchorPointZ</strong>, 且都是<strong>CGFloat</strong>类型.<br/>
+<dr/><br/>
+<strong>zPosition</strong>这个属性在通常情况下并不常用, 在后面我们涉及到一些3D转换的内容时才会去使用这个<strong>zPosition</strong>属性, <strong>zPosition</strong>属性除了用来做3D转换之外, 更多是用来改变<strong>CALayer</strong>的显示顺序了.</p>
 
 <p>来看看Demo吧</p>
 </blockquote>
@@ -420,22 +430,22 @@
 <h3 id="toc_8">Automatic Layout</h3>
 
 <blockquote>
-<p>所谓的<strong>Automatic Layout</strong>就是我们经常所说的自动布局, 自动布局是苹果在<strong>iOS 6</strong>的时候引入进来的一套布局机制, 但当时好像<strong>Xcode</strong>不够给力, 最终并没有得到很好的运用.</p>
-
-<p>在<strong>Mac OS</strong>当中<strong>CALayer</strong>有一个叫做<strong>layoutManager</strong>的属性, 它可以通过<strong>CALayoutManager</strong>协议和<strong>CAConstraintLayoutManger</strong>类来实现自动布局, 但这个东东在<strong>iOS</strong>上并不能使用, 详细我也不太了解.</p>
-
-<p>再补充多一点, 在我们对<strong>UIView</strong>使用自动布局的时候, 你可以直接使用<strong>UIView</strong>提供的<strong>UIViewAutoresizingMask</strong>和<strong>NSLayoutConstraint</strong>两个API进行布局, 但如果你要对一个<strong>CALayer</strong>进行布局的话, 那么最简单的方式就是使用<strong>CALayerDelegate</strong>提供的<strong>API</strong>:</p>
+<p>所谓的<strong>Automatic Layout</strong>就是我们经常所说的自动布局, 自动布局是苹果在<strong>iOS 6</strong>的时候引入进来的一套布局机制, 但当时好像<strong>Xcode</strong>不够给力, 最终并没有得到很好的运用.<br/>
+<dr/><br/>
+在<strong>Mac OS</strong>当中<strong>CALayer</strong>有一个叫做<strong>layoutManager</strong>的属性, 它可以通过<strong>CALayoutManager</strong>协议和<strong>CAConstraintLayoutManger</strong>类来实现自动布局, 但这个东东在<strong>iOS</strong>上并不能使用, 详细我也不太了解.<br/>
+<dr/><br/>
+再补充多一点, 在我们对<strong>UIView</strong>使用自动布局的时候, 你可以直接使用<strong>UIView</strong>提供的<strong>UIViewAutoresizingMask</strong>和<strong>NSLayoutConstraint</strong>两个API进行布局, 但如果你要对一个<strong>CALayer</strong>进行布局的话, 那么最简单的方式就是使用<strong>CALayerDelegate</strong>提供的<strong>API</strong>:</p>
 </blockquote>
 
 <pre><code class="language-objectivec"> - (void)layoutSublayersOfLayer:(CALayer *)layer;
 </code></pre>
 
 <blockquote>
-<p>当<strong>CALayer</strong>的<strong>bounds</strong>发生了改变或者<strong>- (void)setNeedsLayout;</strong>方法被调用的时候, 上面所提及的<strong>API</strong>就会被调用, 这样子你就可以在上面所提及的<strong>API</strong>里手动去调整<strong>CALayer</strong>的布局.</p>
-
-<p>但这样子会有一个致命的问题, 由于<strong>CALayer</strong>并没有<strong>autoresizingMask</strong>以及<strong>constraints</strong>属性, 所以不能像<strong>UIView</strong>那样自适应屏幕旋转, 这也是为什么绝大多数人选择使用<strong>UIView</strong>进行布局的原因之一.</p>
-
-<p>这里我就不多说了, 自动布局的知识点在谷歌搜一大堆, 有神马<strong>xib</strong>的, <strong>storyboard</strong>的, 还有纯代码的, 但是呢, 纯代码的自动布局我只服<strong><a href="https://github.com/SnapKit/Masonry">Masonry</a></strong>, 也有<strong><a href="https://github.com/SnapKit/SnapKit">Swift</a></strong>版本的, 大家可以自行去了解一下, 使用教程神马的, 在谷歌搜搜也是有一堆的, 这里就不做介绍了~</p>
+<p>当<strong>CALayer</strong>的<strong>bounds</strong>发生了改变或者<strong>- (void)setNeedsLayout;</strong>方法被调用的时候, 上面所提及的<strong>API</strong>就会被调用, 这样子你就可以在上面所提及的<strong>API</strong>里手动去调整<strong>CALayer</strong>的布局.<br/>
+<dr/><br/>
+但这样子会有一个致命的问题, 由于<strong>CALayer</strong>并没有<strong>autoresizingMask</strong>以及<strong>constraints</strong>属性, 所以不能像<strong>UIView</strong>那样自适应屏幕旋转, 这也是为什么绝大多数人选择使用<strong>UIView</strong>进行布局的原因之一.<br/>
+<dr/><br/>
+这里我就不多说了, 自动布局的知识点在谷歌搜一大堆, 有神马<strong>xib</strong>的, <strong>storyboard</strong>的, 还有纯代码的, 但是呢, 纯代码的自动布局我只服<strong><a href="https://github.com/SnapKit/Masonry">Masonry</a></strong>, 也有<strong><a href="https://github.com/SnapKit/SnapKit">Swift</a></strong>版本的, 大家可以自行去了解一下, 使用教程神马的, 在谷歌搜搜也是有一堆的, 这里就不做介绍了~</p>
 </blockquote>
 
 <hr/>
@@ -445,11 +455,13 @@
 <blockquote>
 <p>说了那么多, 常规的总结一下, 这次我们更深入的了解了<strong>CALayer</strong>几何图层, 其中包括: </p>
 
-<p><strong>Layout</strong>:<strong>CALayer</strong>的常规布局<br/>
-<strong>AnchorPoint</strong>: <strong>CALayer</strong>的锚点<br/>
-<strong>Coordinate Systems</strong>: <strong>CALayer</strong>的坐标轴, 其中包括如何翻转<strong>CALayer</strong>的几何图层, 还有就是<strong>Z坐标轴</strong>.<br/>
-<strong>Hit Testing</strong>: <strong>CALayer</strong>如何知道用户是否点击该图层<br/>
-<strong>Automatic Layout</strong>: 有关于<strong>CALayer</strong>以及<strong>UIView</strong>的自动布局, 以及一个第三方的布局框架</p>
+<ul>
+<li><strong>Layout</strong>:<strong>CALayer</strong>的常规布局</li>
+<li><strong>AnchorPoint</strong>: <strong>CALayer</strong>的锚点</li>
+<li><strong>Coordinate Systems</strong>: <strong>CALayer</strong>的坐标轴, 其中包括如何翻转<strong>CALayer</strong>的几何图层, 还有就是<strong>Z坐标轴</strong>.</li>
+<li><strong>Hit Testing</strong>: <strong>CALayer</strong>如何知道用户是否点击该图层</li>
+<li><strong>Automatic Layout</strong>: 有关于<strong>CALayer</strong>以及<strong>UIView</strong>的自动布局, 以及一个第三方的布局框架</li>
+</ul>
 </blockquote>
 
 <hr/>
