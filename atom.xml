@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2016-10-27T13:40:05+08:00</updated>
+  <updated>2016-10-28T22:58:16+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,766 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：搭建Mac OS本地SVN服务器]]></title>
+    <link href="https://cainrun.github.io/14785314208383.html"/>
+    <updated>2016-11-07T23:10:20+08:00</updated>
+    <id>https://cainrun.github.io/14785314208383.html</id>
+    <content type="html"><![CDATA[
+<hr/>
+
+<h3 id="toc_0">创建SVN服务器</h3>
+
+<blockquote>
+<p>首先我们要创建一个<strong>SVN</strong>服务器存放夹, 这里我的地址是如下:</p>
+</blockquote>
+
+<pre><code class="language-vim">    sudo svnadmin create /Users/imac/Documents/svn/MyCode
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E6%90%AD%E5%BB%BAMac%20OS%E6%9C%AC%E5%9C%B0SVN%E6%9C%8D%E5%8A%A1%E5%99%A8/1.png" alt="1"/></p>
+
+<hr/>
+
+<h3 id="toc_1">配置SVNServe.conf文件</h3>
+
+<blockquote>
+<p>创建完之后, 就需要配置一下<strong>SVN</strong>, 我这里比较习惯使用<strong>Vim</strong>.<br/>
+在我机子上的目录是如下: </p>
+</blockquote>
+
+<pre><code class="language-vim">sudo vim /Users/imac/Documents/svn/MyCode/conf/svnserve.conf 
+</code></pre>
+
+<blockquote>
+<p>输入完之后, 需要开放几个参数, 一定要把他们前面的<strong>#</strong>号和<strong>空格</strong>都删掉.</p>
+
+<ul>
+<li>anon-access = none(默认为read, 修改改成none)</li>
+<li>auth-access = write</li>
+<li>password-db = passwd</li>
+<li>authz-db = authz</li>
+</ul>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E6%90%AD%E5%BB%BAMac%20OS%E6%9C%AC%E5%9C%B0SVN%E6%9C%8D%E5%8A%A1%E5%99%A8/2.png" alt="2"/></p>
+
+<hr/>
+
+<h3 id="toc_2">配置Passwd文件</h3>
+
+<blockquote>
+<p>配置完<strong>svnserve.conf</strong>文件之后, 就继续来配置<strong>passwd</strong>文件:</p>
+</blockquote>
+
+<pre><code class="language-vim">    sudo vim /Users/imac/Documents/svn/MyCode/conf/passwd 
+</code></pre>
+
+<blockquote>
+<p>这里我们只需要添加一个用户名和密码就可以了, 毕竟就只有自己在用而已.</p>
+</blockquote>
+
+<pre><code class="language-vim">    admin=123456
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E6%90%AD%E5%BB%BAMac%20OS%E6%9C%AC%E5%9C%B0SVN%E6%9C%8D%E5%8A%A1%E5%99%A8/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_3">配置Authz文件</h3>
+
+<blockquote>
+<p>配置完前面两个文件, 下面这个文件配置完就搞定了</p>
+</blockquote>
+
+<pre><code class="language-vim">    sudo vim /Users/imac/Documents/svn/MyCode/conf/authz
+</code></pre>
+
+<pre><code class="language-vim">[groups]
+
+admins=admin
+
+[/]
+@admins=rw
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E6%90%AD%E5%BB%BAMac%20OS%E6%9C%AC%E5%9C%B0SVN%E6%9C%8D%E5%8A%A1%E5%99%A8/4.png" alt="4"/></p>
+
+<hr/>
+
+<h3 id="toc_4">启动SVN服务器</h3>
+
+<blockquote>
+<p>配置了那么多, 最重要的重头戏来了, 就是启动我们的<strong>SVN</strong>服务器</p>
+</blockquote>
+
+<pre><code class="language-vim">    svnserve -d -r /Users/imac/svn/MyCode
+</code></pre>
+
+<blockquote>
+<p>如果输入之后, 终端一点提示都没有, 那就代表<strong>SVN</strong>服务器已经启动成功了.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_5">关闭SVN服务器</h3>
+
+<blockquote>
+<p>有启动, 当然也有关闭</p>
+</blockquote>
+
+<pre><code class="language-vim">    sudo killall svnserve
+</code></pre>
+
+<blockquote>
+<p>或者是打开活动监视器搜索之后在咔擦掉</p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E6%90%AD%E5%BB%BAMac%20OS%E6%9C%AC%E5%9C%B0SVN%E6%9C%8D%E5%8A%A1%E5%99%A8/5.png" alt="5"/></p>
+
+<hr/>
+
+<h3 id="toc_6">首次导入工程文件到SVN服务器</h3>
+
+<blockquote>
+<p><strong>SVN</strong>服务器弄好了, 现在就是要导入工程文件到服务器去了</p>
+</blockquote>
+
+<pre><code class="language-vim">    svn import /Users/imac/Documents/AFNetworking svn://localhost/MyCode --username=admin --password=123456 -m &quot;初始化导入&quot;
+</code></pre>
+
+<blockquote>
+<p>这里解释一下这条命令是啥意思:<br/>
+* <strong>/Users/imac/Documents/AFNetworking</strong>这一段指的是需要导入的工程文件.<br/>
+* <strong>svn://localhost/MyCode</strong>指的是把工程文件上传到<strong>MyCode</strong>这个目录下.<br/>
+* <strong>--username=admin --password=123456</strong>指的是校验用户名和密码.<br/>
+* <strong>-m &quot;初始化导入&quot;</strong>指的是提交的信息.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_7">从SVN服务器下载工程文件到本地</h3>
+
+<blockquote>
+<p>上传工程我们已经知道了, 那下载工程我们也来说一说.</p>
+</blockquote>
+
+<pre><code class="language-vim">    svn checkout svn://localhost/mycode --username=admin --password=123456 /Users/imac/Documents/code
+</code></pre>
+
+<blockquote>
+<p>这里就不解释了和上面那条命令意思差不多.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_8">二次提交代码到服务器</h3>
+
+<blockquote>
+<p>二次提交是有一个前提的, 那就是你首先需要在<strong>SVN</strong>服务器上下载代码到本地, 然后再去修改这一份代码, 才能够二次提交.<br/>
+<dr/><br/>
+首先我们得去到工程目录:</p>
+</blockquote>
+
+<pre><code class="language-vim">    cd /Users/imac/Documents/code
+</code></pre>
+
+<blockquote>
+<p>然后再输入命令:</p>
+</blockquote>
+
+<pre><code class="language-vim">    svn commit -m &quot;修改部分代码&quot;
+</code></pre>
+
+<blockquote>
+<p>这样子就可以把<strong>/Users/imac/Documents/code</strong>这个目录下所有修改过的代码都提交到服务器<br/>
+<dr/><br/>
+这些都是基于<a href="http://blog.csdn.net/langzi7758521/article/details/51646598">终端操作</a>的情况来说的, 我这里推荐使用<strong><font color=red>Cornerstone</font></strong>, 更加的简单方便, 至于哪里有免费版, 大概可以去百度搜一搜, 一堆一堆的~~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_9">权限错误</h3>
+
+<blockquote>
+<p>如果你在导入工程时候出现<strong>E000013</strong>的错误, 如下:</p>
+</blockquote>
+
+<pre><code class="language-vim">svn: E000013: Can&#39;t open file &#39;/Users/xxx/Documents/svn/XXX/db/txn-current-lock&#39;: Permission denied
+</code></pre>
+
+<blockquote>
+<p>这个错误一般来说就是你的<strong>svn</strong>文件夹权限没开放, 只要进入到你的<strong>SVN</strong>目录下, 输入下面的命令就可以解决这个问题了.<br/>
+我这边的目录是<strong>/Users/imac/Documents/svn/MyCode</strong></p>
+</blockquote>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E6%90%AD%E5%BB%BAMac%20OS%E6%9C%AC%E5%9C%B0SVN%E6%9C%8D%E5%8A%A1%E5%99%A8/6.png" alt="6"/></p>
+
+<pre><code class="language-vim">    /*MyCode就是你创建SVN服务器的文件夹*/
+    sudo chown -R $(id -u):$(id -g) MyCode
+    chmod -R u+w MyCode
+</code></pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：5.《Core Animation》CALayer的Transforms]]></title>
+    <link href="https://cainrun.github.io/14777052484078.html"/>
+    <updated>2016-10-29T09:40:48+08:00</updated>
+    <id>https://cainrun.github.io/14777052484078.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>之前我们所了解的<strong>CALayer</strong>都是比较抽象化, 好在<a href="https://cainrun.github.io/14775511877452.html">《Core Animation》CALayer的视觉效果</a>解决我们这些视觉动物的学东西的枯燥, 今天我们就来讲讲<strong>Transforms</strong>, 也就是<strong>CALayer</strong>的<strong>Transforms</strong>.</p>
+
+<p><dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Core Animation</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p><strong>CALayer Transforms</strong>讲得是<strong>CALayer</strong>一些我们能够看得见的东西, 这些知识点在我们日常开发中也会有用到的, 比如<strong>Affine Transforms</strong>, <strong>3D Transforms</strong>, <strong>Solid Objects</strong>等等, 待我们一一去讲解.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">Affine Transforms</h3>
+
+<blockquote>
+<p><strong>Affine Transforms</strong>的中文意思叫做仿射转换, 在前一篇文章的时候我们就使用过<strong>transform</strong>来旋转<strong>UIView</strong>, 但那时候我们只是简单的使用罢了, 并没有说明它的原理.<br/>
+<dr/><br/>
+实际上<strong>UIView</strong>里的<strong>transform</strong>是<strong>CAAffineTransform</strong>类型, 用于做二维空间的旋转, 缩放, 平移等操作, 而且<strong>CAAffineTransform</strong>可以和一个二维空间的向量, 比如<strong>CGPoint</strong>做<strong>3x2</strong>的矩阵.<br/>
+<dr/><br/>
+大概的运算原理就是, 用<strong>CGPoint</strong>的每一列和<strong>CGAffineTransform</strong>矩阵的每一列对应的元素进行相乘再求和, 这样子就会形成一个新的<strong>CGPoint</strong>.<br/>
+<dr/><br/>
+说到这里, 应该会有人有疑惑, <strong>CGAffineTransform</strong>和<strong>CGPoint</strong>完全都不是一样东西, 怎么能做运算呢? 其实并不是的, 当你使用它们两个进行运算的时候, 系统会自动补上一些缺少的元素, 使得<strong>CGAffineTransform</strong>和<strong>CGPoint</strong>进行一一对应, 但运算完之后, 这些填充值就会被抛弃掉, 不会进行保存, 仅仅只是用来做运算罢了.<br/>
+<dr/><br/>
+所以我们通常遇到的二维变换都是使用<strong>3x3</strong>, 而不是刚刚所说到的<strong>2x3</strong>, 但在某些情况下我们也会遇到<strong>2x3</strong>的格式矩阵, 这就是所谓的以列为主(这个等下用事例来查看吧), 但无论如何都好, 只要能够保持一致, 用什么格式又何妨呢?<br/>
+<dr/><br/>
+当对图层进行矩阵变换时, 图层矩形内的每一个点都被相应的做变换, 从而形成一个新的四边形的形状, <strong>CGAffineTransform</strong>中的&quot;仿射&quot;的意思是无论你如何去改变矩阵的值, 图层中平行的两条线在变换之后仍然保持平行, 这就是<strong>CGAffineTransform</strong>的&quot;仿射&quot;.</p>
+</blockquote>
+
+<h4 id="toc_3">Creating a CGAffineTransform - 创建一个CGAffineTransform</h4>
+
+<blockquote>
+<p>其实对矩阵数学的阐述早就超过了<strong>Core Animation</strong>的讨论范围了, 如果你是对矩阵数学一点都不了解的话, 那你就要哭晕在厕所了, 不过还好, <strong>Core Graphics</strong>提供了一系列的<strong>API</strong>, 对完全没有数学基础的开发者来讲也能够做一些简单的变换, 比如:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">    CGAffineTransformMakeRotation(CGFloat angle);
+    CGAffineTransformMakeScale(CGFloat sx, CGFloat sy);
+    CGAffineTransformMakeTranslation(CGFloat tx, CGFloat ty);
+</code></pre>
+
+<blockquote>
+<p>在<strong>UIView</strong>可以通过设置<strong>transform</strong>属性进行变换, 但实际上还是对CGLayer进行了一些图层转变的封装.<br/>
+<dr/><br/>
+<strong>CALayer</strong>同样也有一个<strong>transform</strong>属性, 它叫做<strong>affineTransform</strong>, 但它的类型是<strong>CATransform3D</strong>, 而不是<strong>CGAffineTransform</strong>, 这个后面再解释一下神马是<strong>CATransform3D</strong>.<br/>
+<dr/><br/>
+直接来看Demo吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewTransform {
+    
+    self.view.backgroundColor = [UIColor grayColor];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    
+    imageView.image = [UIImage imageNamed:@&quot;expression&quot;];
+    
+    [self.view addSubview:imageView];
+    
+    // 旋转
+    CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI_4);
+    imageView.layer.affineTransform = transform;
+    
+    // 缩放
+//    CGAffineTransform scaleTransform = CGAffineTransformMakeScale(0.5, 0.5);
+//    imageView.layer.affineTransform = scaleTransform;
+    
+    // 平移
+//    CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(50, 50);
+//    imageView.layer.affineTransform = translationTransform;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/1.png" alt="1"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/2.png" alt="2"/></p>
+
+<blockquote>
+<p>注意一下, 我们在这里使用的是<strong>M_PI_4</strong>, 而不是我们自己输入的神马<strong>45</strong>之类的数字, 因为在<strong>iOS</strong>当中, 使用的的是弧度单位, 而不是角度单位, 弧度用数学常量是表示为<strong>pi</strong>, 一个<strong>pi</strong>就为<strong>180°</strong>, 而四分之一度就是<strong>45°</strong>了.<br/>
+<dr/><br/>
+但这里会有一个问题, 这些宏都是系统提供给我们的, 如果你要自己去加载更多或者是扩展的话, 可以自己手动去写一个<strong>API</strong>.</p>
+</blockquote>
+
+<h4 id="toc_4">Combining Transforms - 混合变换</h4>
+
+<blockquote>
+<p><strong>Core Graphics</strong>提供了一系列的API可以在一个<strong>transform</strong>的基础上做更深层次的<strong>transform</strong>, 比如说缩放之后再旋转, 比如下面几个<strong>API</strong>:<br/>
+<dr/></p>
+</blockquote>
+
+<pre><code class="language-objectivec">    CGAffineTransformRotate(CGAffineTransform t, CGFloat angle);
+    CGAffineTransformScale(CGAffineTransform t, CGFloat sx, CGFloat sy);
+    CGAffineTransformTranslate(CGAffineTransform t, CGFloat tx, CGFloat ty)
+</code></pre>
+
+<blockquote>
+<p>当你操纵一个<strong>transform</strong>的时候, 需要先创建一个<strong>CGAffineTransform</strong>类型的空值, 直接把<strong>CGAffineTransformIdentity</strong>赋值过去就好了, 这个称为单位矩阵.<br/>
+<dr/><br/>
+如果你需要把两个已经写好的<strong>transform</strong>合成为一个的话, 你可以使用系统提供的<strong>API</strong>:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">CGAffineTransformConcat(CGAffineTransform t1, CGAffineTransform t2);
+</code></pre>
+
+<blockquote>
+<p>不说那么多废话了, 直接来看Demo吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewCombiningTransforms {
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    
+    imageView.image = [UIImage imageNamed:@&quot;expression&quot;];
+    
+    [self.view addSubview:imageView];
+    
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    
+    // 旋转
+    transform = CGAffineTransformRotate(transform, M_PI_4);
+    // 缩放
+    transform = CGAffineTransformScale(transform, 0.5f, 0.5f);
+    // 平移
+    transform = CGAffineTransformTranslate(transform, 200, 0);
+    
+    imageView.layer.affineTransform = transform;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/3.png" alt="3"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/4.png" alt="4"/></p>
+
+<blockquote>
+<p>看到图片的时候, 你会发现结果好像和想象有些差异, 为什么会平移了那么多? 原因是在于当你按顺序做了<strong>transform</strong>, 上一个<strong>transform</strong>会影响到下一个<strong>transform</strong>, 所以平移之后, 你会发现同样被缩放和旋转了, 这就是意味着, 你在旋转之后的平移和平移之后的旋转讲会得到两种不同的结果, 这个大家需要注意一下.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_5">3D Transforms</h3>
+
+<blockquote>
+<p>在之前, 我们有提及过<strong>zPosition</strong>这个属性, 可以从用户角度的来让让图层远离或者是靠近,<strong>CATransform</strong>类型的<strong>transform</strong>可以真正做到让图层在<strong>3D</strong>空间内平移或者旋转.<br/>
+<dr/><br/>
+和<strong>CGAffineTransform</strong>类似,<strong>CATransform3D</strong>也是一个矩阵, 但和之间所说的<strong>2x3</strong>矩阵不一样,<strong>CATransform3D</strong>是一个可以在3D空间内做变换的<strong>4x4</strong>矩阵.<br/>
+<dr/><br/>
+和<strong>CGAffineTransform</strong>矩阵类似, <strong>Core Animation</strong>也提供了一系列的使用方法, 用来创建和组合<strong>CATransform3D</strong>矩阵, 于<strong>Core Graphics</strong>的函数相比, 也只是在<strong>3D</strong>的平移和旋转中多出了一个<strong>z</strong>参数, 而旋转的API除了有angle参数之外, 还多出了<strong>x</strong>, <strong>y</strong>, <strong>z</strong>等三个参数, 分别决定了每个坐标轴方向上的旋转, 比如:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">
+CATransform3DMakeRotation(CGFloat angle, CGFloat x, CGFloat y, CGFloat z);
+CATransform3DMakeScale(CGFloat sx, CGFloat sy, CGFloat sz);
+CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
+</code></pre>
+
+<blockquote>
+<p>在之前的文章里, 我们都应该了解了在<strong>iOS</strong>当中, 原点<strong>{0, 0}</strong>是在左上角, <strong>x</strong>轴正方向为右边, <strong>y</strong>轴正方向为下边, 在<strong>Mac OS</strong>当中则是和<strong>iOS</strong>相反, 但是<strong>Z</strong>轴呢, 则是分别和<strong>x</strong>, <strong>y</strong>轴分别垂直, 指向视角外为正方向, 说那么多, 直接来看代码吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewTransforms3D {
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    
+    imageView.image = [UIImage imageNamed:@&quot;expression&quot;];
+    
+    [self.view addSubview:imageView];
+
+    CATransform3D transform = CATransform3DMakeRotation(M_PI_4, 0, 1, 0);
+    imageView.layer.transform = transform;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/5.png" alt="5"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/6.png" alt="6"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/7.png" alt="7"/></p>
+
+<h4 id="toc_6">Perspective Projection</h4>
+
+<blockquote>
+<p>所谓的<strong>Perspective Projection</strong>就是透视投影, 这里需要普及一些知识(虽然我也看不太懂).<br/>
+<dr/><br/>
+在现实生活中, 当物体远离我们的时候, 会由于视角的问题, 物体看起来会变小, 理论上说远离我们的视图边要比靠近视角边更短, 但实际上, 我们的视角是等距离的, 也就是在<strong>3D Transform</strong>中仍然保持平行, 和之前提到的仿射变换有些类似.<br/>
+<dr/><br/>
+所以为了做一些修正, 我们需要引入<strong>投影变换</strong>, 又称为<strong>z变换</strong>, 来对一些做了变换的矩阵做一些修改, 旋转的除外, <strong>Core Animation</strong>, 当中并没有给我们提供直接设置透视变换的函数, 所以我们需要手动去修改矩阵值, 但很庆幸的是, 这个修改是很简单的, 直接来看代码吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewPerspectiveProjection {
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    
+    imageView.image = [UIImage imageNamed:@&quot;expression&quot;];
+    
+    [self.view addSubview:imageView];
+    
+    CATransform3D transform = CATransform3DMakeRotation(M_PI_4, 0, 1, 0);
+    imageView.layer.transform = transform;
+    
+    CATransform3D transform3DIdentity = CATransform3DIdentity;
+    transform3DIdentity.m34 = - 1.0 / 500.0;
+    transform3DIdentity = CATransform3DRotate(transform3DIdentity, M_PI_4, 0, 1, 0);
+    imageView.layer.transform = transform3DIdentity;
+}
+</code></pre>
+
+<blockquote>
+<p>在<strong>CATransform3D</strong>中, 有一个<strong>m34</strong>的元素, 它是用于按比例来缩放<strong>X</strong>和<strong>Y</strong>的值, 从而来计算离视角的距离.<br/>
+<dr/><br/>
+<strong>m34</strong>的默认值为0, 我们可以通过设置<strong>m34</strong>来应用透视效果, 公式是<strong>-1.0/d</strong>, <strong>d</strong>代表了想象中视角相机和屏幕之间的距离, 以像素为单位, 通常设置<strong>500-1000</strong>之间, 但是对于一些特殊视图, 设置的值要小一些, 或者大一些要比<strong>500-1000</strong>要好一些, 所以这些值并不是固定的, 最好是根据需求来调节, 不然会出现湿疹, 或者是失去透视效果.</p>
+</blockquote>
+
+<h4 id="toc_7">The Vanishing Point</h4>
+
+<blockquote>
+<p><strong>The Vanishing Point</strong>翻译过来叫做<strong>消失点</strong>, 意思是当在透视角度绘图时, 原理视觉角度的物体将会变小变远, 远离到一个极限的时候, 所有物体最后都会汇聚并且消失在同一个点.<br/>
+<dr/><br/>
+在现实生活中, 这个点通常都是视图的中心, 如果要在应用中创建拟真效果的透视, 这个点一般是在屏幕的重点, 至少是所有3D对象的视图中点.<br/>
+<dr/><br/>
+在<strong>Core Animation</strong>中, 这个点是位于变换图层的<strong>anchorPoint</strong>(当然也有一些特殊的情况), 也就是说, 当图层发生变换的时候, 这个点永远位于图层变换钱的<strong>anchorPoint</strong>位置.<br/>
+<dr/><br/>
+当我们改变一个图层的<strong>position</strong>时, 也同时改变了它的消失点, 所以在我们做3D变换的时候要记住.<br/>
+<dr/><br/>
+当我们去调整视图的<strong>m34</strong>来让视图更加有3D效果, 通常要把它放置在屏幕的中央, 然后通过平移来把它移动到指定的位置, 这样子做, 就可以让所有的3D图层都有同一个消失点.</p>
+</blockquote>
+
+<h4 id="toc_8">Sublayer Transform</h4>
+
+<blockquote>
+<p>如果在开发中, 我们有多个视图或者多个图层, 而且他们都要做3D变换, 那我们就要对这些视图或者图层每个都设置相同的<strong>m34</strong>值, 并且还要确保在变换钱都在屏幕中央都有一个相同的<strong>position</strong>, 当然, 我们可以自己封装一下, 但这样子也非常的蛋疼, 那该怎么做呢?<br/>
+<dr/><br/>
+在<strong>CALayer</strong>中有一个属性叫做<strong>sublayerTransform</strong>, 它也是<strong>CATransform3D</strong>类型, 但和我们一个一个的去设置图层不同, 它将会影响所有的子图层, 这就是说明了, 我们只要使用<strong>sublayerTransform</strong>, 就可以一次性的把所有子图层都改变.<br/>
+<dr/><br/>
+这也可以提供另一个好处, 就是当我们使用<strong>sublayerTransform</strong>属性时, 我们就不需要再对子图层挨个挨个的去设置消失点, 因为消失点将会被设置在容器图层的中心点, 那我们就可以随意设置<strong>position</strong>和<strong>frame</strong>来放置子图层, 还是直接来看Demo吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewSublayerTransform {
+    
+    UIImageView *imageViewOne = [[UIImageView alloc] initWithFrame:CGRectMake(80, 100, 100, 100)];
+    
+    imageViewOne.image = [UIImage imageNamed:@&quot;expression&quot;];
+    
+    UIImageView *imageViewTwo = [[UIImageView alloc] initWithFrame:CGRectMake(250, 100, 100, 100)];
+    
+    imageViewTwo.image = [UIImage imageNamed:@&quot;expression&quot;];
+
+    [self.view addSubview:imageViewOne];
+    [self.view addSubview:imageViewTwo];
+    
+    CATransform3D perspective = CATransform3DIdentity; perspective.m34 = - 1.0 / 500.0;
+    
+    self.view.layer.sublayerTransform = perspective;
+    
+    CATransform3D transform1 = CATransform3DMakeRotation(M_PI_4, 0, 1, 0);
+    
+    imageViewOne.layer.transform = transform1;
+    
+    CATransform3D transform2 = CATransform3DMakeRotation(-M_PI_4, 0, 1, 0);
+    
+    imageViewTwo.layer.transform = transform2;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/8.png" alt="8"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/9.png" alt="9"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/10.png" alt="10"/></p>
+
+<h4 id="toc_9">Backfaces</h4>
+
+<blockquote>
+<p>我们既然可以在3D场景下旋转图层, 当然也可以从背面去观察它, 比如我们把翻转的角度设置为<strong>M_PI</strong>, 那么就会显示一个镜像的图层, 我们来看看代码:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewBackfaces {
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    
+    imageView.image = [UIImage imageNamed:@&quot;expression&quot;];
+    
+    [self.view addSubview:imageView];
+        
+    CATransform3D transform3DIdentity = CATransform3DIdentity;
+    transform3DIdentity.m34 = - 1.0 / 500.0;
+    transform3DIdentity = CATransform3DRotate(transform3DIdentity, M_PI, 0, 1, 0);
+    imageView.layer.transform = transform3DIdentity;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/11.png" alt="11"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/12.png" alt="12"/></p>
+
+<h4 id="toc_10">Layer Flattening</h4>
+
+<blockquote>
+<p>有人会问, 如果我们对已经做过变换的图层做反方向的会发生啥事?<br/>
+<dr/><br/>
+在理论上来讲, 我们如果对内部图层做了一个-45度的旋转, 如果要恢复正常, 则要做相反的变换, 才能相互抵消, 为了验证一下, 我们先试试:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewLayerFlattening {
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
+    view.backgroundColor = [UIColor blueColor];
+    
+    [self.view addSubview:view];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(50, 50, 100, 100)];
+    
+    imageView.image = [UIImage imageNamed:@&quot;expression&quot;];
+    
+    [view addSubview:imageView];
+    
+    CATransform3D outer = CATransform3DMakeRotation(M_PI_4, 0, 0, 1);
+    view.layer.transform = outer;
+    
+    CATransform3D inner = CATransform3DMakeRotation(-M_PI_4, 0, 0, 1);
+    imageView.layer.transform = inner;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/13.png" alt="13"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/14.png" alt="14"/></p>
+
+<blockquote>
+<p>看结果, 和我们想象的一样, 再试试再3D变化的情况下能不能抵消, 继续看代码:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
+    view.backgroundColor = [UIColor blueColor];
+    
+    [self.view addSubview:view];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(50, 50, 100, 100)];
+    
+    imageView.image = [UIImage imageNamed:@&quot;expression&quot;];
+    
+    [view addSubview:imageView];
+    
+//    CATransform3D outer = CATransform3DMakeRotation(M_PI_4, 0, 0, 1);
+//    view.layer.transform = outer;
+//    
+//    CATransform3D inner = CATransform3DMakeRotation(-M_PI_4, 0, 0, 1);
+//    imageView.layer.transform = inner;
+    
+    // 3D Trans
+    CATransform3D outer = CATransform3DIdentity; outer.m34 = -1.0 / 500.0;
+    outer = CATransform3DRotate(outer, M_PI_4, 0, 1, 0); view.layer.transform = outer;
+    
+    CATransform3D inner = CATransform3DIdentity; inner.m34 = -1.0 / 500.0;
+    inner = CATransform3DRotate(inner, -M_PI_4, 0, 1, 0); imageView.layer.transform = inner;
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/15.png" alt="15"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/16.png" alt="16"/></p>
+
+<blockquote>
+<p>这里我并没有使用<strong>sublayerTransform</strong>属性, 因为这里面的图层并不是容器图层直接的子图层, 所以这里分别对图层设置了<strong>Perspective Projection</strong>.<br/>
+<dr/><br/>
+结果也是和我们所预期的不太一样, 虽然按道理来讲是显示正常的方块, 但实际上并不是的.<br/>
+<dr/><br/>
+在<strong>Core Animation</strong>当中, 3D图层存在于3D空间之内, 但它们并不是存在同一个, 其实每一个图层的3D场景都是扁平化的, 当我们正面观察一个图层时, 看到的图层其实是由子图层创建的3D场景, 当你倾斜这个图层时, 会发现这个3D场景只是被绘制在图层的表面罢了.<br/>
+<dr/><br/>
+总之一句话说完, 用<strong>Core Animation</strong>创建非常负责的3D场景是很蛋疼的, 因为我们不能直接创建一个个图层的去套, 然后构建成一个3D结构的图层关系, 刚刚也说了, 在相同场景下任何3D表面必须和同样的图层保持一致, 这是因为每一个父视图都把它的子视图扁平化了.<br/>
+<dr/><br/>
+那这个有办法解决吗? 当然有, 使用<strong>CALayer</strong>就可以啦, 在<strong>CALayer</strong>中, 有一个叫做<strong>CATransformLayer</strong>的子类就可以解决这个问题, 这个后面再说吧.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_11">Solid Objects</h3>
+
+<blockquote>
+<p><strong>Solid Objects</strong>翻译过来就叫做固体对象, 前面我们懂得了一丢丢的3D空间图层布局, 现在我们尝试着来创建一个固态的3D对象(也就是我们所谓的骰子), 直接来看代码吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewSolidObjects {
+    
+    CATransform3D perspective = CATransform3DIdentity;
+    perspective.m34 = -1.0 / 500.0;
+
+    perspective = CATransform3DRotate(perspective, -M_PI_4, 1, 0, 0);
+    perspective = CATransform3DRotate(perspective, -M_PI_4, 0, 1, 0);
+
+    self.view.layer.sublayerTransform = perspective;
+    
+    CATransform3D transform = CATransform3DMakeTranslation(0, 0, 100);
+
+    for (NSInteger i = 0; i &lt; 6; i++) {
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+        
+        label.backgroundColor = [UIColor whiteColor];
+        label.textColor = [UIColor redColor];
+        label.layer.borderColor = [UIColor blackColor].CGColor;
+        label.layer.borderWidth = 0.5;
+        label.tag = i;
+        label.text = [NSString stringWithFormat:@&quot;%ld&quot;, i + 1];
+        label.font = [UIFont systemFontOfSize:30];
+        label.textAlignment = NSTextAlignmentCenter;
+        
+        switch (label.tag) {
+            case 0: {
+                
+                [self addLabel:label withTransform:transform];
+            }
+                break;
+            case 1: {
+                transform = CATransform3DMakeTranslation(100, 0, 0);
+                transform = CATransform3DRotate(transform, M_PI_2, 0, 1, 0);
+                [self addLabel:label withTransform:transform];
+            }
+                break;
+            case 2: {
+                transform = CATransform3DMakeTranslation(0, -100, 0);
+                transform = CATransform3DRotate(transform, M_PI_2, 1, 0, 0);
+                [self addLabel:label withTransform:transform];
+            }
+                break;
+            case 3: {
+                transform = CATransform3DMakeTranslation(0, 100, 0);
+                transform = CATransform3DRotate(transform, -M_PI_2, 1, 0, 0);
+                [self addLabel:label withTransform:transform];
+            }
+                break;
+            case 4: {
+                transform = CATransform3DMakeTranslation(-100, 0, 0);
+                transform = CATransform3DRotate(transform, -M_PI_2, 0, 1, 0);
+                [self addLabel:label withTransform:transform];
+            }
+                break;
+            case 5: {
+                transform = CATransform3DMakeTranslation(0, 0, -100);
+                transform = CATransform3DRotate(transform, M_PI, 0, 1, 0);
+                [self addLabel:label withTransform:transform];
+            }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+- (void)addLabel:(UILabel *)label withTransform:(CATransform3D)transform {
+    
+    [self.view addSubview:label];
+    
+    CGSize containerSize = self.view.bounds.size;
+    label.center = CGPointMake(containerSize.width / 2.0, containerSize.height / 2.0);
+    label.layer.transform = transform;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/17.png" alt="17"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/18.png" alt="18"/></p>
+
+<h4 id="toc_12">Light and Shadow</h4>
+
+<blockquote>
+<p>刚刚我们弄了一个看上去像是立方体的, 但是它们之前的每一个面之间的连接压根就分辨不出, 虽然在<strong>Core Animation</strong>可以用3D显示图层, 但它并没有光线的概念, 如果要让这个立方体看起来更加的真实, 那我们就要手动给它加个阴影效果, 这个就根据自己的需求来看了.<br/>
+<dr/><br/>
+这里我们简单的来看看事例: </p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)addLightingToLabel:(CALayer *)labelLayer {
+    
+    CALayer *layer = [CALayer layer];
+    layer.frame = labelLayer.bounds;
+    
+    [labelLayer addSublayer:layer];
+    
+    CATransform3D transform = labelLayer.transform;
+    
+    GLKMatrix4 matrix4 = [self matrixFrom3DTransformation:transform];
+    GLKMatrix3 matrix3 = GLKMatrix4GetMatrix3(matrix4);
+    
+    GLKVector3 normal = GLKVector3Make(0, 0, 1);
+    normal = GLKMatrix3MultiplyVector3(matrix3, normal);
+    normal = GLKVector3Normalize(normal);
+    
+    GLKVector3 light = GLKVector3Normalize(GLKVector3Make(LIGHT_DIRECTION));
+    CGFloat dotProduct = GLKVector3DotProduct(normal, light);
+    
+    CGFloat shadow = 1 + dotProduct - AMBIENT_LIGHT;
+    UIColor *color = [UIColor colorWithWhite:0 alpha:shadow];
+    
+    layer.backgroundColor = color.CGColor;
+}
+
+- (GLKMatrix4)matrixFrom3DTransformation:(CATransform3D)transform {
+    GLKMatrix4 matrix = GLKMatrix4Make(transform.m11, transform.m12, transform.m13, transform.m14,
+                                       transform.m21, transform.m22, transform.m23, transform.m24,
+                                       transform.m31, transform.m32, transform.m33, transform.m34,
+                                       transform.m41, transform.m42, transform.m43, transform.m44);
+    
+    return matrix;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/19.png" alt="19"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/5.Transforms/images/20.png" alt="20"/></p>
+
+<h4 id="toc_13">Touch Events</h4>
+
+<blockquote>
+<p>虽然说我们现在用的是<strong>UILabel</strong>, 如果我们把3, 4, 5, 6换成<strong>UIButton</strong>和<strong>UIView</strong>的组合, 那4, 5, 6点击按钮是无法触发点击事件的.<br/>
+<dr/><br/>
+这是因为由于视图的顺序, 在之前我们就说过, 点击事件的处理是由视图再父视图中的顺序决定的, 并不是在<strong>3D空间</strong>的<strong>Z轴顺序</strong>上.<br/>
+<dr/><br/>
+但在这个例子当中, 我们的视图的确是按照顺序来添加的, 那为什么把4, 5, 6换成<strong>UIButton</strong>和<strong>UIView</strong>之后就无法处理点击事件了呢? 那是因为被前面的三个视图挡住了, 在表面上截断了4, 5, 6的点击事件, 这个是和普通的2D布局在按钮上覆盖物体是一样的.<br/>
+<dr/><br/>
+我们可以把除了3视图之外的视图<strong>userInteractionEnabled</strong>属性都设置成<strong>NO</strong>, 这样子就可以禁止事件传递, 或者通过简单的代码, 把<strong>视图3</strong>覆盖在<strong>视图6</strong>上, 那这样子无论你如何点, 都可以点击到按钮了.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_14">总结</h3>
+
+<blockquote>
+<p>总结一下:<br/>
+* AffineTransforms的使用<br/>
+* AffineTransforms的混合变换<br/>
+* 3D Transforms的Perspective Projection<br/>
+* 3D Transforms的The Vanishing Point<br/>
+* 3D Transforms的Sublayer Transform<br/>
+* 3D Transforms的Backfaces<br/>
+* 3D Transforms的Layer Flattening<br/>
+* 最后再来一丢丢的Solid Objects</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_15">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/CoreAnimation">https://github.com/CainRun/CoreAnimation</a></p>
+
+<hr/>
+
+<h3 id="toc_16">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：4.《Core Animation》CALayer的视觉效果]]></title>
@@ -4480,505 +5240,6 @@ static NSString *uploadURL = @&quot;http://requestb.in/1hx20w61&quot;;
 <h3 id="toc_12">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/ShareExtensionDemo">https://github.com/CainRun/ShareExtensionDemo</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：iOS 8 新特性《Today Extension》]]></title>
-    <link href="https://cainrun.github.io/14718509058148.html"/>
-    <updated>2016-08-22T15:28:25+08:00</updated>
-    <id>https://cainrun.github.io/14718509058148.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>这次的<strong><code>Today Extension</code></strong>预研，让我觉得自己还有很多的不足，因为还有很多东西都没有去仔细的去研究，以后接下来会继续再接再厉。</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注<code>Today Extension</code>, 祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<blockquote>
-<p><strong><code>Today Extension</code></strong>是在<strong><code>iOS 8</code></strong>之后所推出来的重大更新之一，在此之前， 或许有人看过部分<strong><code>App</code></strong>就已经实现过这些功能，但那种实现方式是并不是系统所提供的，所以在性能方面需要打个问号。</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">创建Today Extension</h3>
-
-<blockquote>
-<p>开始创建Today Extension</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/0.png" alt="0"/></p>
-
-<blockquote>
-<p>选择<strong><code>Today Extension</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/1.png" alt="1"/></p>
-
-<blockquote>
-<p>激活<strong><code>Today Extension</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/2.png" alt="2"/></p>
-
-<hr/>
-
-<h3 id="toc_3">使用Storyboard实现Today Extension</h3>
-
-<blockquote>
-<p>在创建好<strong><code>Today Extension</code></strong>时，<strong><code>Xcode</code></strong>会自动创建一个对应的<strong><code>MainInterface.storyboard</code></strong>文件，并且与<strong><code>Today Extension</code></strong>的<strong><code>Controller</code></strong>关联，打开<strong><code>MainInterface.storyboard</code></strong>, 我们会看到有一个内容为<strong><code>Hello World</code></strong>的<strong><code>UILabel</code></strong>，废话少说现在我们来看看运行效果。</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/3.png" alt="3"/></p>
-
-<blockquote>
-<p>选择你需要关联启动的App</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/4.png" alt="4"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/5.png" alt="5"/></p>
-
-<blockquote>
-<p>不要怀疑，就是这么简单的，<strong><code>Today Extension</code></strong>就这么出来了。</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_4">打开数据共享服务</h3>
-
-<blockquote>
-<p>不过，骚年郎们别着急，只是展示个<strong><code>Hello World</code></strong>而已，别高兴得太早，接下来我们讲重头戏，也就是应用<strong><code>App</code></strong>与<strong><code>Today Extension</code></strong>的数据交互，在此之前， 我们需要打开两个服务。</p>
-
-<p>首先是主程序里的</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/6.png" alt="6"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/7.png" alt="7"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/8.png" alt="8"/></p>
-
-<blockquote>
-<p>再者呢，就是<strong><code>Today Extension</code></strong>里的</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/9.png" alt="9"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/10.png" alt="10"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/11.png" alt="11"/></p>
-
-<blockquote>
-<p>做完这两个操作之后，我们会看到多出来的两个<strong><code>证书</code></strong>。</p>
-
-<p>PS：<font color=red><strong>这个证书是收费的， 如果没有去申请，一个账号可以免费测试10个证书，主应用1个，Today Extension插件1个，也就是说一个应用需要两个。</strong></font></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/12.png" alt="12"/></p>
-
-<hr/>
-
-<h3 id="toc_5">删掉Storyboard</h3>
-
-<blockquote>
-<p>接下来之前，我们要把<strong><code>MainInterface.storyboard</code></strong>给干掉，毕竟代码才是王道（个人观点，不喜勿喷）如果喜欢用<strong><code>Storyboard</code></strong>的朋友，也有一个<a href="https://github.com/CainRun/TodayExtensionExample/tree/master/TodayExtension-Storyboard">Storyboard</a>版本的，后面再补上，废话就不多说了，上教程。</p>
-
-<p>找到<strong><code>TodayI Extension</code></strong>中的<strong><code>Info.plist</code></strong>文件，看到这小样就在这，先留着先</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/13.png" alt="13"/></p>
-
-<blockquote>
-<p>手动添加<strong><code>NSExtensionPrincipalClass</code></strong>字段 并设为<strong><code>TodayViewController</code></strong>（这个<strong><code>Controller</code></strong>你可以自己指定，我这里为了方便，就直接拿<strong><code>Xcode</code></strong>生成的）</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/14.png" alt="14"/></p>
-
-<blockquote>
-<p>现在我们可以把<strong><code>storyboard</code></strong>这小样给删掉了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/15.png" alt="15"/></p>
-
-<blockquote>
-<p>再运行，你就会看到整个<strong><code>Today Extension</code></strong>是空的了，只有一个空图标和一个标题。</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/16.png" alt="16"/></p>
-
-<hr/>
-
-<h3 id="toc_6">代码实现</h3>
-
-<blockquote>
-<p>主应用中，我们需要设置一下<strong><code>NSUserDefault</code></strong></p>
-</blockquote>
-
-<pre><code class="language-objectivec">- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:@&quot;group.todayExtensionCodeExample&quot;];
-    [userDefault setObject:@&quot;tips&quot; forKey:@&quot;group.todayExtensionCodeExample.tips&quot;];
-}
-
-</code></pre>
-
-<blockquote>
-<p>现在我们进入<strong><code>TodayViewController</code></strong>开始写代码了</p>
-</blockquote>
-
-<pre><code class="language-objective-c">interface TodayViewController () &lt;NCWidgetProviding&gt;
-
-@property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, strong) UILabel *tipsLabel;
-
-@end
-
-@implementation TodayViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    /**
-     *  设置Today Extension的Size
-     *
-     *  @param 0   Today Extension的宽度是不可变的，所以这里随便给个0就好了
-     *  @param 150 高度是可控制的，这里我给了一个固定值150
-     *
-     *  @return CGSize
-     */
-    self.preferredContentSize = CGSizeMake(0, 150);
-    
-    /**
-     *  初始化一个UIView，且设置它的属性
-     */
-    self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0,
-                                                                0,
-                                                                self.view.frame.size.width,
-                                                                self.view.frame.size.height)];
-    self.contentView.backgroundColor = [UIColor whiteColor];
-    
-    [self.view addSubview:self.contentView];
-
-    /**
-     *  初始化一个Label，并且设置它的属性
-     *
-     */
-    self.tipsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, self.view.frame.size.width, 30)];
-    
-    self.tipsLabel.text            = @&quot;这是一个测试代码&quot;;
-    self.tipsLabel.numberOfLines   = 0;
-    self.tipsLabel.textColor       = [UIColor blackColor];
-    self.tipsLabel.backgroundColor = [UIColor redColor];
-
-    [self.view addSubview:self.tipsLabel];
-    
-    /**
-     *  获取主应用传过来的数据
-     */
-    NSUserDefaults *userDefault = [[NSUserDefaults alloc] initWithSuiteName:@&quot;group.todayExtensionCodeExample&quot;];
-    
-    NSString *nickName = [userDefault objectForKey:@&quot;group.todayExtensionCodeExample.tips&quot;];
-    
-    if (nickName) {
-        
-        NSString *message = @&quot;今天XX又给你准备了很多惊喜哦，快去看看吧！&quot;;
-        
-        self.tipsLabel.text = [NSString stringWithFormat:@&quot;%@,%@&quot;, nickName, message];
-    }
-}
-
-/**
- *  该方法是用来设置Today Extension的偏移，默认会像左偏移
- *
- *  @param defaultMarginInsets UIEdgeInsets
- *
- *  @return UIEdgeInsets
- */
-- (UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets {
-    
-    return UIEdgeInsetsZero;
-}
-
-/**
- *  该方法是用来刷新Today Extension数据的
- *
- *  @param completionHandler
- */
-- (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler {
-    // Perform any setup necessary in order to update the view.
-    
-    // If an error is encountered, use NCUpdateResultFailed
-    // If there&#39;s no update required, use NCUpdateResultNoData
-    // If there&#39;s an update, use NCUpdateResultNewData
-
-    completionHandler(NCUpdateResultNewData);
-}
-
-@end
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_7">从Today Extension跳转至App</h3>
-
-<blockquote>
-<p>首先，我们需要添加<strong><code>Identifier</code></strong>，以及<strong><code>URL Schemes</code></strong>。</p>
-
-<p><font color=purple><strong>PS：这里的</strong><code>Identifier</code><strong>和</strong><code>URL Schemes</code><strong>是你自己定义的，不能与其他</strong><code>Application</code><strong>的</strong><code>Identifier</code><strong>、</strong><code>URL Schemes</code><strong>相同，否则会造成冲突。</strong></font></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/17.png" alt="17"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/18.png" alt="18"/></p>
-
-<blockquote>
-<p>然后呢，我们去到主应用的<strong><code>AppDelegate.m</code></strong>文件中添加方法</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/19.png" alt="19"/></p>
-
-<blockquote>
-<p>最后，我们去到<strong><code>TodayViewController</code></strong>里补上对应的方法就好了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/20.png" alt="20"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/21.png" alt="21"/></p>
-
-<hr/>
-
-<h3 id="toc_8">最终效果</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/TodayExtensionExample/master/images-folder/22.png" alt="22"/></p>
-
-<hr/>
-
-<h3 id="toc_9">注意点</h3>
-
-<p><strong>PS：在保证代码正确的前提下，如果遇到</strong><code>Today Extension</code><strong>无法加载数据，或者其他异常，可以把</strong><code>Application</code><strong>删掉，插件也删掉，</strong><code>Clear</code><strong>一下</strong><code>Project</code><strong>，在运行即可。</strong></p>
-
-<hr/>
-
-<h3 id="toc_10">补上几篇文章</h3>
-
-<p><a href="http://www.jianshu.com/p/ab268a1ae000">iOS 8 Extension之Today插件</a></p>
-
-<p><a href="https://onevcat.com/2014/08/notification-today-widget/">WWDC 2014 Session笔记 - iOS 通知中心扩展制作入门</a></p>
-
-<p><a href="http://adad184.com/2014/10/29/how-to-setup-today-extension-programmatically/">如何用纯代码构建一个Widget(today extension)</a></p>
-
-<hr/>
-
-<h3 id="toc_11">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/TodayExtensionExample">https://github.com/CainRun/TodayExtensionExample</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：《iOS设计模式 — 代理模式》]]></title>
-    <link href="https://cainrun.github.io/14718501007074.html"/>
-    <updated>2016-08-22T15:15:00+08:00</updated>
-    <id>https://cainrun.github.io/14718501007074.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>上次我们知道了<strong><code>单例模式</code></strong>是怎么回事, 现在我们来探讨一下什么叫做<strong><code>代理模式</code></strong>.</p>
-
-<p>其实所谓的代理模式在我们日常生活中非常的常见, 比如买车, 各式各样的牌子都有, 但这些汽车生产商又不可能自己掏钱在每个城市的每个角落都开一家自己的直营店, 所以他们会去招一些第三方的代理商进行分销, 而这个就是我们今天所要说的<strong><code>代理模式</code></strong>.</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>代理模式</code><strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/ProxyPatternUML.png" alt="ProxyPatternUM"/></p>
-
-<blockquote>
-<p>这是一张<strong><code>代理模式</code></strong>的UML图, 同样也很简单的讲解了<strong><code>代理模式</code></strong>到底是怎么回事</p>
-
-<p>顺序如下: <br/>
-- 1.<strong><code>Client(客户)</code></strong>向<strong><code>Subject(代理店)</code></strong>发起购买汽车的请求<br/>
-- 2.<strong><code>Subject(代理店)</code></strong>会向<strong><code>Proxy(生产商)</code></strong>进行提单<br/>
-- 3.<strong><code>Proxy(生产商)</code></strong>按照提单进行交货给<strong><code>Subject(代理店)</code></strong><br/>
-- 4.<strong><code>Subject(代理点)</code></strong>再交付给<strong><code>Client(客户)</code></strong>, </p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">创建工程</h3>
-
-<blockquote>
-<p>打开我们自己创建的<strong><code>DesignPatternWork</code></strong>文件夹, 里面有我们之前所创建的<strong><code>DesignPatternWorkSpace</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/1.png" alt="1"/></p>
-
-<blockquote>
-<p>添加我们所要创建的新工程, 命名为<strong><code>ProxyPattern</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/2.png" alt="2"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/3.png" alt="3"/></p>
-
-<hr/>
-
-<h2 id="toc_3"><center>创建代理类</center></h2>
-
-<h3 id="toc_4">声明代理类</h3>
-
-<blockquote>
-<p>这里我们就拿奥迪这个汽车生产商来进行演示, 原谅我是个奥迪控~~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/4.png" alt="4"/></p>
-
-<hr/>
-
-<h3 id="toc_5">声明代理方法</h3>
-
-<blockquote>
-<p>在这里声明两个代理方法, 但他们有所区别, 一个是必须实现, 一个是可选类型的, 由于方法名自注释, 我这里就不添加注释了.</p>
-</blockquote>
-
-<pre><code class="language-objectivec">@required
-- (void)audiManufacturer:(AudiManufacturer *)audiManufacturer
-           orderQuantity:(NSInteger)orderQuantity;
-</code></pre>
-
-<pre><code class="language-objectivec">@optional
-- (void)audiManufacturer:(AudiManufacturer *)audiManufacturer
-            audiDelegateInfo:(NSString *)audiDelegateInfo;
-</code></pre>
-
-<blockquote>
-<p>解释一下, 为什么我们需要在代理方法中提供代理类, 其实这个很好理解, 打个比方, 就拿奥迪来说吧, 一个品牌的车子, 肯定有不同的型号, 而每个型号不一定都是在同一家工厂里生产的, 这个时候我们就需要区分生产地, 所以我们为了提供外部去区分, 就需要在代理方法中提供代理类<strong><code>(个人理解, 不是官方语言哈)</code></strong>.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/5.png" alt="5"/></p>
-
-<hr/>
-
-<h3 id="toc_6">内部实现代理方法</h3>
-
-<blockquote>
-<p>在内部实现两个对方开放的方法</p>
-</blockquote>
-
-<pre><code class="language-objectivec">- (void)buyCarCount:(NSInteger)count;
-- (void)buyCarModel:(NSString *)model;
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/6.png" alt="6"/></p>
-
-<hr/>
-
-<h3 id="toc_7">外部调用代理</h3>
-
-<blockquote>
-<p>代理类以及代理方法我们已经完成了, 接下来我们就要在外部去实现了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/7.png" alt="7"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/8.png" alt="8"/></p>
-
-<hr/>
-
-<h2 id="toc_8"><center>代理与协议的区别</center></h2>
-
-<h3 id="toc_9">代理与协议</h3>
-
-<blockquote>
-<p>到这里, 我们已经完成了整个代理模式的所有要求了, 但还有一些小细节需要提提.</p>
-
-<p><strong><code>代理职能:</code></strong>降低对象与对象之间的耦合度<br/>
- <strong><code>协议职能:</code></strong>主要是用来约束对象或筛选对象<br/>
- <strong><code>代理与协议的相似:</code></strong>代理与协议都是使用<strong><code>@protocol</code></strong>来进行声明, 并且提供方法的一种模式, 看起来没啥不一样.<br/>
- <strong><code>代理与协议的不同:</code></strong>其实就如同它们的职能所说, <strong><code>代理</code></strong>是为了降低对象与对象之间的耦合度, <strong><code>协议</code></strong>是用来约束对象或筛选对象</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_10">创建协议</h3>
-
-<blockquote>
-<p>这里我们用代码演示一下吧, 这样子更加的简单明了, 不过这里要注意一下, <strong><code>Protocol</code></strong>是没有<strong><code>.m</code></strong>文件的</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/9.png" alt="9"/></p>
-
-<hr/>
-
-<h3 id="toc_11">创建顾客类</h3>
-
-<blockquote>
-<p>创建完协议就要创建顾客了, 并且这个顾客类是必须遵守我们创建的<strong><code>Protocol</code></strong>, 然后在这个<strong><code>Protocol</code></strong>里加个判断.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/10.png" alt="10"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/11.png" alt="11"/></p>
-
-<blockquote>
-<p>现在我们来初始化一下这个顾客类, 并且校验一下我们所写的<strong><code>Protocol</code></strong>是否生效.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/12.png" alt="12"/></p>
-
-<blockquote>
-<p>先输入<strong><code>10000</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/13.png" alt="13"/></p>
-
-<blockquote>
-<p>再输入<strong><code>1000000</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ProxyPattern/ProxyPattern%E8%AF%B4%E6%98%8E/14.png" alt="14"/></p>
-
-<hr/>
-
-<h3 id="toc_12">补充一点</h3>
-
-<blockquote>
-<p>其实在iOS中, 就有一个类叫做<strong><code>NSProxy</code></strong>, 它也可以用来实现<strong><code>代理模式</code></strong>, 但在这里先不做介绍, 后面有时间再另外写一篇文章去讲解怎么用<strong><code>NSProxy</code></strong>去实现代理模式, 如果有好奇心特别重的朋友, 也可以自行去翻查一下资料~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_13">最后总结</h3>
-
-<blockquote>
-<p>经过上面的演示, 就知道<strong><code>代理模式</code></strong>并没有想象中那么复杂, 说白了, 所谓的<strong><code>代理模式</code></strong>就是为了降低对象与对象之间的耦合度, 为了方便维护罢了, 同时我们也知道了<strong><code>代理</code></strong>与<strong><code>协议</code></strong>之间的区别, 这篇文章就到了, 谢谢大家的观看~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_14">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
 
 ]]></content>
   </entry>
