@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2016-10-28T22:58:16+08:00</updated>
+  <updated>2016-11-13T01:50:59+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -19,9 +19,21 @@
     <updated>2016-11-07T23:10:20+08:00</updated>
     <id>https://cainrun.github.io/14785314208383.html</id>
     <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>在前一段时间, 没网的情况下写项目, 发现一件很蛋疼的事, 居然不知道怎么版本管理了, 灵光一闪, 自己搭建个本地SVN服务器吧, 于是乎这文章就出来了</p>
+
+<p><dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>搭建Mac OS本地SVN服务器</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
 <hr/>
 
-<h3 id="toc_0">创建SVN服务器</h3>
+<h3 id="toc_1">创建SVN服务器</h3>
 
 <blockquote>
 <p>首先我们要创建一个<strong>SVN</strong>服务器存放夹, 这里我的地址是如下:</p>
@@ -34,7 +46,7 @@
 
 <hr/>
 
-<h3 id="toc_1">配置SVNServe.conf文件</h3>
+<h3 id="toc_2">配置SVNServe.conf文件</h3>
 
 <blockquote>
 <p>创建完之后, 就需要配置一下<strong>SVN</strong>, 我这里比较习惯使用<strong>Vim</strong>.<br/>
@@ -59,7 +71,7 @@
 
 <hr/>
 
-<h3 id="toc_2">配置Passwd文件</h3>
+<h3 id="toc_3">配置Passwd文件</h3>
 
 <blockquote>
 <p>配置完<strong>svnserve.conf</strong>文件之后, 就继续来配置<strong>passwd</strong>文件:</p>
@@ -79,7 +91,7 @@
 
 <hr/>
 
-<h3 id="toc_3">配置Authz文件</h3>
+<h3 id="toc_4">配置Authz文件</h3>
 
 <blockquote>
 <p>配置完前面两个文件, 下面这个文件配置完就搞定了</p>
@@ -100,7 +112,7 @@ admins=admin
 
 <hr/>
 
-<h3 id="toc_4">启动SVN服务器</h3>
+<h3 id="toc_5">启动SVN服务器</h3>
 
 <blockquote>
 <p>配置了那么多, 最重要的重头戏来了, 就是启动我们的<strong>SVN</strong>服务器</p>
@@ -115,7 +127,7 @@ admins=admin
 
 <hr/>
 
-<h3 id="toc_5">关闭SVN服务器</h3>
+<h3 id="toc_6">关闭SVN服务器</h3>
 
 <blockquote>
 <p>有启动, 当然也有关闭</p>
@@ -132,7 +144,7 @@ admins=admin
 
 <hr/>
 
-<h3 id="toc_6">首次导入工程文件到SVN服务器</h3>
+<h3 id="toc_7">首次导入工程文件到SVN服务器</h3>
 
 <blockquote>
 <p><strong>SVN</strong>服务器弄好了, 现在就是要导入工程文件到服务器去了</p>
@@ -151,7 +163,7 @@ admins=admin
 
 <hr/>
 
-<h3 id="toc_7">从SVN服务器下载工程文件到本地</h3>
+<h3 id="toc_8">从SVN服务器下载工程文件到本地</h3>
 
 <blockquote>
 <p>上传工程我们已经知道了, 那下载工程我们也来说一说.</p>
@@ -166,7 +178,7 @@ admins=admin
 
 <hr/>
 
-<h3 id="toc_8">二次提交代码到服务器</h3>
+<h3 id="toc_9">二次提交代码到服务器</h3>
 
 <blockquote>
 <p>二次提交是有一个前提的, 那就是你首先需要在<strong>SVN</strong>服务器上下载代码到本地, 然后再去修改这一份代码, 才能够二次提交.<br/>
@@ -192,7 +204,7 @@ admins=admin
 
 <hr/>
 
-<h3 id="toc_9">权限错误</h3>
+<h3 id="toc_10">权限错误</h3>
 
 <blockquote>
 <p>如果你在导入工程时候出现<strong>E000013</strong>的错误, 如下:</p>
