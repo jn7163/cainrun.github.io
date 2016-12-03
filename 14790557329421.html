@@ -1,0 +1,1117 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	玩转iOS开发：6.《Core Animation》CALayer的Specialized Layers - Cain For iOS
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Cain For iOS" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+				 
+				 	<div class="profilepic">
+						<img src="asset/icon.png" style="width:160px;">
+					</div>
+            	
+					
+					<h1><a href="index.html">Cain For iOS</a></h1>
+					<p class="subtitle">指弹吉他演奏爱好者, 摄影爱好者, iOS 开发工程师, 如果您有更好的建议或者其他不明白的地方, 可以联系我QQ: 350116542</p>
+					<nav id="main-nav">
+						<ul class="main">
+						
+						  <li id=""><a target="self" href="index.html">Home</a></li>
+						
+						  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+						
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+
+
+
+<a target="_blank" class="linkedin" href="www.linkedin.com/in/cainluo" title="LinkedIn">LinkedIn</a>
+
+
+
+<a target="_blank" class="weibo" href="http://weibo.com/1826190094" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/CainRun" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:zhebushimengfei@qq.com" title="Email">Email</a>
+
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：6.《Core Animation》CALayer的Specialized Layers</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>在上一篇文章<a href="https://cainrun.github.io/14777052484078.html">《Core Animation》CALayer的Transforms</a>中, 我们了解了二维空间和三维空间的一些布局, 还有就是最简单的旋转, 平移之类的, 再来一些就是混合使用的, 这次我们来换个话题.</p>
+
+<p><dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Core Animation</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p><strong>Specialized Layers</strong>讲得是一些专用的一些图层类, 而不是之前所说的一些用于图片, 颜色之类的, 下面让我们来看看吧~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">CAShapeLayer</h3>
+
+<blockquote>
+<p>在之前的文章里, 我们使用过阴影效果, 并且是不使用<strong>CGPath</strong>情况下去构建形状不同的阴影, 在<strong>CALayer</strong>中, 有一个子类叫做<strong>CAShapeLayer</strong>, 它也是可以做到对应的效果.<br/>
+<dr/><br/>
+<strong>CAShapeLayer</strong>是一个通过矢量图形来进行绘制的图层子类, 而并不是使用<strong>Bitmap</strong>, 当我们指定对应的颜色, 线宽等属性, 就可以使用<strong>CGPath</strong>来绘制我们想要的形状, 最后<strong>CAShapeLayer</strong>就自动渲染出来了, 当然你也可以使用<strong>Core Graphics</strong>直接对一个<strong>CALayer</strong>进行绘制, 但<strong>CAShapeLayer</strong>要比<strong>Core Graphics</strong>直接操作<strong>CALayer</strong>要好一些, 比如:</p>
+
+<ul>
+<li><strong>CAShapeLayer</strong>使用了硬件加速, 绘制同一图形时会比<strong>Core Graphics</strong>渲染的快.</li>
+<li><strong>CAShapeLayer</strong>不需要像普通<strong>CALayer</strong>一样创建一个寄宿图形, 所以无论有多大, 都不会占用太多的内存.</li>
+<li><strong>CAShapeLayer</strong>和<strong>Core Graphics</strong>不一样, 它并不会被图层边界给裁剪掉.</li>
+<li><strong>CAShapeLayer</strong>不会出现像素化, 这可以提现在, 用<strong>CAShapeLayer</strong>做3D变换的时候, 不会和普通的图层一样出现像素化.</li>
+</ul>
+</blockquote>
+
+<h4 id="toc_3">创建一个CGPath</h4>
+
+<blockquote>
+<p>刚刚说了, <strong>CAShapeLayer</strong>可以通过<strong>CGPath</strong>来绘制任意图形, 并且可以设置一些属性, 比如<strong>lineWith</strong>, <strong>lineCap</strong>, <strong>lineJoin</strong>.<br/>
+<dr/><br/>
+我们绘制这个图形的时候, 不一定要闭合, 图层路径也不是绝对, 可以在一个图层上绘制多个不同的图形, 当然, 如果你要想用不同的颜色风格来绘制N个图形, 那你就要准备好多个<strong>Layer</strong>了.<br/>
+<dr/><br/>
+<strong>CAShapeLayer</strong>是属于<strong>CGPathRef</strong>类型, 但在实际开发中, 我们是用<strong>UIBezierPath</strong>来创建图层路径的, 这样子我们就不用考虑人工释放<strong>CGPath</strong>了, 下面让我们来看Demo吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)createPath {
+    
+    UIBezierPath *path = [[UIBezierPath alloc] init];
+    
+    [path moveToPoint:CGPointMake(175, 100)];
+    [path addQuadCurveToPoint:CGPointMake(100, 500)
+                 controlPoint:CGPointMake(250, 600)];
+    
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.strokeColor = [UIColor blueColor].CGColor;
+    shapeLayer.fillColor = [UIColor clearColor].CGColor;
+    shapeLayer.lineWidth = 10;
+    shapeLayer.lineJoin = kCALineJoinRound;
+    shapeLayer.lineCap = kCALineCapRound;
+    shapeLayer.path = path.CGPath;
+    
+    [self.view.layer addSublayer:shapeLayer];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/1.png" alt="1"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/2.png" alt="2"/></p>
+
+<h4 id="toc_4">圆角</h4>
+
+<blockquote>
+<p>之前我们在之前的文章里, 有提到过把一个视图剪切成圆角, 用的就是<strong>CALayer</strong>的<strong>cornerRadius</strong>属性, 而<strong>CAShapeLayer</strong>类也可以提供同样的功能, 虽然代码多了一些, 但也多了一些灵活, 它可以指定单独的指定每个角.<br/>
+<dr/><br/>
+我们创建圆角矩形其实就是人工绘制单独的直线和弧度, 但在<strong>UIBezierPath</strong>中有提供自动绘制圆角矩形的方法, 直接看代码:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)viewRoundedCorners {
+    
+    CGRect rect = CGRectMake(130, 130, 100, 100);
+    CGSize radii = CGSizeMake(10, 10);
+    
+    UIRectCorner corners = UIRectCornerTopRight | UIRectCornerBottomRight | UIRectCornerBottomLeft | UIRectCornerTopLeft;
+    
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect
+                                               byRoundingCorners:corners
+                                                     cornerRadii:radii];
+    
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    
+    shapeLayer.path = path.CGPath;
+    
+    [self.view.layer addSublayer:shapeLayer];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/3.png" alt="3"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/4.png" alt="4"/></p>
+
+<hr/>
+
+<h3 id="toc_5">CATextLayer</h3>
+
+<blockquote>
+<p>如果我们想在一个图层里显示文字, 我们可以借助和<strong>UILabel</strong>一样的方式, 使用<strong>Core Graphics</strong>在图层上写入内容, 但如果要越过<strong>UILabel</strong>这些控件, 直接在图层上显示文字的话, 我们就要为每个显示文字的图层创建一个图层代理的类, 并且判断哪个图层需要显示哪个字符串, 如果再加一些字体, 颜色一些乱七八糟的东西, 那就蛋疼的不要不要的.<br/>
+<dr/><br/>
+好在<strong>CALayer</strong>里有一个子类, 叫做<strong>CATextLayer</strong>, 它几乎都包含了<strong>UILabel</strong>的所有绘制特性, 而且还额外提供了一些新特性, 并且在渲染的速度上, 要比<strong>UILabel</strong>快的多, 偷偷说个事, 在<strong>iOS 6</strong>之前, <strong>UILabel</strong>其实是通过<strong>WebKit</strong>来实现绘制的, 所以那时候<strong>iOS</strong>在渲染文字的时候会有非常大的性能问题, 但<strong>CATextLayer</strong>使用的是<strong>Core Text</strong>, 两者之前完全不同一个概念.<br/>
+<dr/><br/>
+说那么多废话, 直接上代码吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)catextLayer {
+    
+    UIView *labelView = [[UIView alloc] initWithFrame:CGRectMake(30, 100, 300, 300)];
+    
+    labelView.backgroundColor = [UIColor redColor];
+    
+    [self.view addSubview:labelView];
+    
+    CATextLayer *textLayer = [CATextLayer layer];
+    textLayer.frame = labelView.bounds;
+    
+    [labelView.layer addSublayer:textLayer];
+    
+    textLayer.foregroundColor = [UIColor blackColor].CGColor;
+    textLayer.alignmentMode = kCAAlignmentJustified;
+    textLayer.wrapped = YES;
+    
+    UIFont *font = [UIFont systemFontOfSize:15];
+    
+    CFStringRef fontName = (__bridge CFStringRef)font.fontName;
+    CGFontRef fontRef = CGFontCreateWithFontName(fontName);
+    
+    textLayer.font = fontRef;
+    textLayer.fontSize = font.pointSize;
+    
+    CGFontRelease(fontRef);
+    
+    NSString *text = @&quot;这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字&quot;;
+    
+    textLayer.string = text;
+}
+</code></pre>
+
+<blockquote>
+<p>这里还要多说一句, 如果你发现文本显示的时候出现像素化的时候, 只要加上以下这段代码, 就哦了, 它会以<strong>Retina</strong>模式来渲染:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">    textLayer.contentsScale = [UIScreen mainScreen].scale;
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/5.png" alt="5"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/6.png" alt="6"/></p>
+
+<blockquote>
+<p><strong>contentsScale</strong>并且并不关心屏幕的拉伸, 因为默认都是<strong>1.0f</strong>, 所以我们要高清, 那就设置它吧.<br/>
+<dr/><br/>
+<strong>CATextLayer</strong>里的<strong>font</strong>属性, 其实并不是一个真正的<strong>UIFont</strong>类型, 而是一个<strong>CFTypeRef</strong>类型, 这样子就可以根据我们的需求来决定字体的属性到底是用<strong>CGFontRef</strong>类型还是用<strong>Core Text</strong>里的<strong>CTFontRef</strong>类型了, 同时字体大小也是用<strong>fontSize</strong>属性单独设置的, 因为<strong>CTFontRef</strong>和<strong>CGFontRef</strong>和<strong>UIFont</strong>完全是两回事, 在代码中我们也知道了如何将<strong>UIFont</strong>转成<strong>CGFontRef</strong>.<br/>
+<dr/><br/>
+当然<strong>CATextLayer</strong>里的<strong>string</strong>属性是<strong>id</strong>类型, 并不是我们想象中的<strong>NSString</strong>类型, 因为这样子我们就可以用<strong>NSString</strong>也可以用<strong>NSAttributedString</strong>来指定要显示的文本, 比如指定某段文字的字体, 颜色, 字重, 斜体等等.</p>
+</blockquote>
+
+<h4 id="toc_6">Rich Text</h4>
+
+<blockquote>
+<p>其实在<strong>iOS 6</strong>的时候, <strong>Apple</strong>就已经给了<strong>UILabel</strong>和其他的<strong>UIKit</strong>文本视图添加直接的属性, 但事实上, 在<strong>iOS 3.2</strong>的时候, <strong>CATextLayer</strong>就已经支持属性化字符串了, 如果你想支持更低版本的<strong>iOS</strong>那么你可以使用<strong>CATextLayer</strong>, 不需要和更复杂的<strong>Core Text</strong>打交道, 也省略了使用其他的方法, 但现在又会有哪家公司支持低版本的<strong>iOS</strong>呢? 但不能够说在新版本的<strong>iOS</strong>D昂中<strong>CATextLayer</strong>就无用功了, 这个得看我们的需求来确定了.<br/>
+<dr/> <br/>
+这次我们把<strong>Core Text</strong>, <strong>CATextLayer</strong>, <strong>NSAttributedString</strong>三者混在一起使用一下~</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)attributedString {
+    
+    UIView *labelView = [[UIView alloc] initWithFrame:CGRectMake(0, 200, self.view.frame.size.width, 400)];
+    
+    [self.view addSubview:labelView];
+    
+    CATextLayer *textLayer = [CATextLayer layer];
+    
+    textLayer.frame = labelView.bounds;
+    textLayer.contentsScale = [UIScreen mainScreen].scale;
+    
+    [labelView.layer addSublayer:textLayer];
+    
+    textLayer.alignmentMode = kCAAlignmentJustified; textLayer.wrapped = YES;
+    
+    UIFont *font = [UIFont systemFontOfSize:15];
+
+    NSString *text = @&quot;这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字, 这是一段测试的文字&quot;;
+    
+    NSMutableAttributedString *string = nil;
+    string = [[NSMutableAttributedString alloc] initWithString:text];
+    
+    CFStringRef fontName = (__bridge CFStringRef)font.fontName; CGFloat fontSize = font.pointSize;
+    CTFontRef fontRef = CTFontCreateWithName(fontName, fontSize, NULL);
+    
+    NSDictionary *attribs = @{(__bridge id)kCTForegroundColorAttributeName : (__bridge id)[UIColor blackColor].CGColor,
+                              (__bridge id)kCTFontAttributeName: (__bridge id)fontRef};
+    
+    [string setAttributes:attribs range:NSMakeRange(0, [text length])];
+    
+    attribs = @{(__bridge id)kCTForegroundColorAttributeName: (__bridge id)[UIColor redColor].CGColor,
+                (__bridge id)kCTUnderlineStyleAttributeName: @(kCTUnderlineStyleSingle),
+                (__bridge id)kCTFontAttributeName: (__bridge id)fontRef};
+    
+    [string setAttributes:attribs range:NSMakeRange(6, 20)];
+    
+    CFRelease(fontRef);
+    
+    textLayer.string = string;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/7.png" alt="7"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/8.png" alt="8"/></p>
+
+<h4 id="toc_7">Leading and Kerning</h4>
+
+<blockquote>
+<p>这里有个点, 由于<strong>Core Text</strong>和<strong>WebKit</strong>的内部实现机制不同, 用<strong>CATextLayer</strong>渲染或者是用<strong>UILabel</strong>渲染文本行距和字距也是不一样的, 这个是由使用字体和字符来决定的, 所以大家如果要使用普通的<strong>UILabel</strong>和<strong>CATextLayer</strong>, 就要好好注意一下了.</p>
+</blockquote>
+
+<h4 id="toc_8">A UILabel Replacement</h4>
+
+<blockquote>
+<p>这次我们就自己创建一个属于我们自己的<strong>UILabel</strong>, 代替系统的<strong>UILabel</strong>, 虽然这个类也是继承于<strong>UILabel</strong>, 但比系统的<strong>UILabel</strong>的<strong>-drawRect:</strong>方法要快, 来看看代码吧~</p>
+</blockquote>
+
+<pre><code class="language-objectivec">#import &quot;CLLabel.h&quot;
+#import &lt;QuartzCore/QuartzCore.h&gt;
+
+@implementation CLLabel
+
++ (Class)layerClass {
+    
+    return [CATextLayer class];
+}
+
+- (CATextLayer *)textLayer {
+    
+    return (CATextLayer *)self.layer;
+}
+
+- (void)setUp {
+    
+    self.text = self.text;
+    self.textColor = self.textColor;
+    self.font = self.font;
+    
+    [self textLayer].wrapped = YES;
+    [self.layer display];
+}
+
+- (id)initWithFrame:(CGRect)frame {
+    
+    if (self = [super initWithFrame:frame]) {
+        
+        [self setUp];
+    }
+    
+    return self;
+}
+
+- (void)awakeFromNib {
+    
+    [self setUp];
+}
+
+- (void)setText:(NSString *)text {
+    super.text = text;
+    
+    [self textLayer].string = text;
+}
+
+- (void)setTextColor:(UIColor *)textColor {
+    super.textColor = textColor;
+    
+    [self textLayer].foregroundColor = textColor.CGColor;
+}
+
+- (void)setFont:(UIFont *)font {
+    super.font = font;
+    
+    CFStringRef fontName = (__bridge CFStringRef)font.fontName;
+    CGFontRef fontRef = CGFontCreateWithFontName(fontName);
+    
+    [self textLayer].font = fontRef;
+    [self textLayer].fontSize = font.pointSize;
+    
+    CGFontRelease(fontRef);
+}
+
+@end
+</code></pre>
+
+<blockquote>
+<p>使用这个自定义的<strong>CLLabel</strong>, 我们看看效果</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)createCLLabel {
+    
+    CLLabel *label = [[CLLabel alloc] initWithFrame:CGRectMake(20, 50, 200, 200)];
+    
+    label.text = @&quot;这是一段很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长的测试文字&quot;;
+    label.textColor = [UIColor blackColor];
+    
+    [self.view addSubview:label];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/9.png" alt="9"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/10.png" alt="10"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/11.png" alt="11"/></p>
+
+<hr/>
+
+<h3 id="toc_9">CATransformLayer</h3>
+
+<blockquote>
+<p>在我们日常开发当中, 如果需要用到<strong>3D Layer</strong>, 可以用到之前我们说到的<strong>3D Transforms</strong>, 但是那样子太麻烦了, 要算一堆东西, 如果有一种<strong>Layer</strong>可以像玩积木一样, 一个一个的组合成一个<strong>3D</strong>形状的话, 那该多好~<br/>
+<dr/><br/>
+其实<strong>Apple</strong>早就想到了这个问题, 它们提供了<strong>CATransformLayer</strong>, 就是专门用来给<strong>Layer</strong>做一个容器, 然后让拼接成一个看起来像<strong>3D</strong>的一样图形.<br/>
+<dr/><br/>
+我们来看代码: </p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)transformLayer {
+    
+    self.view.backgroundColor = [UIColor grayColor];
+    
+    CATransform3D transform3DOne = CATransform3DIdentity;
+    
+    transform3DOne.m34 = -1.0 / 500.0;
+    
+    self.view.layer.sublayerTransform = transform3DOne;
+    
+    CATransform3D transform3DTwo = CATransform3DIdentity;
+    
+    transform3DTwo = CATransform3DTranslate(transform3DTwo, -100, 0, 0);
+    
+    CALayer *cubeOne = [self cubeWithTransform:transform3DTwo];
+    
+    [self.view.layer addSublayer:cubeOne];
+    
+    CATransform3D transform3DThree = CATransform3DIdentity;
+    
+    transform3DThree = CATransform3DTranslate(transform3DThree, 100, 0, 0);
+    transform3DThree = CATransform3DRotate(transform3DThree, -M_PI_4, 1, 0, 0);
+    transform3DThree = CATransform3DRotate(transform3DThree, -M_PI_4, 0, 1, 0);
+    
+    CALayer *cubeTwo = [self cubeWithTransform:transform3DThree];
+    
+    [self.view.layer addSublayer:cubeTwo];
+}
+
+- (CALayer *)layerWithTransform:(CATransform3D)transform {
+    
+    CALayer *layer = [CALayer layer];
+    
+    layer.frame = CGRectMake(-50, -50, 100, 100);
+    
+    CGFloat red = (rand() / (double)INT_MAX);
+    CGFloat green = (100000 / (double)INT_MAX);
+    CGFloat blue = (rand() / (double)INT_MAX);
+    
+    layer.backgroundColor = [UIColor colorWithRed:red
+                                            green:green
+                                             blue:blue
+                                            alpha:1.0f].CGColor;
+    layer.transform = transform;
+    
+    return layer;
+}
+
+- (CALayer *)cubeWithTransform:(CATransform3D)transform {
+    
+    // cube
+    CATransformLayer *cube = [CATransformLayer layer];
+    
+    // layer one
+    CATransform3D transform3D = CATransform3DMakeTranslation(0, 0, 50);
+    [cube addSublayer:[self layerWithTransform:transform3D]];
+    
+    // layer two
+    transform3D = CATransform3DMakeTranslation(50, 0, 0);
+    transform3D = CATransform3DRotate(transform3D, M_PI_2, 0, 1, 0);
+    [cube addSublayer:[self layerWithTransform:transform3D]];
+    
+    // layer three
+    transform3D = CATransform3DMakeTranslation(0, -50, 0);
+    transform3D = CATransform3DRotate(transform3D, M_PI_2, 1, 0, 0);
+    [cube addSublayer:[self layerWithTransform:transform3D]];
+
+    // layer five
+    transform3D = CATransform3DMakeTranslation(-50, 0, 0);
+    transform3D = CATransform3DRotate(transform3D, -M_PI_2, 0, 1, 0);
+    [cube addSublayer:[self layerWithTransform:transform3D]];
+
+    // layer six
+    transform3D = CATransform3DMakeTranslation(0, 0, -50);
+    transform3D = CATransform3DRotate(transform3D, M_PI, 0, 1, 0);
+    [cube addSublayer:[self layerWithTransform:transform3D]];
+
+    CGSize containerSize = self.view.bounds.size;
+    
+    cube.position = CGPointMake(containerSize.width / 2.0,
+                                containerSize.height / 2.0);
+    
+    cube.transform = transform;
+    
+    return cube;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/12.png" alt="12"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/13.png" alt="13"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/14.png" alt="14"/></p>
+
+<hr/>
+
+<h3 id="toc_10">CAGradientLayer</h3>
+
+<blockquote>
+<p>在<strong>Layer</strong>中, 有一种颜色平滑渐变的子类, 叫做<strong>CAGradientLayer</strong>, 虽然用<strong>Core Graphics</strong>也可以通过一些技巧做到和<strong>CAGradientLayer</strong>一样的效果, 但<strong>CAGradieLayer</strong>真正好, 是好在它是用硬件加速来绘制的, 直接来看代码吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)gradientLayer {
+    
+    UIView *view = [[UIView alloc] init];
+    
+    view.bounds = CGRectMake(0, 0, 200, 200);
+    view.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2);
+    
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.frame = view.bounds;
+    
+    // 设置渐变的颜色, 理论上来讲是无限添加的
+    gradientLayer.colors = @[(__bridge id)[UIColor redColor].CGColor,
+                             (__bridge id)[UIColor greenColor].CGColor];
+    
+    gradientLayer.startPoint = CGPointMake(0, 0); // 开始渐变的点
+    gradientLayer.endPoint = CGPointMake(1, 1); // 结束渐变的点
+    
+    gradientLayer.locations = @[@0.0, @0.2]; // 设置渐变的区域
+    
+    [view.layer addSublayer:gradientLayer];
+    
+    [self.view addSubview:view];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/15.png" alt="15"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/16.png" alt="16"/></p>
+
+<hr/>
+
+<h3 id="toc_11">CAReplicatorLayer</h3>
+
+<blockquote>
+<p>在<strong>CALayer</strong>的子类当中还有一个叫做<strong>CAReplicatorLayer</strong>, 它是用来复制重复的图层, 并且, 你可以给这些复制的图层进行一些属性上的操作, 比如渐变色, 渐变透明, 形状, 还可以加动画效果, 来看看代码吧:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">#pragma mark - CAReplicatorLayer
+- (void)replicatorLayer {
+    
+    UIView *view = [[UIView alloc] init];
+    
+    view.bounds = CGRectMake(0, 0, 100, 100);
+    view.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 4.5);
+    
+    CATransform3D transform = CATransform3DIdentity;
+    
+    transform = CATransform3DTranslate(transform, 0, 200, 0);
+    transform = CATransform3DRotate(transform, M_PI / 5.0, 0, 0, 1);
+    transform = CATransform3DTranslate(transform, 0, -200, 0);
+
+    CAReplicatorLayer *replicatorLayer = [CAReplicatorLayer layer];
+    
+    replicatorLayer.frame = view.bounds;
+    replicatorLayer.instanceCount = 10;  // 复制图层个数
+    replicatorLayer.instanceBlueOffset = -1.0f; // 设置每一个图层的逐渐蓝色偏移
+    replicatorLayer.instanceRedOffset = -1.0f;  // 设置每一个图层的逐渐红色偏移
+    replicatorLayer.instanceAlphaOffset = -0.1f;
+    replicatorLayer.instanceDelay = 0.33f;  // 设置每个图层延迟0.33f
+    replicatorLayer.instanceTransform = transform;
+    
+    CALayer *layer = [CALayer layer];
+    
+    layer.frame = CGRectMake(0, 0, 100, 100);
+    layer.backgroundColor = [UIColor whiteColor].CGColor;
+    
+    [replicatorLayer addSublayer:layer];
+    
+    self.view.backgroundColor = [UIColor grayColor];
+    
+    [view.layer addSublayer:replicatorLayer];
+    
+    [self addLayerAnimation:layer];
+    
+    [self.view addSubview:view];
+}
+
+- (void)addLayerAnimation:(CALayer *)layer {
+    
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@&quot;position.y&quot;];
+    
+    animation.toValue =  @(layer.position.y - 25.0);
+    animation.duration = 0.5;
+    animation.autoreverses = true;
+    animation.repeatCount = CGFLOAT_MAX;
+    
+    [layer addAnimation:animation forKey:nil];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/17.png" alt="17"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/18.gif" alt="18"/></p>
+
+<h4 id="toc_12">Reflections</h4>
+
+<blockquote>
+<p><strong>CAReplicatorLayer</strong>其实还有一个更加实用的功能, 就是做一个镜面反射的效果, 我们可以自己封装一个<strong>UIView</strong>的类, 也可以自己写一个简单的, 这里我就写个简单点的吧, 大家也可以去<strong>GitHub</strong>里面搜搜, 我在网上搜到一个, 虽然这个库已经2年多没更新了, 但还是值得看看的<a href="https://github.com/nicklockwood/ReflectionView">ReflectionView</a>.</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)reflectionsLayer {
+    
+    CAReplicatorLayer *replicatorLayer = [CAReplicatorLayer layer];
+    
+    replicatorLayer.instanceCount = 2;
+    replicatorLayer.frame = CGRectMake(50, 100, 100, 100);
+
+    CALayer *layer = [CALayer layer];
+    
+    layer.contents = (__bridge id _Nullable)([UIImage imageNamed:@&quot;github&quot;].CGImage);
+    layer.frame = replicatorLayer.bounds;
+
+    CATransform3D transform = CATransform3DIdentity;
+    
+    transform = CATransform3DTranslate(transform, 0, layer.bounds.size.height, 0);
+    transform = CATransform3DScale(transform, 1, -1, 0);
+    
+    replicatorLayer.instanceTransform = transform;
+    replicatorLayer.instanceAlphaOffset = -0.6;
+    
+    [replicatorLayer addSublayer:layer];
+    
+    [self.view.layer addSublayer:replicatorLayer];
+    self.view.backgroundColor = [UIColor grayColor];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/19.png" alt="19"/><br/>
+<img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/20.png" alt="20"/></p>
+
+<hr/>
+
+<h3 id="toc_13">CAScrollLayer</h3>
+
+<blockquote>
+<p>在<strong>CALayer</strong>的子类当中, 还有一个<strong>CAScrollLayer</strong>, 它可以被称为<strong>UIScrollView</strong>的代替品, 但有一个问题, 我们都知道<strong>Core Animation</strong>是不能处理用户输入, 所以<strong>CAScrollLayer</strong>也不能处理滑动事件, 也不能实现<strong>UIScrollView</strong>那种滑动反弹效果, 但这里加了一个滑动手势就可以实现了滑动效果了.</p>
+</blockquote>
+
+<pre><code class="language-objectivec">@interface ViewController ()
+
+@property (nonatomic, strong) CAScrollLayer *scrollLayer;
+
+@end
+
+#pragma mark - CAScrollLayer
+- (void)addScrollLayer {
+    
+    CALayer *layer = [CALayer layer];
+    
+    layer.contents = (__bridge id _Nullable)([UIImage imageNamed:@&quot;github&quot;].CGImage);
+    layer.frame = CGRectMake(0, 0, 300, 300);
+    
+    self.scrollLayer = [CAScrollLayer layer];
+    self.scrollLayer.frame = CGRectMake(50, 100, 150, 150);
+    self.scrollLayer.scrollMode = kCAScrollBoth;
+    self.scrollLayer.backgroundColor = [UIColor grayColor].CGColor;
+    
+    [self.scrollLayer addSublayer:layer];
+    
+    [self.view.layer addSublayer:self.scrollLayer];
+    
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
+    
+    [self.view addGestureRecognizer:pan];
+}
+
+- (void)panGesture:(UIPanGestureRecognizer *)pan {
+    
+    CGPoint translocation = [pan translationInView:self.view];
+    CGPoint origin = self.scrollLayer.bounds.origin;
+    
+    origin = CGPointMake(origin.x - translocation.x, origin.y - translocation.y);
+    
+    [self.scrollLayer scrollToPoint:origin];
+    
+    [pan setTranslation:CGPointZero inView:self.view];
+}
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_14">CATiledLayer</h3>
+
+<blockquote>
+<p>在我们开发当中, 有时候我们会需要加载一张超大的图片, 比如神马4K高清图, 或者是世界地图等等之类的, 但是在<strong>iOS</strong>当中是有内存限制的, 并不像其他系统一样<strong>4G</strong>, <strong>6G</strong>有超大内存, 如果我们要把超大的图片加载到内存当中, 那很明显, 直接会撑爆, 或者是加速速度慢得感人, 如果你是在主线程中使用<strong>UIImage</strong>的<strong>+ (nullable UIImage *)imageNamed:(NSString *)name;</strong>或者是<strong>- (nullable instancetype)initWithContentsOfFile:(NSString *)path</strong>方法来加载图片的话, 那你会惊喜的发现, 卡线程了~~<br/>
+<dr/><br/>
+在<strong>iOS</strong>当中, 能够高效的绘制并且加载到界面的图片是有一个大小限制的, 因为在<strong>iOS</strong>当中所有显示在屏幕上的图片最终都会被转化为<strong>OpenGL</strong>的纹理, 同时<strong>OpenGL</strong>是有一个最大纹理尺寸的限制, 根据设备的型号来决定, 通常是<strong>2048*2048</strong>或者<strong>4096*4096</strong>, 如果我们想在单个纹理中显示一个比这个限制尺寸还要大的图, 哪怕图片已经存在于内存当中, 我们也会遇到非常大的性能问题, 因为<strong>Core Animation</strong>是强制用<strong>CPU</strong>处理图片, 而不是<strong>GPU</strong>, 苹果为了解决这个问题, 于是乎有了<strong>CATiledLayer</strong>, 下面我们来看看<strong>Demo</strong>:<br/>
+<dr/><br/>
+由于我不懂怎么把大图分解成小图, 这里就找张小一点的图用用</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)addCATileLayer {
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.width)];
+    
+    [self.view addSubview:scrollView];
+    
+    CATiledLayer *tiledLayer = [CATiledLayer layer];
+    
+    tiledLayer.frame = CGRectMake(0, 0, 2048, 2048);
+    tiledLayer.delegate = self;
+    tiledLayer.contentsScale = [UIScreen mainScreen].scale;
+    
+    [scrollView.layer addSublayer:tiledLayer];
+    
+    scrollView.contentSize = tiledLayer.frame.size;
+    
+    [tiledLayer setNeedsDisplay];
+}
+
+- (void)drawLayer:(CATiledLayer *)layer inContext:(CGContextRef)ctx {
+    
+    CGRect bounds = CGContextGetClipBoundingBox(ctx);
+    
+    NSInteger x = floor(bounds.origin.x / layer.tileSize.width);
+    NSInteger y = floor(bounds.origin.y / layer.tileSize.height);
+    
+    NSString *imageName = [NSString stringWithFormat:@&quot;image%02zd_%02zd&quot;, x, y];
+    
+    UIImage *tileImage = [UIImage imageNamed:imageName];
+    
+    UIGraphicsPushContext(ctx);
+    
+    [tileImage drawInRect:bounds];
+    
+    UIGraphicsPopContext();
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/21.gif" alt="21"/></p>
+
+<blockquote>
+<p>这里我们注意到, 我默认是用<strong>Retina</strong>模式去显示图片的, 所以我们看起来这些图片会比较小, 如果你不想用<strong>Retina</strong>模式去显示, 你可以把代码中的一句代码删除即可:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">    tiledLayer.contentsScale = [UIScreen mainScreen].scale;
+</code></pre>
+
+<blockquote>
+<p>如果我们要做到像地图那样子放大缩小的话, 那就要自己头脑风暴一下, 然后想着如何去实现了~~</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_15">CAEmitterLayer</h3>
+
+<blockquote>
+<p>在<strong>iOS 5</strong>版本中, 苹果加入了一个新的<strong>CALayer</strong>子类, 叫做<strong>CAEmitterLayer</strong>, 它是一个高性能的粒子引擎, 常用于制作实时效果的动画, 比如烟雾, 火, 雨等等之类的.<br/>
+<dr/><br/>
+其实仔细想想, <strong>CAEmitterLayer</strong>看起来更像是一个容器, 里面装载着很多的<strong>CAEmitterCell</strong>, 这些<strong>CAEmitterCell</strong>定义了一个粒子效果, 然后在<strong>CAEmitterLayer</strong>的装载中显示出来.<br/>
+<dr/><br/>
+<strong>CAEmitterCell</strong>类似于一个普通的<strong>CALayer</strong>, 它有一个<strong>contents</strong>的属性, 可以定义为一个<strong>CGImage</strong>, 但不同于普通的<strong>CALayer</strong>的是它有一些课设置属性控制着表现和行为, 想了解更多的话, 大家可以自行去<strong>CAEmitterCell</strong>的头文件找找, 现在我们来看看<strong>Demo</strong>:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)addCAEmitterLayer {
+    
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 100,
+                                                                   self.view.frame.size.width,
+                                                                   self.view.frame.size.width)];
+    
+    [self.view addSubview:contentView];
+    
+    CAEmitterLayer *emitterLayer = [CAEmitterLayer layer];
+    
+    emitterLayer.frame = contentView.bounds;
+    emitterLayer.renderMode = kCAEmitterLayerAdditive;
+    emitterLayer.emitterPosition = CGPointMake(emitterLayer.frame.size.width / 2,
+                                               emitterLayer.frame.size.height / 2);
+    
+    [contentView.layer addSublayer:emitterLayer];
+    
+    CAEmitterCell *cell = [[CAEmitterCell alloc] init];
+    
+    cell.contents = (__bridge id _Nullable)([UIImage imageNamed:@&quot;fire&quot;].CGImage);
+    cell.birthRate = 150;
+    cell.lifetime = 5.0;
+    cell.color = [UIColor colorWithRed:1.f
+                                 green:0.5f
+                                  blue:0.1f
+                                 alpha:1.0f].CGColor;
+    cell.alphaSpeed = -0.4f;
+    cell.velocity = 50.f;
+    cell.velocityRange = 50.f;
+    cell.emissionRange = M_PI * 2.0f;
+    
+    emitterLayer.emitterCells = @[cell];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/22.gif" alt="22"/></p>
+
+<blockquote>
+<p>这里补充一下知识点, <strong>CAEMitterCell</strong>基本上可以分为三种:</p>
+
+<ul>
+<li>粒子的某一属性的初始值, 比如:<strong>color</strong>属性指定了一个图片的混合色, 在<strong>Demo</strong>当中我们就设置了某个颜色.</li>
+<li>粒子某一属性的变化范围, 比如:<strong>emissionRange</strong>, 在<strong>Demo</strong>当中, 我们设置为<strong>M_PI * 2.0f</strong>, 这意味着粒子可以从<strong>360°</strong>的任意位置反射出来.</li>
+<li><p>粒子在指定值的时间线上的变化, 比如: <strong>alphaSpeed</strong>, 子啊<strong>Demo</strong>中, 我们设置为<strong>-0.4f</strong>, 这意味着, 每过一秒, 粒子的透明度就减少<strong>0.4</strong>, 这样子就有渐渐消失的效果啦.<br/>
+<dr/><br/>
+而<strong>CAEmitterLayer</strong>它是控制着整个粒子系统的位置和形状, 比如<strong>birthRate</strong>, <strong>lifetime</strong>和<strong>celocity</strong>, 当然, <strong>CAEMitterCell</strong>也有这些属性, 整个粒子系统都是这些属性以相乘的方式作用在一起, 这样子我们就可以用一个值来加速或者扩大整个粒子系统.<br/>
+<dr/><br/>
+我们还需要知道另外两个比较重要的属性:</p></li>
+<li><p><strong>preservesDepth</strong>: 是否将一个<strong>3D</strong>的粒子系统平面化到一个图层, 或者可以在<strong>3D</strong>空间中混合其他图层.</p></li>
+<li><p><strong>renderMode</strong>: 控制着粒子图片在视觉上是如何混合的, 在<strong>Demo</strong>当中, 我们设置为<strong>kCAEmitterLayerAdditive</strong>效果, 默认值为<strong>kCAEmitterLayerUnordered</strong>, 在开发当中需要什么样的效果, 还是得根据需求的来~</p></li>
+</ul>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_16">CAEAGLLayer</h3>
+
+<blockquote>
+<p>在<strong>iOS</strong>当中, 如果我们需要高性能的图形绘制, 那肯定是少不了去了解<strong>OpenGL</strong>, 这里说的是非游戏类的应用哈, 毕竟游戏有属于自己的一套渲染库, 说起<strong>OpenGL</strong>, 肯定有很多人觉得这个框架很厉害, 的确是的, 因为<strong>OpenGL</strong>是用<strong>C</strong>来写的, 直接和硬件进行通信, 但是呢, 也因为是用<strong>C</strong>所写的, 几乎有没有抽象出来的接口, 如果你要直接使用<strong>OpenGL</strong>来把图形显示在屏幕上, 那你就需要写非常多的复杂代码, 虽然<strong>OpenGL</strong>是非常强大的神器, 因为<strong>OpenGL</strong>是<strong>Core Animation</strong>和<strong>UIKit</strong>的基础.<br/>
+<dr/><br/>
+在<strong>OpenGL</strong>中, 是没有对象和图层继承的概念, 它只是非常简单的去处理三角形, 在<strong>OpenGL</strong>中, 所有东西都是<strong>3D</strong>空间中有颜色和纹理的三角形, 感觉灰常的牛逼~<br/>
+<dr/><br/>
+如果我们要高效的时候<strong>Core Animation</strong>, 那么我们就需要判断我们需要绘制哪些内容, 比如(矢量图形, 粒子, 文本等等), 但及时是我们选择了合适的图层去呈现这些内容, <strong>Core Animation</strong>中也不是每个类型的内容都被高度优化过, 所以要想得到高性能的去绘制, 那就比较蛋疼了.<br/>
+<dr/><br/>
+在<strong>iOS 5</strong>中, 苹果为了解决这些蛋疼的问题, 加入了一个叫做<strong>GLKit</strong>的库, 它在一定层度上减少了使用<strong>OpenGL</strong>的复杂度, 提供了一个叫做<strong>GLKView</strong>的<strong>UIView</strong>子类, 帮我们处理大部分的设置内容和绘制工作, 有需要了解<strong>GLKit</strong>的朋友们可以去翻翻官方文档.<br/>
+<dr/><br/>
+及时是如此, 我们还是需要使用到一个叫做<strong>CAEAGLLayer</strong>的<strong>CALayer</strong>子类, 酱紫我们才可以用来显示<strong>OpenGL</strong>的图形.<br/>
+<dr/><br/>
+这里还需要提到一点, 虽然在大部分情况下, 我们不需要手动设置<strong>CAEAGLLayer</strong>(如果是用<strong>GLKView</strong>的话), 我们可以设置一个<strong>OpenGL ES 2.0</strong>的上下文, 这是大多数的用法, <strong>GLKit</strong>为我们提供许多便捷的方法, 比如设置顶点和片段的着色器之类的, 这些都是以类<strong>C</strong>语言叫做<strong>GLSL</strong>自包含在程序中, 同事在运行时载入到图形硬件中, 当然, <strong>GLSL</strong>的代码和设置<strong>CAEAGLLayer</strong>是一毛钱关系都没, 所以我们会用<strong>GLKBaseEffect</strong>类, 将着色的逻辑抽象出来就完事, 其他的事情, 还是和平常使用一样就哦了, 下面让我们来看看<strong>Demo</strong>:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)addCAEAGLLayer {
+    
+    UIView *glView = [[UIView alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, self.view.frame.size.width)];
+    
+    [self.view addSubview:glView];
+    
+    // 设置Context
+    self.glContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    
+    [EAGLContext setCurrentContext:self.glContext];
+    
+    // 设置显示的Layer
+    self.glLayer = [CAEAGLLayer layer];
+    self.glLayer.frame = glView.bounds;
+    [glView.layer addSublayer:self.glLayer];
+    self.glLayer.drawableProperties = @{kEAGLDrawablePropertyRetainedBacking : @NO,
+                                        kEAGLDrawablePropertyColorFormat : kEAGLColorFormatRGBA8};
+    
+    self.effect = [[GLKBaseEffect alloc] init];
+    
+    [self setUpBuffers];
+    [self drawFrame];
+}
+
+- (void)setUpBuffers {
+    
+    // 设置Frame
+    glGenFramebuffers(1, &amp;_framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+    
+    // 设置颜色
+    glGenRenderbuffers(1, &amp;_colorRenderbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                              GL_RENDERBUFFER, _colorRenderbuffer);
+    
+    [self.glContext renderbufferStorage:GL_RENDERBUFFER
+                           fromDrawable:self.glLayer];
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH,
+                                 &amp;_framebufferWidth);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT,
+                                 &amp;_framebufferHeight);
+    
+    // 检查是否成功
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        
+        NSLog(@&quot;%i&quot;, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    }
+}
+
+- (void)tearDownBuffers {
+    
+    if (_framebuffer) {
+        
+        glDeleteFramebuffers(1, &amp;_framebuffer);
+        _framebuffer = 0;
+    }
+    
+    if (_colorRenderbuffer) {
+        
+        glDeleteRenderbuffers(1, &amp;_colorRenderbuffer);
+        _colorRenderbuffer = 0;
+    }
+}
+
+- (void)drawFrame {
+    
+    // 绑定缓冲区
+    glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+    glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+    
+    [self.effect prepareToDraw];
+    
+    // 清空屏幕
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    
+    // 设置顶点
+    GLfloat vertices[] = {
+        -0.5f, -0.5f, -1.0f,
+        0.0f, 0.5f, -1.0f,
+        0.5f, -0.5f, -1.0f};
+    
+    // 设置颜色值
+    GLfloat colors[] = {
+        0.0f, 0.0f, 1.0f, 1.0f,
+        0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 1.0f};
+    
+    // 开始画三角形
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glEnableVertexAttribArray(GLKVertexAttribColor);
+    glVertexAttribPointer(GLKVertexAttribPosition,
+                          3, GL_FLOAT, GL_FALSE, 0, vertices);
+    glVertexAttribPointer(GLKVertexAttribColor,
+                          4, GL_FLOAT, GL_FALSE, 0, colors);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    
+    // 渲染
+    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderbuffer);
+    [self.glContext presentRenderbuffer:GL_RENDERBUFFER];
+}
+
+- (void)dealloc {
+    [self tearDownBuffers];
+    
+    [EAGLContext setCurrentContext:nil];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/23.png" alt="23"/></p>
+
+<blockquote>
+<p>如果我们要做一个真正的<strong>OpenGL</strong>应用, </p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_17">AVPlayerLayer</h3>
+
+<blockquote>
+<p>最后一个图层类型叫做<strong>AVPlayerLayer</strong>, 看名字就知道它并不属于<strong>Core Animation</strong>里的一个部分, 它是由<strong>AVFoundation</strong>所提供, 但它和<strong>Core Animation</strong>紧密的结合在一起, 并且是<strong>CALayer</strong>的子类, 可以用来显示自定义内容.<br/>
+<dr/><br/>
+实际上<strong>AVPlayerLayer</strong>是用来在<strong>iOS</strong>上播放视频的, 是属于<strong>MPMoivePlayer</strong>的底层实现, 提供了显示视频的底层支持.<br/>
+<dr/><br/>
+<strong>AVPlayerLayer</strong>使用起来比较简单, 我们可以直接来看看<strong>Demo</strong>:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)addAVPlayerLayer {
+    
+    NSURL *url = [[NSBundle mainBundle] URLForResource:@&quot;demo0&quot;
+                                         withExtension:@&quot;m4v&quot;];
+    
+    AVPlayer *player = [AVPlayer playerWithURL:url];
+    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+    
+    playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    
+    [self.view.layer addSublayer:playerLayer];
+    
+    [player play];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/24.gif" alt="24"/></p>
+
+<blockquote>
+<p>我们知道了<strong>AVPlayerLayer</strong>是<strong>CALayer</strong>的子类, 那么它应当也有父类的所有特性, 比如3D, 圆角, 有色边框, 蒙版, 阴影等等效果都有, 我们再原来的基础上再改改~</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)addAVPlayerLayerTwo {
+    
+    NSURL *url = [[NSBundle mainBundle] URLForResource:@&quot;demo0&quot;
+                                         withExtension:@&quot;m4v&quot;];
+    
+    AVPlayer *player = [AVPlayer playerWithURL:url];
+    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+    
+    playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    
+    [self.view.layer addSublayer:playerLayer];
+    
+    CATransform3D transform = CATransform3DIdentity;
+    transform.m34 = -1.0 / 500.0;
+    transform = CATransform3DRotate(transform, M_PI_4, 1, 1, 0);
+    
+    playerLayer.transform = transform;
+    playerLayer.masksToBounds = YES;
+    playerLayer.cornerRadius = 30.f;
+    playerLayer.borderColor = [UIColor blueColor].CGColor;
+    playerLayer.borderWidth = 10.f;
+    
+    [player play];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/6.SpecializedLayers/images/25.gif" alt="25"/></p>
+
+<hr/>
+
+<h3 id="toc_18">总结</h3>
+
+<blockquote>
+<p>好了, 这次我们讲到这里了, 在这章里, 我们认识<strong>CALayer</strong>的一些子类, 以及它们的一些特性, 方便我们在开发当中实现我们想要的效果时提供了多一些的参考, 但是呢, 这还远远不够, 我们只是初步的去了解这些<strong>CALayer</strong>子类的皮毛, 单单<strong>CATiledLayer</strong>和<strong>CAEMitterLayer</strong>两个子类我们都可以单独抽出来写一长串的东东, 这个还是后面再说吧, 重点是, 我们要记住, <strong>CALayer</strong>的用处非常之大, 虽然有一些<strong>CALayer</strong>的子类并没有为所有可能出现的场景进行优化, 这个就要靠我们自己的头脑风暴去思考如何才能更好的去优化了.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_19">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/CoreAnimation">https://github.com/CainRun/CoreAnimation</a></p>
+
+<hr/>
+
+<h3 id="toc_20">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	 
+
+	  
+
+	  
+	      <div class="ds-thread" data-thread-key="14790557329421.html" data-url="https://cainrun.github.io/14790557329421.html" data-title="玩转iOS开发：6.《Core Animation》CALayer的Specialized Layers"></div>
+	  
+
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="https://cainrun.github.io">Cain</a> &nbsp;&nbsp; 
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+  
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:'cainluo'};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+    
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+</body>
+</html>
