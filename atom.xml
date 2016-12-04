@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2016-12-04T00:02:29+08:00</updated>
+  <updated>2016-12-04T00:10:11+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,448 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：7.《Core Animation》Implicit Animations]]></title>
+    <link href="https://cainrun.github.io/14807833712288.html"/>
+    <updated>2016-12-04T00:42:51+08:00</updated>
+    <id>https://cainrun.github.io/14807833712288.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>在上一篇文章<a href="https://cainrun.github.io/14790557329421.html">《Core Animation》CALayer的Specialized Layers</a>中, 我们了解了<strong>CALayer</strong>的许多子类特性, 可以为我们在遇到一些特殊的开发需求中提供一定的帮助, 既然我们这次学的的<strong>Core Animation</strong>, 那怎么会和动画不挂钩呢? 这次让我们来初体验一下.</p>
+
+<p><dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Core Animation</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">简介</h3>
+
+<blockquote>
+<p><strong>Implicit Animations</strong>也称为隐式动画, 啥? 什么叫做隐式动画? 百度去吧~~哈哈哈(后面会讲解的), 这些问题就不在这里做解释了, 还是进入主题才比较重要.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">Transactions</h3>
+
+<blockquote>
+<p>其实在<strong>Core Animation</strong>中, 动画效果并不需要我们去手动打开, 因为系统默认就是<strong>Open</strong>状态, 相反过来, 如果我们不需要动画的话, 我们需要手动的去关闭.<br/>
+<dr/><br/>
+如果我们用一个<strong>CALayer</strong>的一个动画属性, 并且尝试去改变它, 这个效果并不会马上就显示出来, 因为它要从一个默认值平滑的过度到一个新的值, 而这些所有的内部操作我们都不需要去理会, 因为系统默认就是这么做的.<br/>
+<dr/><br/>
+我们可以先来看个<strong>Demo</strong>:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)transactionsColor {
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0,
+                                                            100,
+                                                            self.view.frame.size.width,
+                                                            self.view.frame.size.width)];
+    
+    view.backgroundColor = [UIColor grayColor];
+    
+    [self.view addSubview:view];
+    
+    UIButton *button = [[UIButton alloc] init];
+    
+    button.center = CGPointMake(self.view.frame.size.width / 2, 50);
+    button.bounds = CGRectMake(0, 0, 100, 50);
+    button.backgroundColor = [UIColor blueColor];
+    
+    [button setTitle:@&quot;改变颜色&quot;
+            forState:UIControlStateNormal];
+    [button addTarget:self
+               action:@selector(changeLayerColor)
+     forControlEvents:UIControlEventTouchUpInside];
+    
+    [view addSubview:button];
+    
+    self.colorLayer  = [CALayer layer];
+    self.colorLayer.position = CGPointMake(view.frame.size.width / 2, view.frame.size.height / 2);
+    self.colorLayer.bounds = CGRectMake(0, 0, 150, 150);
+    self.colorLayer.backgroundColor = [UIColor redColor].CGColor;
+    
+    [view.layer addSublayer:self.colorLayer];
+}
+
+- (void)changeLayerColor {
+    
+    CGFloat redColor = arc4random() / (CGFloat)INT_MAX;
+    CGFloat greenColor = arc4random() / (CGFloat)INT_MAX;
+    CGFloat blueColor = arc4random() / (CGFloat)INT_MAX;
+    
+    self.colorLayer.backgroundColor = [UIColor colorWithRed:redColor
+                                                      green:greenColor
+                                                       blue:blueColor
+                                                      alpha:1.0f].CGColor;
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/7.ImplicitAnimations/Images/1.gif" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/7.ImplicitAnimations/Images/2.png" alt="2"/></p>
+
+<blockquote>
+<p>看完这个<strong>Demo</strong>其实就已经知道神马叫做隐式动画了, 所谓的隐式动画就是我们没有给它指定任何的动画类型, 仅仅只是改变某个属性, 当然<strong>Core Animation</strong>也是支持显示动画, 不然我们就没那么多的兴趣来学习<strong>Core Animation</strong>了~<br/>
+<dr/><br/>
+那么当我们去改变一个属性的时候, <strong>Core Animation</strong>是如何去判断动画类型还有动画的持续时间呢? 这个问题其实也很简单, 动画的执行时间取决于<strong>Transactions</strong>的设置, 而动画类型是取决于<strong>CALayer</strong>的行为.<br/>
+<dr/><br/>
+其实<strong>Transactions</strong>实际上是<strong>Core Animation</strong>用来包含一堆属性动画集合的机制, 任何用指定<strong>Transactions</strong>去改变可以做动画效果的图层属性都不会马上发生变化, 而是需要<strong>Transactions</strong>在提交的一瞬间, 才会开始用一个动画效果过渡到新设置的值.<br/>
+<dr/><br/>
+而<strong>Transactions</strong>是需要通过<strong>CATransaction</strong>这个类来进行管理的, 奇怪的是, <strong>CATransaction</strong>这个类并不是管理一个简单的<strong>Transactions</strong>, 而是管理了一堆我们不能访问的<strong>Transactions</strong>, 由于<strong>CATransaction</strong>并没有属性和实例化方法, 也不能用<strong>+ (instancetype)alloc;</strong>和<strong>- (instancetype)init;</strong>方法来创建它, 只有它所提供的<strong>+ (void)begin;</strong>和<strong>+ (void)commit;</strong>来控制.<br/>
+<dr/><br/>
+虽然我们再上面的<strong>Demo</strong>里没有设置动画时间, 但<strong>Core Animation</strong>会在每一个<strong>run looop</strong>周期中自动开始一次新的<strong>Transactions</strong>, 即使我们不手动的去调用<strong>[CATransaction begin];</strong>, 但在每一次<strong>run loop</strong>的循环中, 被修改的属性都会集中起来, 然后统一做一次0.25秒的动画, 这个是系统默认的.<br/>
+<dr/><br/>
+说了那么多, 我们实际上来改改修改颜色的那个代码块, 让它有一个显示动画的效果:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)changeLayerColorAgain {
+    
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:2.0f];
+    
+    CGFloat redColor = arc4random() / (CGFloat)INT_MAX;
+    CGFloat greenColor = arc4random() / (CGFloat)INT_MAX;
+    CGFloat blueColor = arc4random() / (CGFloat)INT_MAX;
+    
+    self.colorLayer.backgroundColor = [UIColor colorWithRed:redColor
+                                                      green:greenColor
+                                                       blue:blueColor
+                                                      alpha:1.0f].CGColor;
+    
+    [CATransaction commit];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/7.ImplicitAnimations/Images/3.gif" alt="3"/></p>
+
+<blockquote>
+<p>看起来的效果让人觉得是真的有动画效果了, 如果大家在之前就已经用过<strong>UIView</strong>来做过动画的话, 那么大家应该对这个动画模式不会感觉到陌生, 因为<strong>UIView</strong>就有两个类似的方法, <strong>+ (void)beginAnimations:(nullable NSString *)animationID context:(nullable void *)context;</strong>和<strong>+ (void)commitAnimations;</strong>, 其实这两个这两个方法也是因为在内部设置了<strong>CATransaction</strong>的原因.<br/>
+<dr/><br/>
+在<strong>iOS 4</strong>的时候, 苹果就已经对<strong>UIView</strong>添加了一种基于<strong>Block</strong>的动画方法, <strong>+ (void)animateWithDuration:(NSTimeInterval)duration animations:(void (<sup>)(void))animations</sup> NS_AVAILABLE_IOS(4_0);</strong>, 用起来更加的方便, 但实际上是做同样的事情, 但使用这种方法就可以避免<strong>+ (void)begin;</strong>和<strong>+ (void)commit;</strong>匹配的问题造成一些蛋疼的事情.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_3">Completion Blocks</h3>
+
+<blockquote>
+<p>这里我们就使用一下基于<strong>UIView</strong>的<strong>Block</strong>动画方法, 我们可以在动画结束之后再对这个图层进行一些操作, 当然这里还是基于上面的<strong>Demo</strong>来做演示:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)changeLayerColorWithCompletion {
+    
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:2.0f];
+    
+    [CATransaction setCompletionBlock:^{
+        CGAffineTransform transform = self.colorLayer.affineTransform;
+        
+        transform = CGAffineTransformRotate(transform, M_PI_4);
+        
+        self.colorLayer.affineTransform = transform;
+    }];
+    
+    CGFloat redColor = arc4random() / (CGFloat)INT_MAX;
+    CGFloat greenColor = arc4random() / (CGFloat)INT_MAX;
+    CGFloat blueColor = arc4random() / (CGFloat)INT_MAX;
+    
+    self.colorLayer.backgroundColor = [UIColor colorWithRed:redColor
+                                                      green:greenColor
+                                                       blue:blueColor
+                                                      alpha:1.0f].CGColor;
+    
+    [CATransaction commit];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/7.ImplicitAnimations/Images/4.gif" alt="4"/></p>
+
+<hr/>
+
+<h3 id="toc_4">Layer Actions</h3>
+
+<blockquote>
+<p>开始的时候我们就用一个<strong>Demo</strong>来进行演示:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)addLayerView {
+    
+    self.layerView = [[UIView alloc] init];
+    self.layerView.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2);
+    self.layerView.bounds = CGRectMake(0, 0, 150, 150);
+    self.layerView.backgroundColor = [UIColor redColor];
+    
+    [self.view addSubview:self.layerView];
+    
+    UIButton *button = [[UIButton alloc] init];
+    
+    button.center = CGPointMake(self.view.frame.size.width / 2, 200);
+    button.bounds = CGRectMake(0, 0, 100, 50);
+    button.backgroundColor = [UIColor blueColor];
+    
+    [button setTitle:@&quot;改变颜色&quot;
+            forState:UIControlStateNormal];
+    
+    [button addTarget:self
+               action:@selector(changeLayerViewColor)
+     forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:button];
+}
+
+- (void)changeLayerViewColor {
+    
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:2.0f];
+    
+    CGFloat redColor = arc4random() / (CGFloat)INT_MAX;
+    CGFloat greenColor = arc4random() / (CGFloat)INT_MAX;
+    CGFloat blueColor = arc4random() / (CGFloat)INT_MAX;
+    
+    self.layerView.layer.backgroundColor = [UIColor colorWithRed:redColor
+                                                           green:greenColor
+                                                            blue:blueColor
+                                                           alpha:1.0f].CGColor;
+    
+    [CATransaction commit];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/7.ImplicitAnimations/Images/5.gif" alt="5"/></p>
+
+<blockquote>
+<p>看完这个<strong>Demo</strong>, 有很多人肯定会有疑问, 为啥没有了之前的那个平滑过渡效果呢? 好像是被干掉了, 这是啥回事?<br/>
+<dr/><br/>
+其实我们可以仔细想一想, 如果<strong>UIView</strong>里的属性都有动画特性的话, 那我们去修改这些属性时, 肯定会注意到的, 可为啥<strong>UIKit</strong>要把这个隐式动画给禁止呢?<br/>
+<dr/><br/>
+我们都知道<strong>Core Animation</strong>通常会对<strong>CALayer</strong>所有的可做动画的属性都赋予了动画特性, 但在<strong>UIView</strong>中就不一样了, 它会默认把所关联在一起的<strong>CALayer</strong>的这个特性给关闭掉, 这里就要了解一下隐式动画是如何实现的.<br/>
+<dr/><br/>
+当我们改变<strong>CALayer</strong>属性时, <strong>CALayer</strong>自动应用的动画, 我们可以成为<strong>CALayer</strong>的行为, 每当<strong>CALayer</strong>的属性被修改的时候, 它会去调用<strong>- (nullable id<CAAction>)actionForKey:(NSString *)event;</strong>这个方法去传递属性的名称, 然后就会去执行如下几步:</p>
+
+<ul>
+<li>首先<strong>CALayer</strong>会去检测它是否有<strong>Delegate</strong>, 并且看看这个<strong>Delegate</strong>有没有实现<strong>CALayerDelegate</strong>协议里的<strong>- (nullable id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event;</strong>方法, 如果有, 就直接调用并返回结果.</li>
+<li>如果<strong>CALayer</strong>没有<strong>Delegate</strong>的话, 或者<strong>Delegate</strong>没有实现<strong>- (nullable id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event;</strong>方法, 那么图层就会接着去检查包含属性名称对应的<strong>CALayer</strong>行为所映射的<strong>Actions</strong>字典.</li>
+<li>如果<strong>Actions</strong>字典没有包含对应的属性, 那么图层接着会在它的<strong>style</strong>字典里接着搜索属性名.</li>
+<li><p>最后, 在<strong>style</strong>里也找不到对应的行为, 那么图层就会直接调用<strong>+ (nullable id<CAAction>)defaultActionForKey:(NSString *)event;</strong>实现系统所提供的每个属性的默认行为.<br/>
+<dr/><br/>
+如果一轮完整的搜索结束之后, <strong>- (nullable id<CAAction>)actionForKey:(NSString *)event;</strong>返回为空的话, 那么肯定不会有动画效果, 如果返回<strong>CAAction</strong>协议对应的对象, <strong>CALayer</strong>会拿这个结果去对比先前和当前的值, 并且做一个动画效果.<br/>
+<dr/><br/>
+知道这个原理之后, 我们就知道<strong>UIKit</strong>是肿么把隐式动画给禁止掉了:</p></li>
+<li><p>每一个<strong>UIView</strong>对它所关联的图层都是充当一个<strong>Delegate</strong>对象, 并且提供了<strong>- (nullable id<CAAction>)actionForKey:(NSString *)event;</strong>的实现方法.</p></li>
+<li><p>当不在一个动画块的实现中, 那么<strong>UIView</strong>就会对所有<strong>CALayer</strong>的行为返回<strong>nil</strong>, 如果在动画的<strong>Block</strong>范围之内, <strong>UIView</strong>就会返回一个非空的值.<br/>
+<dr/><br/>
+这里我们简单的<strong>Log</strong>一下结果:</p></li>
+</ul>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)checkViewAction {
+    
+    UIView *layerView = [[UIView alloc] init];
+    
+    layerView.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2);
+    layerView.bounds = CGRectMake(0, 0, 150, 150);
+    layerView.backgroundColor = [UIColor redColor];
+    
+    [self.view addSubview:layerView];
+    
+    NSLog(@&quot;Before: %@&quot;, [layerView actionForLayer:layerView.layer
+                                            forKey:@&quot;backgroundColor&quot;]);
+    
+    [UIView beginAnimations:nil
+                    context:nil];
+    
+    NSLog(@&quot;After: %@&quot;, [layerView actionForLayer:layerView.layer
+                                           forKey:@&quot;backgroundColor&quot;]);
+    
+    [UIView commitAnimations];
+}
+</code></pre>
+
+<pre><code class="language-vim">2016-12-04 12:45:28.178 7.ImplicitAnimations[57079:2126402] Before: &lt;null&gt;
+2016-12-04 12:45:28.179 7.ImplicitAnimations[57079:2126402] After: &lt;CABasicAnimation: 0x6000000327c0&gt;
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/7.ImplicitAnimations/Images/6.png" alt="6"/></p>
+
+<blockquote>
+<p>这样子我们就可以知道, 当属性在<strong>Block</strong>之外发生改变, <strong>UIView</strong>会直接通过返回<strong>nil</strong>来禁用隐式动画, 但如果在动画块的范围之内, 就会根据动画的具体类型来返回相应的属性, 这个后续会讲到.<br/>
+<dr/><br/>
+其实除了通过返回<strong>nil</strong>并不是唯一禁止隐式动画的方法, 我们也可以通过<strong>CATransacition</strong>的<strong>+ (void)setDisableActions:(BOOL)flag;</strong>方法, 通过<strong>flag</strong>来对所有属性打开或者关闭隐式动画, 哪怕你是在<strong>[CATransaction begin];</strong>之后来添加, 也是一样可以关闭的.<br/>
+<dr/><br/>
+这里还有一个<strong>Demo</strong>, 使用<strong>CATransaction</strong>来实现的一个叫做<strong>推进过渡</strong>动画, 其实说白也就是一个<strong>Push</strong>动画:</p>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)pushAnimation {
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0,
+                                                            100,
+                                                            self.view.frame.size.width,
+                                                            self.view.frame.size.width)];
+    
+    view.backgroundColor = [UIColor grayColor];
+    
+    [self.view addSubview:view];
+    
+    UIButton *button = [[UIButton alloc] init];
+    
+    button.center = CGPointMake(self.view.frame.size.width / 2, 50);
+    button.bounds = CGRectMake(0, 0, 100, 50);
+    button.backgroundColor = [UIColor blueColor];
+    
+    [button setTitle:@&quot;改变颜色&quot;
+            forState:UIControlStateNormal];
+    
+    [button addTarget:self
+               action:@selector(pushChangeColor)
+     forControlEvents:UIControlEventTouchUpInside];
+    
+    [view addSubview:button];
+    
+    self.colorLayer  = [CALayer layer];
+    self.colorLayer.position = CGPointMake(view.frame.size.width / 2, view.frame.size.height / 2);
+    self.colorLayer.bounds = CGRectMake(0, 0, 150, 150);
+    self.colorLayer.backgroundColor = [UIColor redColor].CGColor;
+    
+    CATransition *transition = [CATransition animation];
+    
+    transition.type = kCATransitionPush;
+    transition.subtype = kCATransitionFromLeft;
+    
+    self.colorLayer.actions = @{@&quot;backgroundColor&quot;: transition};
+    
+    [view.layer addSublayer:self.colorLayer];
+}
+
+- (void)pushChangeColor {
+    
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:2.0f];
+
+    CGFloat redColor = arc4random() / (CGFloat)INT_MAX;
+    CGFloat greenColor = arc4random() / (CGFloat)INT_MAX;
+    CGFloat blueColor = arc4random() / (CGFloat)INT_MAX;
+    
+    self.colorLayer.backgroundColor = [UIColor colorWithRed:redColor
+                                                      green:greenColor
+                                                       blue:blueColor
+                                                      alpha:1.0f].CGColor;
+    [CATransaction commit];
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/7.ImplicitAnimations/Images/7.gif" alt="7"/></p>
+
+<hr/>
+
+<h3 id="toc_5">Presentation Versus Model</h3>
+
+<blockquote>
+<p>其实仔细想想, <strong>CALayer</strong>的属性行为并不太正常, 为何这么说呢, 因为当我们去改变一个图层的属性时, 我们会发现, 这个值的确是立即发生了改变, 但在屏幕上并没有马上生效, 为何呢? 因为我们在设置属性的时候, 并没有直接去调整图层的显示外观, 仅仅只是定义了图层动画结束之后即将要发生改变的外观.<br/>
+<dr/><br/>
+<strong>Core Animation</strong>在这里充当了一个控制器的角色, 并且根据<strong>Layer Actions</strong>和<strong>Transactions</strong>来更新视图在屏幕上显示的状态.<br/>
+<dr/><br/>
+在于用户交互的界面中, <strong>CALayer</strong>的行为更像是保存着视图如何去显示和动画的执行数据模型.<br/>
+<dr/><br/>
+在<strong>iOS</strong>中, 屏幕会以每秒钟重绘60次, 如果动画市场比60分之一秒还要长, 那么在这段时间里, <strong>Core Animation</strong>就会对屏幕上的图层进行重新的组合, 这就意味着<strong>CALayer</strong>除了我们给予的值之外, 还必须要知道当前显示在屏幕上的属性值的记录.<br/>
+<dr/><br/>
+而每个图层属性的显示值都会被存储在一个叫做<strong>呈现图层</strong>的独立图层当中, 我们可以通过<strong>- (nullable instancetype)presentationLayer;</strong>方法来访问, 而这个所谓的<strong>呈现图层</strong>, 实际上就是模型图层的复制, 但它的好处是它的属性值代表了在任何指定时间当前所显示的外观效果, 通俗点来讲, 就是我们可以通过获取<strong>呈现图层</strong>的值来获取当前屏幕上真正显示出来的值.<br/>
+<dr/><br/>
+这里需要注意的一点就是, 如果在<strong>呈现图层</strong>仅仅当<strong>CALayer</strong>首次被提交的时候创建, 那么去调用<strong>- (nullable instancetype)presentationLayer;</strong>方法就会返回<strong>nil</strong>.<br/>
+<dr/><br/>
+这里我们或许还会注意到另一个方法<strong>- (instancetype)modelLayer;</strong>, 如果我们在呈现图层上调用这个方法, 那么就会返回一个它正在呈现所以来的<strong>CALayer</strong>, 而通常在一个图层上调用这个方法, 就会返回<strong>self</strong>.<br/>
+<dr/><br/>
+在大多数开发的场景下, 我们都不需要直接访问呈现图层, 我们可以通过和模型图层的交互, 来让<strong>Core Animation</strong>更新并且显示, 但在以下两种场景下<strong>呈现图层</strong>就非常有用了, 一个是在同步动画里, 一个是在处理用户交互的时候:</p>
+
+<ul>
+<li>如果我们在实现一个基于定时器的动画, 而不仅仅是基于<strong>Transactions</strong>的动画, 这个时候我们就要准确的知道在某一时刻图层显示在什么位置, 这就会对正确的布局起非常大的作用了.</li>
+<li>如果我们想让做动画的图层对于用户有交互, 我们可以使用<strong>- (nullable CALayer *)hitTest:(CGPoint)p;</strong>方法来判断指定的图层是否被点击了, 这个时候就会显示更加的友好, 因为<strong>呈现图层</strong>代表了用户当前看到的图层位置, 而不是当动画效果结束之后的位置.
+<dr/>
+说了那么多, 还是直接上<strong>Demo</strong>比较直接:</li>
+</ul>
+</blockquote>
+
+<pre><code class="language-objectivec">- (void)presentationVersusModel {
+    
+    self.colorLayer  = [CALayer layer];
+    self.colorLayer.position = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2);
+    self.colorLayer.bounds = CGRectMake(0, 0, 150, 150);
+    self.colorLayer.backgroundColor = [UIColor redColor].CGColor;
+    
+    [self.view.layer addSublayer:self.colorLayer];
+}
+
+- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event {
+    
+    CGPoint point = [[touches anyObject] locationInView:self.view];
+    
+    if ([self.colorLayer.presentationLayer hitTest:point]) {
+        
+        CGFloat redColor = arc4random() / (CGFloat)INT_MAX;
+        CGFloat greenColor = arc4random() / (CGFloat)INT_MAX;
+        CGFloat blueColor = arc4random() / (CGFloat)INT_MAX;
+        
+        self.colorLayer.backgroundColor = [UIColor colorWithRed:redColor
+                                                          green:greenColor
+                                                           blue:blueColor
+                                                          alpha:1.0f].CGColor;
+    } else {
+        [CATransaction begin];
+        [CATransaction setAnimationDuration:4.0f];
+        
+        self.colorLayer.position = point;
+        
+        [CATransaction commit];
+    }
+}
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/7.ImplicitAnimations/Images/8.gif" alt="8"/></p>
+
+<hr/>
+
+<h3 id="toc_6">总结</h3>
+
+<blockquote>
+<p>总结一下:</p>
+
+<ul>
+<li><strong>Core Animation</strong>默认是打开动画效果的, 并且默认的动画效果是平滑过渡滴.</li>
+<li>我们知道了隐式动画的实现方式.</li>
+<li><strong>UIView</strong>关联的图层默认都禁用了隐式动画, 对这种图层做动画的唯一办法就是使用<strong>UIView</strong>的动画函数, 或者是继承与<strong>UIView</strong>并且重写<strong>- (nullable id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event;</strong>方法, 最直接的方法就是直接创建一个显示动画.</li>
+<li>对于一个单独存在的图层来讲, 我们可以通过实现图层的<strong>- (nullable id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event;</strong>方法, 或者是提供一个<strong>Actions</strong>的字典来控制隐式动画.</li>
+<li>除此之外, 我们来了解了<strong>呈现图层</strong>和<strong>模型图层</strong>, 知道了这两个家伙的一些皮毛.
+<dr/>
+好了, 这次就到这里了, 谢谢大家~</li>
+</ul>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_7">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/CoreAnimation">https://github.com/CainRun/CoreAnimation</a></p>
+
+<hr/>
+
+<h3 id="toc_8">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：6.《Core Animation》CALayer的Specialized Layers]]></title>
@@ -5690,173 +6132,6 @@ command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCent
 <blockquote>
 <p>由于真机调试是需要修改<strong><code>Xcode</code></strong>工程配置, 不太适合团队协作, 所以这里我只提供了模拟器UI调试的方法, 如果有朋友需要真机调试, 这里有一个<a href="http://support.revealapp.com/kb/getting-started/integrating-reveal-add-reveal-to-your-xcode-project">官方教程</a>, 有兴趣的童鞋可以自行去查看</p>
 </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：《iOS设计模式 — 工厂模式》]]></title>
-    <link href="https://cainrun.github.io/14718583940487.html"/>
-    <updated>2016-08-22T17:33:14+08:00</updated>
-    <id>https://cainrun.github.io/14718583940487.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>刚忙完就给我来一场大病, 多么痛的领悟, 好不容易好点了, 可以整理整理知识点了~</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>工厂模式</code><strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/FactoryPatternUML.jpg" alt="UML"/></p>
-
-<blockquote>
-<p>所谓<strong><code>工厂模式</code></strong>其实显示中的工厂没啥区别, 客户下单, 工厂负责做出产品出来交货, 这样子就没了, 至于工厂里面做了什么东西, 怎么实现, 我们完全不用关注, 只要知道工厂能按时交货就可以了.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">简单工厂与抽象工厂</h3>
-
-<blockquote>
-<p>在工厂模式当中, 又有两种不同的工厂模式, 分别是<strong><code>简单工厂</code></strong>与<strong><code>抽象工厂</code></strong>, 他们之前的区别也很简单, 无非就是一个是<strong><code>实例</code></strong>一个<strong><code>抽象</code></strong>, 这么说好像不太明确, 下面我们来建个工程, 看看<strong><code>简单工厂</code></strong>和<strong><code>抽象工厂</code></strong>两者之间到底有啥不一样~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_3">简单工厂</h3>
-
-<blockquote>
-<p>首先我们把之前的那个<strong><code>WorkSpace</code></strong>打开, 新建一个<strong><code>FactoryPattern</code></strong>工程, 然后我们再来新建一个工厂类, 这次我们就拿一个汽车工厂作为例子~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/1.png" alt="1"/></p>
-
-<blockquote>
-<p>接下来我们创建一个汽车的基类<strong><code>BaseCar</code></strong>, 还有一个协议, 这个协议是用来限制<strong><code>BaseCar</code></strong>或者<strong><code>BaseCar</code></strong>的子类实现一些必须实现的方法, 我这里只是做演示, 所以<strong><code>BaseCar</code></strong>类里面空实现就好了, 其他的交给子类去实现.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/2.png" alt="2"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/3.png" alt="3"/></p>
-
-<blockquote>
-<p>汽车的基类我们已经有了, 现在我们来建立一个汽车工厂类, 就拿全球最大的汽车厂商通用来做例子, 在这里我们会拿通用汽车的几个旗下品牌来做例子, 且都继承与<strong><code>BaseCar</code></strong>, 然后给他们对应做一些差异化的操作就OK了~~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/4.png" alt="4"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/5.png" alt="5"/></p>
-
-<blockquote>
-<p>现在我们来实现<strong><code>Protocol</code></strong>里的方法再加一些差异化, 酱紫我们就知道到时候初始化出来的汽车是哪辆了~~<br/>
-我们先拿<strong><code>Buick</code></strong>来做例子, 添加一个差异化方法, 然后再看看我们利用工厂模式初始化出来的对象是不是<strong><code>Buick</code></strong>.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/6.png" alt="6"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/7.png" alt="7"/></p>
-
-<blockquote>
-<p>其他的几个品牌车子也是同理进行就可以了, 这里就不做演示了, 代码当中我会填上去, 到时候大家去下载源码下来看看就哦了~~</p>
-
-<p><strong><code>简单工厂</code></strong>到这里就基本上搞定了, 下面就让我们来看看什么是<strong><code>抽象工厂</code></strong>.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_4">抽象工厂</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/AbstractFactoryUML.jpg" alt="AbstractFactoryUML"/></p>
-
-<blockquote>
-<p>其实所谓的<strong><code>抽象工厂</code></strong>与<strong><code>简单工厂</code></strong>最大的却别, 就是把工厂类做成一个抽象的对象, 比<strong><code>简单工厂</code></strong>多了一层抽象层, 然后使用一个管理者去管理这些对应的厂商, 用户可以根据自己的需求, 向不同的厂商拿货, 这就像是超市似得, 一个类别的商品有好几个或者是十几个不同的厂商在供货, 可以让消费者, 根据自己的消费水平或者需求来选择不同厂商的产品, 下面让我们用代码说话~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_5">新建抽象工厂目录</h3>
-
-<blockquote>
-<p>在开始之前, 我们肯定要先规划好文件夹的目录, 以免与之前的<strong><code>简单工厂</code></strong>类搞混, 下面就是我们的文件夹结构.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/8.png" alt="8"/></p>
-
-<blockquote>
-<p>接下来我们就要去新建我们的<strong><code>BaseFactory</code></strong>以及<strong><code>BaseCar</code></strong>, 但是这里由于之前已经有<strong><code>BaseCar</code></strong>这个类了, 为了区别, 我们在新建的<strong><code>BaseCar</code></strong>前面加个前缀<strong><code>Ab</code></strong>, 酱紫就好了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/9.png" alt="9"/></p>
-
-<blockquote>
-<p>声明且实现<strong><code>AbBaseFactory</code></strong>的一个方法.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/10.png" alt="10"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/11.png" alt="11"/></p>
-
-<blockquote>
-<p>新建完成之后, 我们就需要继续, 这次我们拿<strong><code>长安</code></strong>和<strong><code>广汽</code></strong>两个厂商做例子, 车型的话, 我就随便挑两个, 一个是<strong><code>凯美瑞</code></strong>, 一个是<strong><code>昂克赛拉</code></strong>(我是随便取的两辆车啊, 百度一搜就出来这两个货了, 要怪就怪百度去吧).</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/12.png" alt="12"/></p>
-
-<hr/>
-
-<h3 id="toc_6">完善对应的工厂</h3>
-
-<blockquote>
-<p>新建完这些类之后, 我们需要分别给对应的厂商添加对应的车型, <strong><code>长安-马自达</code></strong>, <strong><code>广汽-凯美瑞</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/13.png" alt="13"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/14.png" alt="14"/></p>
-
-<hr/>
-
-<h3 id="toc_7">工厂管理者</h3>
-
-<blockquote>
-<p>在完成了之前的工作之后, 现在我们来看看<strong><code>抽象工厂</code></strong>的核心, 工厂管理者(FactoryManager).</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/15.png" alt="15"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/16.png" alt="16"/></p>
-
-<blockquote>
-<p>酱紫, 我们就完成了<strong><code>抽象工厂</code></strong>的所有步骤了, 下面让我们来使用一下<strong><code>抽象工厂</code></strong>.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_8">使用抽象工厂</h3>
-
-<blockquote>
-<p>完成了所有步骤之后, 我们就来使用一下<strong><code>抽象工厂</code></strong>, 看看到底是不是我们所要的东西.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/FactoryPattern/FactoryPattern%E8%AF%B4%E6%98%8E/17.png" alt="17"/></p>
-
-<blockquote>
-<p>嘿嘿, 到这里, 我们就完成了<strong><code>工厂模式</code></strong>的<strong><code>简单工厂</code></strong>和<strong><code>抽象工厂</code></strong>了, 非常的简单, 如果你们需要对应的文档和代码, 请到我的<strong><code>GitHub</code></strong>里, 地址就在下面</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_9">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
 
 ]]></content>
   </entry>
