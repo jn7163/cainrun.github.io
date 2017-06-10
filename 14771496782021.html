@@ -148,19 +148,19 @@
 <h3 id="toc_2">CALayer的Contents属性</h3>
 
 <blockquote>
-<p>在<strong>CALayer</strong>中, 有这么一个<strong>contents</strong>属性, 那么<strong>contents</strong>这个属性是用来做什么的呢? 我们先来看一段官方解释.</p>
-
-<p><strong><font color=blue>An object that provides the contents of the layer. Animatable.</font></strong></p>
-
-<p>从字面上意思来看, 这是一个提供图层内容的对象, 并且是<strong>id</strong>类型, 也就意味着, 我们可以给这个<strong>contents</strong>属性赋任意的值, 毕竟是<strong>id</strong>类型嘛, 但在实际操作中, 是行不通的, 为什么? </p>
-
-<p>这里就要牵扯到<strong>Mac OS</strong>了, 因为在<strong>Mac OS</strong>当中, 给<strong>CALayer</strong>中的<strong>contents</strong>属性赋值, 无论是<strong>CGImage</strong>还是<strong>NSImage</strong>, 都能得到对应的效果, 而在<strong>iOS</strong>当中, 只能赋值<strong>CGImage</strong>, 或许到了这里, 你会觉得挺简单的, 但呵呵了, 这里还要牵扯到指针的问题(个人对指针有些晕).</p>
-
-<p>实际上, 我们给<strong>contents</strong>属性赋<strong>CGImage</strong>的时候, 真正赋值的是<strong>CGImageRef</strong>, 它是指向<strong>CGImage</strong>的指针, 用过<strong>UIImage</strong>的朋友应该会发现,<strong>UIImage</strong>当中有一个<strong>CGImage</strong>的属性, 这个属性的返回值就是<strong>CGImageRef</strong>.</p>
-
-<p>某些童鞋会说, 既然是<strong>CGImageRef</strong>类型的话, 那直接赋值给<strong>contents</strong>不就好了么, 其实并不是滴, 直接这么赋值会报编译错误滴, 为什么?? </p>
-
-<p>因为<strong>CGImageRef</strong>并不是一个真正的<strong>Cocoa</strong>对象, 它是属于<strong>Core Foundation</strong>里的东西(什么是<strong>Core Foundation</strong>? 嘿嘿, 自行百度去吧~~), 那么我们就没办法给<strong>contents</strong>赋值吗? 肯定不是啦, 我们可以通过一些关键字进行赋值, 就能够得到对应的效果了, 代码如下:</p>
+<p>在<strong>CALayer</strong>中, 有这么一个<strong>contents</strong>属性, 那么<strong>contents</strong>这个属性是用来做什么的呢? 我们先来看一段官方解释.<br/>
+<dr/><br/>
+<strong><font color=blue>An object that provides the contents of the layer. Animatable.</font></strong><br/>
+<dr/><br/>
+从字面上意思来看, 这是一个提供图层内容的对象, 并且是<strong>id</strong>类型, 也就意味着, 我们可以给这个<strong>contents</strong>属性赋任意的值, 毕竟是<strong>id</strong>类型嘛, 但在实际操作中, 是行不通的, 为什么? <br/>
+<dr/><br/>
+这里就要牵扯到<strong>Mac OS</strong>了, 因为在<strong>Mac OS</strong>当中, 给<strong>CALayer</strong>中的<strong>contents</strong>属性赋值, 无论是<strong>CGImage</strong>还是<strong>NSImage</strong>, 都能得到对应的效果, 而在<strong>iOS</strong>当中, 只能赋值<strong>CGImage</strong>, 或许到了这里, 你会觉得挺简单的, 但呵呵了, 这里还要牵扯到指针的问题(个人对指针有些晕).<br/>
+<dr/><br/>
+实际上, 我们给<strong>contents</strong>属性赋<strong>CGImage</strong>的时候, 真正赋值的是<strong>CGImageRef</strong>, 它是指向<strong>CGImage</strong>的指针, 用过<strong>UIImage</strong>的朋友应该会发现, <strong>UIImage</strong>当中有一个<strong>CGImage</strong>的属性, 这个属性的返回值就是<strong>CGImageRef</strong>.<br/>
+<dr/><br/>
+某些童鞋会说, 既然是<strong>CGImageRef</strong>类型的话, 那直接赋值给<strong>contents</strong>不就好了么, 其实并不是滴, 直接这么赋值会报编译错误滴, 为什么?? <br/>
+<dr/><br/>
+因为<strong>CGImageRef</strong>并不是一个真正的<strong>Cocoa</strong>对象, 它是属于<strong>Core Foundation</strong>里的东西(什么是<strong>Core Foundation</strong>? 嘿嘿, 自行百度去吧~~), 那么我们就没办法给<strong>contents</strong>赋值吗? 肯定不是啦, 我们可以通过一些关键字进行赋值, 就能够得到对应的效果了, 代码如下:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewDidLoad {
@@ -175,7 +175,6 @@
     
     [self.view addSubview:layerView];
     
-    
     UIImage *image = [UIImage imageNamed:@&quot;bear&quot;];
     
     layerView.layer.contents = (__bridge id _Nullable)(image.CGImage);
@@ -183,9 +182,9 @@
 </code></pre>
 
 <blockquote>
-<p>这里提一点哈, 这个关键字在<strong>非ARC内存管理机制</strong>中是不需要加滴, 但是呢, 特么的, 你为啥不用<strong>ARC</strong>? 估计连你自己都会这么问你自己了.</p>
-
-<p>效果图: </p>
+<p>这里提一点哈, 这个关键字在<strong>非ARC内存管理机制</strong>中是不需要加滴, 但是呢, 特么的, 你为啥不用<strong>ARC</strong>? 估计连你自己都会这么问你自己了.<br/>
+<dr/><br/>
+效果图: </p>
 </blockquote>
 
 <p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/2.CALayer/images/1.png" alt="1"/></p>
@@ -207,11 +206,11 @@
 <h3 id="toc_3">CALayer的ContentGravity属性</h3>
 
 <blockquote>
-<p>不知道你们有没有发现, 我们所展示的图片有一些变形, 如果是用<strong>UIImageView</strong>的话, 我们可以直接设置<strong>contentModel</strong>这个属性, 使得图片正常显示, 但如果是在<strong>CALayer</strong>呢? </p>
-
-<p>当然<strong>CALayer</strong>也有一个类似<strong>contentModel</strong>的属性, 它叫做<strong>contentGravity</strong>, 虽然名字有些差别, 但是使用效果都是差不多的~~</p>
-
-<p>进入头文件之后我们会看到<strong>contentGravity</strong>可以赋值的选项有:</p>
+<p>不知道你们有没有发现, 我们所展示的图片有一些变形, 如果是用<strong>UIImageView</strong>的话, 我们可以直接设置<strong>contentModel</strong>这个属性, 使得图片正常显示, 但如果是在<strong>CALayer</strong>呢? <br/>
+<dr/><br/>
+当然<strong>CALayer</strong>也有一个类似<strong>contentModel</strong>的属性, 它叫做<strong>contentGravity</strong>, 虽然名字有些差别, 但是使用效果都是差不多的~~<br/>
+<dr/><br/>
+进入头文件之后我们会看到<strong>contentGravity</strong>可以赋值的选项有:</p>
 
 <ul>
 <li>kCAGravityCenter</li>
@@ -225,10 +224,10 @@
 <li>kCAGravityBottomRight</li>
 <li>kCAGravityResize</li>
 <li>kCAGravityResizeAspect</li>
-<li>kCAGravityResizeAspectFill</li>
+<li>kCAGravityResizeAspectFill
+<dr/>
+现在我们就来改改工程里的代码:</li>
 </ul>
-
-<p>现在我们就来改改工程里的代码:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">    layerView.layer.contentsGravity = kCAGravityResizeAspect;
@@ -249,17 +248,17 @@
 <h3 id="toc_4">CALayer的ContentsScale属性</h3>
 
 <blockquote>
-<p>其实我在想, 我是不是不应该把<strong>CALayer</strong>里的所有属性都拿出来讲一讲? 只是简单讲一些重要的好了, 接下来的就是<strong>contentsScale</strong>.</p>
-
-<p><strong>contentsScale</strong>这个属性主要是定义图层的像素和视图比例大小, 默认情况是<strong>1.0</strong>, 而且是<strong>CGFloat</strong>类型.</p>
-
-<p>但如果你的<strong>CALayer</strong>已经设置了<strong>contentsGravity</strong>, 那么再设置<strong>contentsScale</strong>, 效果就是没多大影响, 或者直接说压根就没影响吧, 如果你只是想着单纯的放大缩小<strong>CALayer</strong>, 可以直接使用<strong>transform</strong>和<strong>affineTransForm</strong>实现你想要的效果, 后续会详细讲解<strong>transforms</strong>.</p>
-
-<p>当然放大缩小肯定也不是<strong>contentsScale</strong>属性的主要作用, 这里就需要解释一下<strong>contentsScale</strong>: </p>
-
-<p><strong>contentsScale</strong>主要是支持Retina机制的一部分, 它是用来判断绘制图层时应该需要创建多大的空间, 和需要显示图片的拉伸度,<strong>UIView</strong>也有一个类似的属性, 叫做<strong>contentScaleFactor</strong>, 只是我们非常少的去使用罢了.</p>
-
-<p>这个时候我们来改改工程里的代码, 让<strong>contentsScale</strong>呈现效果: </p>
+<p>其实我在想, 我是不是不应该把<strong>CALayer</strong>里的所有属性都拿出来讲一讲? 只是简单讲一些重要的好了, 接下来的就是<strong>contentsScale</strong>.<br/>
+<dr/><br/>
+<strong>contentsScale</strong>这个属性主要是定义图层的像素和视图比例大小, 默认情况是<strong>1.0</strong>, 而且是<strong>CGFloat</strong>类型.<br/>
+<dr/><br/>
+但如果你的<strong>CALayer</strong>已经设置了<strong>contentsGravity</strong>, 那么再设置<strong>contentsScale</strong>, 效果就是没多大影响, 或者直接说压根就没影响吧, 如果你只是想着单纯的放大缩小<strong>CALayer</strong>, 可以直接使用<strong>transform</strong>和<strong>affineTransForm</strong>实现你想要的效果, 后续会详细讲解<strong>transforms</strong>.<br/>
+<dr/><br/>
+当然放大缩小肯定也不是<strong>contentsScale</strong>属性的主要作用, 这里就需要解释一下<strong>contentsScale</strong>: <br/>
+<dr/><br/>
+<strong>contentsScale</strong>主要是支持<strong>Retina</strong>机制的一部分, 它是用来判断绘制图层时应该需要创建多大的空间, 和需要显示图片的拉伸度,<strong>UIView</strong>也有一个类似的属性, 叫做<strong>contentScaleFactor</strong>, 只是我们非常少的去使用罢了.<br/>
+<dr/><br/>
+这个时候我们来改改工程里的代码, 让<strong>contentsScale</strong>呈现效果: </p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewDidLoad {
@@ -295,15 +294,15 @@
 <h3 id="toc_5">CALayer的MaskToBounds属性</h3>
 
 <blockquote>
-<p>看完了<strong>contentsScale</strong>属性, 现在我们继续来看<strong>maskToBounds</strong>属性.</p>
-
-<p>我们先来看一段官方文字介绍: </p>
-
-<p><strong><font color=blue>A Boolean indicating whether sublayers are clipped to the layer’s bounds. Animatable.</font></strong></p>
-
-<p>看完之后, 我们知道这个属性是一个<strong>BOOL</strong>类型, 问你如果子图层超出了视图层, 是否剪切掉, 如果你设置为<strong>YES</strong>, 那就剪切掉了, 默认为<strong>NO</strong>.</p>
-
-<p>就拿我们刚刚的工程作为一个事例来讲, 那张图片肯定是超过了视图层的, 如果我们把<strong>maskToBounds</strong>属性设置为<strong>YES</strong>, 效果就不一样了:</p>
+<p>看完了<strong>contentsScale</strong>属性, 现在我们继续来看<strong>maskToBounds</strong>属性.<br/>
+<dr/><br/>
+我们先来看一段官方文字介绍: <br/>
+<dr/><br/>
+<strong><font color=blue>A Boolean indicating whether sublayers are clipped to the layer’s bounds. Animatable.</font></strong><br/>
+<dr/><br/>
+看完之后, 我们知道这个属性是一个<strong>BOOL</strong>类型, 问你如果子图层超出了视图层, 是否剪切掉, 如果你设置为<strong>YES</strong>, 那就剪切掉了, 默认为<strong>NO</strong>.<br/>
+<dr/><br/>
+就拿我们刚刚的工程作为一个事例来讲, 那张图片肯定是超过了视图层的, 如果我们把<strong>maskToBounds</strong>属性设置为<strong>YES</strong>, 效果就不一样了:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewDidLoad {
@@ -340,17 +339,14 @@
 <h3 id="toc_6">CALayer的ContentsRect属性</h3>
 
 <blockquote>
-<p><strong>CALayer</strong>有一个属性叫做<strong>contentsRect</strong>, 它是可以根据输入的坐标轴来显示区域块的图层, 而<strong>frame</strong>,<strong>bounds</strong>则是以点来计算的, 在这里它们有一些区别.</p>
-
-<p>还有一个注意点, <strong>contentsRect</strong>的坐标轴默认是<strong>{0, 0, 1, 1}</strong>, 单位坐标一般指定的是<strong>0~1</strong>之间, 如果小于这个数, 或者是大于这个数, 哼哼, 你自己试试看吧~</p>
-
-<p>说到这里, 应该会有人有些疑惑, 神马是点? 难道和像素不一样的么? 那就先来普及一下先吧(这里我是搜到的一些比较中肯的说法)~</p>
-</blockquote>
-
-<p></br></p>
-
-<blockquote>
-<p>点: </p>
+<p><strong>CALayer</strong>有一个属性叫做<strong>contentsRect</strong>, 它是可以根据输入的坐标轴来显示区域块的图层, 而<strong>frame</strong>,<strong>bounds</strong>则是以点来计算的, 在这里它们有一些区别.<br/>
+<dr/><br/>
+还有一个注意点, <strong>contentsRect</strong>的坐标轴默认是<strong>{0, 0, 1, 1}</strong>, 单位坐标一般指定的是<strong>0~1</strong>之间, 如果小于这个数, 或者是大于这个数, 哼哼, 你自己试试看吧~<br/>
+<dr/><br/>
+说到这里, 应该会有人有些疑惑, 神马是点? 难道和像素不一样的么? 那就先来普及一下先吧(这里我是搜到的一些比较中肯的说法)~<br/>
+</br><br/>
+点: <br/>
+<dr/> </p>
 
 <ul>
 <li>在<strong>iOS</strong>和<strong>Mac OS</strong>中最常见的坐标体系。</li>
@@ -358,35 +354,23 @@
 <li>在标准设备上, 一个点就是一个像素, 但是在<strong>Retina</strong>设备上, 一个点等于<strong>2*2</strong>个像素。</li>
 <li><strong>iOS</strong>用点作为屏幕的坐标测算体系就是为了在<strong>Retina</strong>设备和普通设备上能有一致的视觉效果。</li>
 </ul>
-</blockquote>
 
-<p></br></p>
-
-<blockquote>
-<p>像素:</p>
+<p></br><br/>
+像素:<br/>
+<dr/></p>
 
 <ul>
 <li>物理像素坐标并不会用来屏幕布局, 但是仍然与图片有相对关系。 </li>
 <li><strong>UIImage</strong>是一个屏幕分辨率解决方案, 所以指定点来度量大小。</li>
-<li>但是一些底层的图片表示如<strong>CGImage</strong>就会使用像素, 所以你要清楚在<strong>Retina</strong>设备和普通设备上, 他们表现出来了不同的大小。</li>
+<li><p>但是一些底层的图片表示如<strong>CGImage</strong>就会使用像素, 所以你要清楚在<strong>Retina</strong>设备和普通设备上, 他们表现出来了不同的大小。<br/>
+</br><br/>
+单位: <br/>
+<dr/></p></li>
+<li><p>对于与图片大小或是图层边界相关的显示, 单位坐标是一个方便的度量方式, 当大小改变的时候, 也不需要再次调整。</p></li>
+<li><p>单位坐标在<strong>OpenGL</strong>这种纹理坐标系统中用得很多,<strong>Core Animation</strong>中也用到了单位坐标。<br/>
+</br><br/>
+这里我们还是继续拿刚刚的工程来演示: </p></li>
 </ul>
-</blockquote>
-
-<p></br></p>
-
-<blockquote>
-<p>单位: </p>
-
-<ul>
-<li>对于与图片大小或是图层边界相关的显示, 单位坐标是一个方便的度量方式, 当大小改变的时候, 也不需要再次调整。</li>
-<li>单位坐标在<strong>OpenGL</strong>这种纹理坐标系统中用得很多,<strong>Core Animation</strong>中也用到了单位坐标。</li>
-</ul>
-</blockquote>
-
-<p></br></p>
-
-<blockquote>
-<p>这里我们还是继续拿刚刚的工程来演示: </p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewDidLoad {
@@ -420,13 +404,13 @@
 <p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/2.CALayer/images/7.png" alt="7"/></p>
 
 <blockquote>
-<p>补充一些额外的知识点:</p>
-
-<p><strong>contentsRect</strong>在<strong>App</strong>当中, 还有一个更好玩的用法叫做<strong>image sprites</strong>, 如果你有游戏开发经验的话, 你肯定对<strong>image sprites</strong>不陌生, 甚至是非常熟练的使用, 可以使图片独立的变更在屏幕上显示的位置.</p>
-
-<p>但如果我们抛开游戏开发来说的话, 在我们日常生活当中, 微博就是一个经典的代表, 把图片拼接成一张大图片, 然后再分享出去, 这里使用的就是<strong>contentsRect</strong>, 这样子的好处就是可以减少内存的使用, 载入的时间, 还有渲染的性能等等.</p>
-
-<p>这里我就不做演示了, 感兴趣的童鞋可以 到网上找找资料.</p>
+<p>补充一些额外的知识点:<br/>
+<dr/><br/>
+<strong>contentsRect</strong>在<strong>App</strong>当中, 还有一个更好玩的用法叫做<strong>image sprites</strong>, 如果你有游戏开发经验的话, 你肯定对<strong>image sprites</strong>不陌生, 甚至是非常熟练的使用, 可以使图片独立的变更在屏幕上显示的位置.<br/>
+<dr/><br/>
+但如果我们抛开游戏开发来说的话, 在我们日常生活当中, 微博就是一个经典的代表, 把图片拼接成一张大图片, 然后再分享出去, 这里使用的就是<strong>contentsRect</strong>, 这样子的好处就是可以减少内存的使用, 载入的时间, 还有渲染的性能等等.<br/>
+<dr/><br/>
+这里我就不做演示了, 感兴趣的童鞋可以 到网上找找资料.</p>
 </blockquote>
 
 <hr/>
@@ -434,11 +418,11 @@
 <h3 id="toc_7">CALayer的ContentsCenter属性</h3>
 
 <blockquote>
-<p>讲到这里, 已经算是<strong>CALayer</strong>最后的一个属性了, 它叫做<strong>contentsCenter</strong>, 它的意思比较拗口, 它是一个<strong>CGRect</strong>, 且定义了一个固定的边框和一个图层上可拉伸的区域.</p>
-
-<p>如果你只是单单改变<strong>contentsCenter</strong>的值, 并不会影响到<strong>CALayer</strong>的显示效果, 要同时去改变这个图层的大小, 才能看到效果.</p>
-
-<p>我们还是直接看代码吧, 在我们原先的项目上添加一个方法, 并且加多一个<strong>UIView</strong>类:</p>
+<p>讲到这里, 已经算是<strong>CALayer</strong>最后的一个属性了, 它叫做<strong>contentsCenter</strong>, 它的意思比较拗口, 它是一个<strong>CGRect</strong>, 且定义了一个固定的边框和一个图层上可拉伸的区域.<br/>
+<dr/><br/>
+如果你只是单单改变<strong>contentsCenter</strong>的值, 并不会影响到<strong>CALayer</strong>的显示效果, 要同时去改变这个图层的大小, 才能看到效果.<br/>
+<dr/><br/>
+我们还是直接看代码吧, 在我们原先的项目上添加一个方法, 并且加多一个<strong>UIView</strong>类:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewDidLoad {
@@ -513,45 +497,46 @@
 <h3 id="toc_8">CALayer的Delegate</h3>
 
 <blockquote>
-<p>降到这里, 基本上就已经介绍完了<strong>CALayer</strong>, 但还有一点也是需要提一提的, <strong>CALayer</strong>除了使用<strong>contents</strong>赋值<strong>CGImage</strong>来显示图层之后, 还可以使用<strong>Core Graphics</strong>去进行绘制, 在<strong>UIView</strong>就可以看到这个方法, 叫做<strong>-drawRect:</strong>.</p>
-
-<p><strong>-drawRect:</strong>方法默认没有去实现, 因为在<strong>UIView</strong>中,<strong>backing image</strong>并不是必须的, 但如果你去调用<strong>-drawRect:</strong>方法, 那么UIView就会给你生成一个新的<strong>backing image</strong>, 而这个<strong>backing image</strong>的像素尺寸等于视图大小乘以<strong>contentsScale</strong>的值.</p>
-
-<p>这里需要注意一个点, 如果你的视图里不需要创建一个<strong>backing image</strong>的话, 千万不要去写一个空的<strong>-drawRect:</strong>方法, 这样子就会对CPU与内存造成浪费, 这也是苹果官方建议的.</p>
-
-<p>我们先来解释一下<strong>-drawRect:</strong>方法的实现原理:</p>
+<p>降到这里, 基本上就已经介绍完了<strong>CALayer</strong>, 但还有一点也是需要提一提的, <strong>CALayer</strong>除了使用<strong>contents</strong>赋值<strong>CGImage</strong>来显示图层之后, 还可以使用<strong>Core Graphics</strong>去进行绘制, 在<strong>UIView</strong>就可以看到这个方法, 叫做<strong>-drawRect:</strong>.<br/>
+<dr/><br/>
+<strong>-drawRect:</strong>方法默认没有去实现, 因为在<strong>UIView</strong>中,<strong>backing image</strong>并不是必须的, 但如果你去调用<strong>-drawRect:</strong>方法, 那么UIView就会给你生成一个新的<strong>backing image</strong>, 而这个<strong>backing image</strong>的像素尺寸等于视图大小乘以<strong>contentsScale</strong>的值.<br/>
+<dr/><br/>
+这里需要注意一个点, 如果你的视图里不需要创建一个<strong>backing image</strong>的话, 千万不要去写一个空的<strong>-drawRect:</strong>方法, 这样子就会对CPU与内存造成浪费, 这也是苹果官方建议的.<br/>
+<dr/><br/>
+我们先来解释一下<strong>-drawRect:</strong>方法的实现原理:<br/>
+<dr/></p>
 
 <ul>
 <li>当<strong>-drawRect:</strong>被调用,<strong>UIView</strong>会创建一个新的<strong>backing image</strong>.</li>
 <li>会使用<strong>Core Graphics</strong>对<strong>backing image</strong>进行描绘.</li>
-<li>然后这个描绘好的<strong>backing image</strong>会被缓存起来, 等到它需要被更新的时候, 就会去使用.</li>
+<li>然后这个描绘好的<strong>backing image</strong>会被缓存起来, 等到它需要被更新的时候, 就会去使用.
+<dr/>
+当然, 我们自己也可以手动去调用, 比如去调用<strong>-setNeedsDisplay:</strong>, 那么被重新绘制的<strong>backing image</strong>就会立马显示出来了.
+<dr/>
+总而言之, <strong>-drawRect:</strong>看似是<strong>UIView</strong>的方法, 但实际上都是在内部对CALayer进行了重绘以及缓存的操作.
+<dr/>
+还有, <strong>CALayer</strong>也有一个<strong>delegate</strong>的属性, 而且是<strong>id</strong>类型, 并实现<strong>CALayerDelegate</strong>协议, 当<strong>CALayer</strong>需要一个特定内容时, 就会从代理方法里去请求, 由于<strong>CALayerDelegate</strong>是一个非正式的协议, 所以并没有神马属性给你引用, 直接调用代理方法就可以了.
+<dr/>
+当需要被重绘的时候, <strong>CALayer</strong>就会去调用:</li>
 </ul>
-
-<p>当然, 我们自己也可以手动去调用, 比如去调用<strong>-setNeedsDisplay:</strong>, 那么被重新绘制的<strong>backing image</strong>就会立马显示出来了.</p>
-
-<p>总而言之, <strong>-drawRect:</strong>看似是<strong>UIView</strong>的方法, 但实际上都是在内部对CALayer进行了重绘以及缓存的操作.</p>
-
-<p>还有, <strong>CALayer</strong>也有一个<strong>delegate</strong>的属性, 而且是<strong>id</strong>类型, 并实现<strong>CALayerDelegate</strong>协议, 当<strong>CALayer</strong>需要一个特定内容时, 就会从代理方法里去请求, 由于<strong>CALayerDelegate</strong>是一个非正式的协议, 所以并没有神马属性给你引用, 直接调用代理方法就可以了.</p>
-
-<p>当需要被重绘的时候, <strong>CALayer</strong>就会去调用:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">    -(void)displayLayer:(CALayer *)layer;
 </code></pre>
 
 <blockquote>
-<p>如果你还想再重绘的时候设置一下<strong>contents</strong>的话, 那么就要在这个方法里去实现, 不然在别的方法里就没法做到了.</p>
-
-<p>但如果没有实现以上的方法时, 那么就会去调用:</p>
+<p>如果你还想再重绘的时候设置一下<strong>contents</strong>的话, 那么就要在这个方法里去实现, 不然在别的方法里就没法做到了.<br/>
+<dr/><br/>
+但如果没有实现以上的方法时, 那么就会去调用:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">    - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx;
 </code></pre>
 
 <blockquote>
-<p>在调用这个方法之前, <strong>CALayer</strong>会创建一个适合尺寸的<strong>backing image</strong>, 当然, 尺寸肯定是由<strong>bounds</strong>和<strong>contentsScale</strong>决定的, 还有一个<strong>Core Graphics</strong>绘制的上下文, 未绘制<strong>backing image</strong>做准备, 等的就是<strong>ctx</strong>的传入.</p>
-
-<p>说了那么多我们直接用代码演示吧~</p>
+<p>在调用这个方法之前, <strong>CALayer</strong>会创建一个适合尺寸的<strong>backing image</strong>, 当然, 尺寸肯定是由<strong>bounds</strong>和<strong>contentsScale</strong>决定的, 还有一个<strong>Core Graphics</strong>绘制的上下文, 未绘制<strong>backing image</strong>做准备, 等的就是<strong>ctx</strong>的传入.<br/>
+<dr/><br/>
+说了那么多我们直接用代码演示吧~</p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)createNewLayerWithSuperView {
@@ -594,16 +579,18 @@
 <p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/2.CALayer/images/10.png" alt="10"/></p>
 
 <blockquote>
-<p>看到效果图代码之后, 有两点我们是需要注意一下的:</p>
+<p>看到效果图代码之后, 有两点我们是需要注意一下的:<br/>
+<dr/></p>
 
 <ul>
 <li>不同的<strong>CALayer</strong>在不同的<strong>UIView</strong>视图中使用, 是不会自动去重载它的内容的, 所以在事例当中, 我们用<strong>blueLayer</strong>调用了<strong>display</strong>这个方法.</li>
 <li>在事例当中, 我们并没有对<strong>blueLayer</strong>设置<strong>masksToBounds</strong>属性, 但所绘制的那个圆仍然被裁剪了一些, 这个是因为我们在使用<strong>CALayerDelegate</strong>的时候, 并没有让需要描绘的<strong>backing image</strong>支持超出边界外的支持.</li>
 </ul>
 
-<p>聊到这里, 虽然我们知道了<strong>CALayerDelegate</strong>, 但在实际开发当中, 我们基本上非常非常少去接触它, 因为当<strong>UIView</strong>创建<strong>backing image</strong>的时候, 就会默认把<strong>CALayerDelegate</strong>设置为它自己, 同时也会提供一个<strong>- (void)displayLayer:(CALayer *)layer;</strong>的实现, 所以基本上不会遇到什么问题.</p>
-
-<p>当你使用有<strong>backing image</strong>的<strong>UIView</strong>时, 你也不必实现下面两个方法</p>
+<p><dr/><br/>
+聊到这里, 虽然我们知道了<strong>CALayerDelegate</strong>, 但在实际开发当中, 我们基本上非常非常少去接触它, 因为当<strong>UIView</strong>创建<strong>backing image</strong>的时候, 就会默认把<strong>CALayerDelegate</strong>设置为它自己, 同时也会提供一个<strong>- (void)displayLayer:(CALayer *)layer;</strong>的实现, 所以基本上不会遇到什么问题.<br/>
+<dr/><br/>
+当你使用有<strong>backing image</strong>的<strong>UIView</strong>时, 你也不必实现下面两个方法</p>
 </blockquote>
 
 <pre><code class="language-objectivec">    - (void)displayLayer:(CALayer *)layer;
@@ -619,7 +606,8 @@
 <h3 id="toc_9">总结一下</h3>
 
 <blockquote>
-<p>不得不说, 这次的内容有些多, 还是来总结一下:</p>
+<p>不得不说, 这次的内容有些多, 还是来总结一下:<br/>
+<dr/></p>
 
 <ul>
 <li><strong>contents</strong>是给<strong>CALayer</strong>设置内容的一个属性</li>
@@ -662,7 +650,7 @@
 	</div>
 </div>        </div>
 			<footer id="footer" class="inner">Copyright &copy; 2014
-Powered by <a target="_blank" href="https://cainrun.github.io">Cain</a> &nbsp;&nbsp; 
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
 Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
       </footer>
 		</div>

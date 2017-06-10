@@ -864,11 +864,11 @@
 <dr/><br/>
 在<strong>OpenGL</strong>中, 是没有对象和图层继承的概念, 它只是非常简单的去处理三角形, 在<strong>OpenGL</strong>中, 所有东西都是<strong>3D</strong>空间中有颜色和纹理的三角形, 感觉灰常的牛逼~<br/>
 <dr/><br/>
-如果我们要高效的时候<strong>Core Animation</strong>, 那么我们就需要判断我们需要绘制哪些内容, 比如(矢量图形, 粒子, 文本等等), 但及时是我们选择了合适的图层去呈现这些内容, <strong>Core Animation</strong>中也不是每个类型的内容都被高度优化过, 所以要想得到高性能的去绘制, 那就比较蛋疼了.<br/>
+如果我们要高效的时候<strong>Core Animation</strong>, 那么我们就需要判断我们需要绘制哪些内容, 比如(矢量图形, 粒子, 文本等等), 但即使是我们选择了合适的图层去呈现这些内容, <strong>Core Animation</strong>中也不是每个类型的内容都被高度优化过, 所以要想得到高性能的去绘制, 那就比较蛋疼了.<br/>
 <dr/><br/>
 在<strong>iOS 5</strong>中, 苹果为了解决这些蛋疼的问题, 加入了一个叫做<strong>GLKit</strong>的库, 它在一定层度上减少了使用<strong>OpenGL</strong>的复杂度, 提供了一个叫做<strong>GLKView</strong>的<strong>UIView</strong>子类, 帮我们处理大部分的设置内容和绘制工作, 有需要了解<strong>GLKit</strong>的朋友们可以去翻翻官方文档.<br/>
 <dr/><br/>
-及时是如此, 我们还是需要使用到一个叫做<strong>CAEAGLLayer</strong>的<strong>CALayer</strong>子类, 酱紫我们才可以用来显示<strong>OpenGL</strong>的图形.<br/>
+即使是如此, 我们还是需要使用到一个叫做<strong>CAEAGLLayer</strong>的<strong>CALayer</strong>子类, 酱紫我们才可以用来显示<strong>OpenGL</strong>的图形.<br/>
 <dr/><br/>
 这里还需要提到一点, 虽然在大部分情况下, 我们不需要手动设置<strong>CAEAGLLayer</strong>(如果是用<strong>GLKView</strong>的话), 我们可以设置一个<strong>OpenGL ES 2.0</strong>的上下文, 这是大多数的用法, <strong>GLKit</strong>为我们提供许多便捷的方法, 比如设置顶点和片段的着色器之类的, 这些都是以类<strong>C</strong>语言叫做<strong>GLSL</strong>自包含在程序中, 同事在运行时载入到图形硬件中, 当然, <strong>GLSL</strong>的代码和设置<strong>CAEAGLLayer</strong>是一毛钱关系都没, 所以我们会用<strong>GLKBaseEffect</strong>类, 将着色的逻辑抽象出来就完事, 其他的事情, 还是和平常使用一样就哦了, 下面让我们来看看<strong>Demo</strong>:</p>
 </blockquote>
@@ -1089,7 +1089,7 @@
 	</div>
 </div>        </div>
 			<footer id="footer" class="inner">Copyright &copy; 2014
-Powered by <a target="_blank" href="https://cainrun.github.io">Cain</a> &nbsp;&nbsp; 
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
 Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
       </footer>
 		</div>

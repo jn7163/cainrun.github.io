@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2016-12-04T00:10:11+08:00</updated>
+  <updated>2017-06-10T23:52:54+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,275 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Message Extension》]]></title>
+    <link href="https://cainrun.github.io/14969899245168.html"/>
+    <updated>2017-06-09T14:32:04+08:00</updated>
+    <id>https://cainrun.github.io/14969899245168.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">说点废话</h3>
+
+<blockquote>
+<p>中途因为发生了点事, 所以有一段时间没有写博文了, 现在开始开始慢慢写回, 写的风格也改了一些, 大家不懂得可以去各大博客, 论坛, 等等地方翻翻资料, 如果一定要找我问问题的话, 麻烦先用红包来打一下我, 祝大家学习愉快.</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_1">Message</h3>
+
+<p><code>Message</code>是苹果爸爸在<code>iOS 10</code>开放给开发者的库, 虽然说是新的库, 但和在<code>iOS 8</code>所使用的方式差不多, 就是<code>Extension</code>, 我们都知道<code>iOS</code>是封闭系统, 所以就不用抱着会和<code>Android</code>那样的开发.</p>
+
+<p>作为<code>Extension</code>有什么好处咧, 按照官方的说法就是, 既可以保证系统的安全, 又可以独立于<code>App</code>之外, 不必绑定父应用程序的一部分.</p>
+
+<p>这里注明一下, 我这个是<code>Objective-C</code>版本的, 如果要找<code>Swift</code>版本的话, 可以到这里去<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/01%20-%20Messages">Swift-Message</a>.</p>
+
+<hr/>
+
+<h3 id="toc_2">创建项目</h3>
+
+<p>创建<code>Message</code>很简单, 打开<code>Xcode -&gt; New Project -&gt; iMessage Application</code>就搞定了.</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/1.Message/Images/1.png" alt="1"/></p>
+
+<p>创建完之后, 我们就可以看到一个<code>MessageViewController</code>, 这个是苹果爸爸一开始就给我们弄好的控制器, 我们只需要在上面弄我们所需要的东西就好.</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/1.Message/Images/2.png" alt="2"/></p>
+
+<hr/>
+
+<h3 id="toc_3">两个重要的方法</h3>
+
+<p>这里有两个重要的方法是我们必须知道的</p>
+
+<pre><code class="language-objectivec">// 当我们即将打开Message Extension的时候, 就会调用这个方法
+- (void)willBecomeActiveWithConversation:(MSConversation *)conversation;
+</code></pre>
+
+<pre><code class="language-objectivec">// 当我们即将操作Message Extension的时候, 就会调用这个方法, 可以选择不同的样式, 然后决定你的Message Extension的显示方式
+-
+(void)willTransitionToPresentationStyle:(MSMessagesAppPresentationStyle)presentationStyle;
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_4">添加新的控制器</h3>
+
+<p>为了可扩展性和低耦合, 我打算把整个<code>Message Extension</code>拆的非常零散, 这个时候就需要好几个<code>Controller</code>去分别管理它们自己的业务逻辑了.</p>
+
+<p>这里顺便加一个第三方的库<code>Masonry</code>, 感谢<code>Masonry</code>作者的无私奉献~~</p>
+
+<p>我这个<code>Demo</code>里一共有三个自己创建的控制器, 分别是<code>MessageStartController</code>, <code>MessageFinishController</code>, <code>MessageChangeController</code></p>
+
+<p>由于只是简单的演示, 所以这边就不弄的那么复杂了, 详细的代码自己可以去看看, 也很简单.</p>
+
+<hr/>
+
+<h3 id="toc_5">MessagesViewController</h3>
+
+<p>回到我们的<code>MessagesViewController</code>, 这里主要讲讲我的代码:</p>
+
+<pre><code class="language-objectivec">/**
+ Configure ChildController
+
+ @param presentationStyle MSMessagesAppPresentationStyle
+ @param conversation MSConversation
+ */
+- (void)configureChildViewControllerWithPresentationStyle:(MSMessagesAppPresentationStyle)presentationStyle
+                                             conversation:(MSConversation *)conversation {
+    
+    // 清除所有的自控制器
+    for (UIViewController *childController in self.childViewControllers) {
+        
+        [childController willMoveToParentViewController:nil];
+        [childController.view removeFromSuperview];
+        [childController removeFromParentViewController];
+    }
+    
+    switch (presentationStyle) {
+        case MSMessagesAppPresentationStyleCompact:
+            
+            self.childViewController = [self createMessageStartController];
+            
+            break;
+        case MSMessagesAppPresentationStyleExpanded:{
+            
+            MSMessage *message = conversation.selectedMessage;
+            
+            if (message) {
+                
+                self.childViewController = [self createChangeControllerWithConversation:conversation];
+
+            } else {
+                self.childViewController = [self createFinishControllerWithConversation:conversation];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    
+    // 添加子控制器
+    [self addChildViewController:self.childViewController];
+    
+    [self.view addSubview:self.childViewController.view];
+    
+    [self.childViewController.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        (void)make.edges;
+    }];
+    
+    [self.childViewController didMoveToParentViewController:self];
+}
+</code></pre>
+
+<p>之前也说过, 为了灵活性和低耦合, 上面那个方法就是用来添加和删除子控制器的.</p>
+
+<pre><code class="language-objectivec">- (void)willBecomeActiveWithConversation:(MSConversation *)conversation {
+    
+    [self configureChildViewControllerWithPresentationStyle:self.presentationStyle
+                                               conversation:conversation];
+}
+
+-(void)willTransitionToPresentationStyle:(MSMessagesAppPresentationStyle)presentationStyle {
+
+    [self configureChildViewControllerWithPresentationStyle:presentationStyle
+                                               conversation:self.activeConversation];
+}
+</code></pre>
+
+<p>上面这两个方法就是在<code>Message Extension</code>在切换不同样式的时候, 去调用<code>configureChildViewControllerWithPresentationStyle:</code>方法, 来达到在不同样式下可以切换不同的子控制器.</p>
+
+<pre><code class="language-objectivec">/**
+ Configure Message Start Controller
+
+ @return UIViewController
+ */
+- (UIViewController *)createMessageStartController {
+    
+    MessageStartController *childController = [[MessageStartController alloc] init];
+    
+    [childController setMessageStartBloack:^(UIButton *sender){
+        
+        [self requestPresentationStyle:MSMessagesAppPresentationStyleExpanded];
+    }];
+    
+    return childController;
+}
+
+/**
+ Configure Message Finish Controller
+ 
+ @return UIViewController
+ */
+- (UIViewController *)createFinishControllerWithConversation:(MSConversation *)conversation {
+    
+    MessageFinishController *finishController = [[MessageFinishController alloc] init];
+    
+    [finishController setMessageFinishBloack:^(UIButton *sender){
+        
+        MSSession *session = [[MSSession alloc] init];
+        
+        NSString *player = [NSString stringWithFormat:@&quot;%@ - 是否要发送这条内容?&quot;, conversation.localParticipantIdentifier];
+        
+        [self insertMessageWithCaption:player
+                               session:session
+                                 image:[UIImage ms_getImageForView:self.view]
+                          conversation:conversation];
+        
+        [self dismiss];
+    }];
+    
+    return finishController;
+}
+
+/**
+ Configure Message Change Controller
+ 
+ @return UIViewController
+ */
+- (UIViewController *)createChangeControllerWithConversation:(MSConversation *)conversation {
+    
+    MessageChangeController *changeViewController = [[MessageChangeController alloc] init];
+    
+    [changeViewController setMessageChangeBloack:^(UIButton *sender){
+        
+        MSMessage *message = conversation.selectedMessage;
+        
+        if (message) {
+            
+            MSSession *session = [message session];
+            
+            NSString *player = [NSString stringWithFormat:@&quot;%@ - 是否要发送更改后的内容?&quot;, conversation.localParticipantIdentifier];
+            
+            [self insertMessageWithCaption:player
+                                   session:session
+                                     image:[UIImage ms_getImageForView:self.view]
+                              conversation:conversation];
+        }
+        
+        [self dismiss];
+    }];
+    
+    return changeViewController;
+}
+</code></pre>
+
+<p>上面这三个方法就是用来配置<code>MessageStartController</code>, <code>MessageFinishController</code>, <code>MessageChangeController</code>三个控制器.</p>
+
+<hr/>
+
+<h3 id="toc_6">重点</h3>
+
+<p>这里需要重点讲一个方法:</p>
+
+<pre><code class="language-objectivec">/**
+ 把内容插入到Message中
+
+ @param caption NSString
+ @param session MSSession
+ @param image UIImage
+ @param conversation MSConversation
+ */
+- (void)insertMessageWithCaption:(NSString *)caption
+                         session:(MSSession *)session
+                           image:(UIImage *)image
+                    conversation:(MSConversation *)conversation {
+    
+    MSMessage *message = [[MSMessage alloc] initWithSession:session];
+    MSMessageTemplateLayout *templateLayout = [[MSMessageTemplateLayout alloc] init];
+    
+    templateLayout.caption = caption;
+    templateLayout.image = image;
+    
+    message.layout = templateLayout;
+    message.URL = [NSURL URLWithString:@&quot;http://www.baidu.com&quot;];
+    
+    [conversation insertMessage:message
+              completionHandler:nil];
+}
+
+</code></pre>
+
+<p>这个方法, 可以把我们想要内容插入到<code>Message Extension</code>中, 然后发送出去.</p>
+
+<hr/>
+
+<h3 id="toc_7">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/1.Message">https://github.com/CainRun/iOS-10-Characteristic/tree/master/1.Message</a></p>
+
+<hr/>
+
+<h3 id="toc_8">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：7.《Core Animation》Implicit Animations]]></title>
@@ -1201,11 +1470,11 @@
 <dr/><br/>
 在<strong>OpenGL</strong>中, 是没有对象和图层继承的概念, 它只是非常简单的去处理三角形, 在<strong>OpenGL</strong>中, 所有东西都是<strong>3D</strong>空间中有颜色和纹理的三角形, 感觉灰常的牛逼~<br/>
 <dr/><br/>
-如果我们要高效的时候<strong>Core Animation</strong>, 那么我们就需要判断我们需要绘制哪些内容, 比如(矢量图形, 粒子, 文本等等), 但及时是我们选择了合适的图层去呈现这些内容, <strong>Core Animation</strong>中也不是每个类型的内容都被高度优化过, 所以要想得到高性能的去绘制, 那就比较蛋疼了.<br/>
+如果我们要高效的时候<strong>Core Animation</strong>, 那么我们就需要判断我们需要绘制哪些内容, 比如(矢量图形, 粒子, 文本等等), 但即使是我们选择了合适的图层去呈现这些内容, <strong>Core Animation</strong>中也不是每个类型的内容都被高度优化过, 所以要想得到高性能的去绘制, 那就比较蛋疼了.<br/>
 <dr/><br/>
 在<strong>iOS 5</strong>中, 苹果为了解决这些蛋疼的问题, 加入了一个叫做<strong>GLKit</strong>的库, 它在一定层度上减少了使用<strong>OpenGL</strong>的复杂度, 提供了一个叫做<strong>GLKView</strong>的<strong>UIView</strong>子类, 帮我们处理大部分的设置内容和绘制工作, 有需要了解<strong>GLKit</strong>的朋友们可以去翻翻官方文档.<br/>
 <dr/><br/>
-及时是如此, 我们还是需要使用到一个叫做<strong>CAEAGLLayer</strong>的<strong>CALayer</strong>子类, 酱紫我们才可以用来显示<strong>OpenGL</strong>的图形.<br/>
+即使是如此, 我们还是需要使用到一个叫做<strong>CAEAGLLayer</strong>的<strong>CALayer</strong>子类, 酱紫我们才可以用来显示<strong>OpenGL</strong>的图形.<br/>
 <dr/><br/>
 这里还需要提到一点, 虽然在大部分情况下, 我们不需要手动设置<strong>CAEAGLLayer</strong>(如果是用<strong>GLKView</strong>的话), 我们可以设置一个<strong>OpenGL ES 2.0</strong>的上下文, 这是大多数的用法, <strong>GLKit</strong>为我们提供许多便捷的方法, 比如设置顶点和片段的着色器之类的, 这些都是以类<strong>C</strong>语言叫做<strong>GLSL</strong>自包含在程序中, 同事在运行时载入到图形硬件中, 当然, <strong>GLSL</strong>的代码和设置<strong>CAEAGLLayer</strong>是一毛钱关系都没, 所以我们会用<strong>GLKBaseEffect</strong>类, 将着色的逻辑抽象出来就完事, 其他的事情, 还是和平常使用一样就哦了, 下面让我们来看看<strong>Demo</strong>:</p>
 </blockquote>
@@ -2933,19 +3202,19 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <h3 id="toc_2">CALayer的Contents属性</h3>
 
 <blockquote>
-<p>在<strong>CALayer</strong>中, 有这么一个<strong>contents</strong>属性, 那么<strong>contents</strong>这个属性是用来做什么的呢? 我们先来看一段官方解释.</p>
-
-<p><strong><font color=blue>An object that provides the contents of the layer. Animatable.</font></strong></p>
-
-<p>从字面上意思来看, 这是一个提供图层内容的对象, 并且是<strong>id</strong>类型, 也就意味着, 我们可以给这个<strong>contents</strong>属性赋任意的值, 毕竟是<strong>id</strong>类型嘛, 但在实际操作中, 是行不通的, 为什么? </p>
-
-<p>这里就要牵扯到<strong>Mac OS</strong>了, 因为在<strong>Mac OS</strong>当中, 给<strong>CALayer</strong>中的<strong>contents</strong>属性赋值, 无论是<strong>CGImage</strong>还是<strong>NSImage</strong>, 都能得到对应的效果, 而在<strong>iOS</strong>当中, 只能赋值<strong>CGImage</strong>, 或许到了这里, 你会觉得挺简单的, 但呵呵了, 这里还要牵扯到指针的问题(个人对指针有些晕).</p>
-
-<p>实际上, 我们给<strong>contents</strong>属性赋<strong>CGImage</strong>的时候, 真正赋值的是<strong>CGImageRef</strong>, 它是指向<strong>CGImage</strong>的指针, 用过<strong>UIImage</strong>的朋友应该会发现,<strong>UIImage</strong>当中有一个<strong>CGImage</strong>的属性, 这个属性的返回值就是<strong>CGImageRef</strong>.</p>
-
-<p>某些童鞋会说, 既然是<strong>CGImageRef</strong>类型的话, 那直接赋值给<strong>contents</strong>不就好了么, 其实并不是滴, 直接这么赋值会报编译错误滴, 为什么?? </p>
-
-<p>因为<strong>CGImageRef</strong>并不是一个真正的<strong>Cocoa</strong>对象, 它是属于<strong>Core Foundation</strong>里的东西(什么是<strong>Core Foundation</strong>? 嘿嘿, 自行百度去吧~~), 那么我们就没办法给<strong>contents</strong>赋值吗? 肯定不是啦, 我们可以通过一些关键字进行赋值, 就能够得到对应的效果了, 代码如下:</p>
+<p>在<strong>CALayer</strong>中, 有这么一个<strong>contents</strong>属性, 那么<strong>contents</strong>这个属性是用来做什么的呢? 我们先来看一段官方解释.<br/>
+<dr/><br/>
+<strong><font color=blue>An object that provides the contents of the layer. Animatable.</font></strong><br/>
+<dr/><br/>
+从字面上意思来看, 这是一个提供图层内容的对象, 并且是<strong>id</strong>类型, 也就意味着, 我们可以给这个<strong>contents</strong>属性赋任意的值, 毕竟是<strong>id</strong>类型嘛, 但在实际操作中, 是行不通的, 为什么? <br/>
+<dr/><br/>
+这里就要牵扯到<strong>Mac OS</strong>了, 因为在<strong>Mac OS</strong>当中, 给<strong>CALayer</strong>中的<strong>contents</strong>属性赋值, 无论是<strong>CGImage</strong>还是<strong>NSImage</strong>, 都能得到对应的效果, 而在<strong>iOS</strong>当中, 只能赋值<strong>CGImage</strong>, 或许到了这里, 你会觉得挺简单的, 但呵呵了, 这里还要牵扯到指针的问题(个人对指针有些晕).<br/>
+<dr/><br/>
+实际上, 我们给<strong>contents</strong>属性赋<strong>CGImage</strong>的时候, 真正赋值的是<strong>CGImageRef</strong>, 它是指向<strong>CGImage</strong>的指针, 用过<strong>UIImage</strong>的朋友应该会发现, <strong>UIImage</strong>当中有一个<strong>CGImage</strong>的属性, 这个属性的返回值就是<strong>CGImageRef</strong>.<br/>
+<dr/><br/>
+某些童鞋会说, 既然是<strong>CGImageRef</strong>类型的话, 那直接赋值给<strong>contents</strong>不就好了么, 其实并不是滴, 直接这么赋值会报编译错误滴, 为什么?? <br/>
+<dr/><br/>
+因为<strong>CGImageRef</strong>并不是一个真正的<strong>Cocoa</strong>对象, 它是属于<strong>Core Foundation</strong>里的东西(什么是<strong>Core Foundation</strong>? 嘿嘿, 自行百度去吧~~), 那么我们就没办法给<strong>contents</strong>赋值吗? 肯定不是啦, 我们可以通过一些关键字进行赋值, 就能够得到对应的效果了, 代码如下:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewDidLoad {
@@ -2960,7 +3229,6 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
     
     [self.view addSubview:layerView];
     
-    
     UIImage *image = [UIImage imageNamed:@&quot;bear&quot;];
     
     layerView.layer.contents = (__bridge id _Nullable)(image.CGImage);
@@ -2968,9 +3236,9 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 </code></pre>
 
 <blockquote>
-<p>这里提一点哈, 这个关键字在<strong>非ARC内存管理机制</strong>中是不需要加滴, 但是呢, 特么的, 你为啥不用<strong>ARC</strong>? 估计连你自己都会这么问你自己了.</p>
-
-<p>效果图: </p>
+<p>这里提一点哈, 这个关键字在<strong>非ARC内存管理机制</strong>中是不需要加滴, 但是呢, 特么的, 你为啥不用<strong>ARC</strong>? 估计连你自己都会这么问你自己了.<br/>
+<dr/><br/>
+效果图: </p>
 </blockquote>
 
 <p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/2.CALayer/images/1.png" alt="1"/></p>
@@ -2992,11 +3260,11 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <h3 id="toc_3">CALayer的ContentGravity属性</h3>
 
 <blockquote>
-<p>不知道你们有没有发现, 我们所展示的图片有一些变形, 如果是用<strong>UIImageView</strong>的话, 我们可以直接设置<strong>contentModel</strong>这个属性, 使得图片正常显示, 但如果是在<strong>CALayer</strong>呢? </p>
-
-<p>当然<strong>CALayer</strong>也有一个类似<strong>contentModel</strong>的属性, 它叫做<strong>contentGravity</strong>, 虽然名字有些差别, 但是使用效果都是差不多的~~</p>
-
-<p>进入头文件之后我们会看到<strong>contentGravity</strong>可以赋值的选项有:</p>
+<p>不知道你们有没有发现, 我们所展示的图片有一些变形, 如果是用<strong>UIImageView</strong>的话, 我们可以直接设置<strong>contentModel</strong>这个属性, 使得图片正常显示, 但如果是在<strong>CALayer</strong>呢? <br/>
+<dr/><br/>
+当然<strong>CALayer</strong>也有一个类似<strong>contentModel</strong>的属性, 它叫做<strong>contentGravity</strong>, 虽然名字有些差别, 但是使用效果都是差不多的~~<br/>
+<dr/><br/>
+进入头文件之后我们会看到<strong>contentGravity</strong>可以赋值的选项有:</p>
 
 <ul>
 <li>kCAGravityCenter</li>
@@ -3010,10 +3278,10 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <li>kCAGravityBottomRight</li>
 <li>kCAGravityResize</li>
 <li>kCAGravityResizeAspect</li>
-<li>kCAGravityResizeAspectFill</li>
+<li>kCAGravityResizeAspectFill
+<dr/>
+现在我们就来改改工程里的代码:</li>
 </ul>
-
-<p>现在我们就来改改工程里的代码:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">    layerView.layer.contentsGravity = kCAGravityResizeAspect;
@@ -3034,17 +3302,17 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <h3 id="toc_4">CALayer的ContentsScale属性</h3>
 
 <blockquote>
-<p>其实我在想, 我是不是不应该把<strong>CALayer</strong>里的所有属性都拿出来讲一讲? 只是简单讲一些重要的好了, 接下来的就是<strong>contentsScale</strong>.</p>
-
-<p><strong>contentsScale</strong>这个属性主要是定义图层的像素和视图比例大小, 默认情况是<strong>1.0</strong>, 而且是<strong>CGFloat</strong>类型.</p>
-
-<p>但如果你的<strong>CALayer</strong>已经设置了<strong>contentsGravity</strong>, 那么再设置<strong>contentsScale</strong>, 效果就是没多大影响, 或者直接说压根就没影响吧, 如果你只是想着单纯的放大缩小<strong>CALayer</strong>, 可以直接使用<strong>transform</strong>和<strong>affineTransForm</strong>实现你想要的效果, 后续会详细讲解<strong>transforms</strong>.</p>
-
-<p>当然放大缩小肯定也不是<strong>contentsScale</strong>属性的主要作用, 这里就需要解释一下<strong>contentsScale</strong>: </p>
-
-<p><strong>contentsScale</strong>主要是支持Retina机制的一部分, 它是用来判断绘制图层时应该需要创建多大的空间, 和需要显示图片的拉伸度,<strong>UIView</strong>也有一个类似的属性, 叫做<strong>contentScaleFactor</strong>, 只是我们非常少的去使用罢了.</p>
-
-<p>这个时候我们来改改工程里的代码, 让<strong>contentsScale</strong>呈现效果: </p>
+<p>其实我在想, 我是不是不应该把<strong>CALayer</strong>里的所有属性都拿出来讲一讲? 只是简单讲一些重要的好了, 接下来的就是<strong>contentsScale</strong>.<br/>
+<dr/><br/>
+<strong>contentsScale</strong>这个属性主要是定义图层的像素和视图比例大小, 默认情况是<strong>1.0</strong>, 而且是<strong>CGFloat</strong>类型.<br/>
+<dr/><br/>
+但如果你的<strong>CALayer</strong>已经设置了<strong>contentsGravity</strong>, 那么再设置<strong>contentsScale</strong>, 效果就是没多大影响, 或者直接说压根就没影响吧, 如果你只是想着单纯的放大缩小<strong>CALayer</strong>, 可以直接使用<strong>transform</strong>和<strong>affineTransForm</strong>实现你想要的效果, 后续会详细讲解<strong>transforms</strong>.<br/>
+<dr/><br/>
+当然放大缩小肯定也不是<strong>contentsScale</strong>属性的主要作用, 这里就需要解释一下<strong>contentsScale</strong>: <br/>
+<dr/><br/>
+<strong>contentsScale</strong>主要是支持<strong>Retina</strong>机制的一部分, 它是用来判断绘制图层时应该需要创建多大的空间, 和需要显示图片的拉伸度,<strong>UIView</strong>也有一个类似的属性, 叫做<strong>contentScaleFactor</strong>, 只是我们非常少的去使用罢了.<br/>
+<dr/><br/>
+这个时候我们来改改工程里的代码, 让<strong>contentsScale</strong>呈现效果: </p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewDidLoad {
@@ -3080,15 +3348,15 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <h3 id="toc_5">CALayer的MaskToBounds属性</h3>
 
 <blockquote>
-<p>看完了<strong>contentsScale</strong>属性, 现在我们继续来看<strong>maskToBounds</strong>属性.</p>
-
-<p>我们先来看一段官方文字介绍: </p>
-
-<p><strong><font color=blue>A Boolean indicating whether sublayers are clipped to the layer’s bounds. Animatable.</font></strong></p>
-
-<p>看完之后, 我们知道这个属性是一个<strong>BOOL</strong>类型, 问你如果子图层超出了视图层, 是否剪切掉, 如果你设置为<strong>YES</strong>, 那就剪切掉了, 默认为<strong>NO</strong>.</p>
-
-<p>就拿我们刚刚的工程作为一个事例来讲, 那张图片肯定是超过了视图层的, 如果我们把<strong>maskToBounds</strong>属性设置为<strong>YES</strong>, 效果就不一样了:</p>
+<p>看完了<strong>contentsScale</strong>属性, 现在我们继续来看<strong>maskToBounds</strong>属性.<br/>
+<dr/><br/>
+我们先来看一段官方文字介绍: <br/>
+<dr/><br/>
+<strong><font color=blue>A Boolean indicating whether sublayers are clipped to the layer’s bounds. Animatable.</font></strong><br/>
+<dr/><br/>
+看完之后, 我们知道这个属性是一个<strong>BOOL</strong>类型, 问你如果子图层超出了视图层, 是否剪切掉, 如果你设置为<strong>YES</strong>, 那就剪切掉了, 默认为<strong>NO</strong>.<br/>
+<dr/><br/>
+就拿我们刚刚的工程作为一个事例来讲, 那张图片肯定是超过了视图层的, 如果我们把<strong>maskToBounds</strong>属性设置为<strong>YES</strong>, 效果就不一样了:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewDidLoad {
@@ -3125,17 +3393,14 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <h3 id="toc_6">CALayer的ContentsRect属性</h3>
 
 <blockquote>
-<p><strong>CALayer</strong>有一个属性叫做<strong>contentsRect</strong>, 它是可以根据输入的坐标轴来显示区域块的图层, 而<strong>frame</strong>,<strong>bounds</strong>则是以点来计算的, 在这里它们有一些区别.</p>
-
-<p>还有一个注意点, <strong>contentsRect</strong>的坐标轴默认是<strong>{0, 0, 1, 1}</strong>, 单位坐标一般指定的是<strong>0~1</strong>之间, 如果小于这个数, 或者是大于这个数, 哼哼, 你自己试试看吧~</p>
-
-<p>说到这里, 应该会有人有些疑惑, 神马是点? 难道和像素不一样的么? 那就先来普及一下先吧(这里我是搜到的一些比较中肯的说法)~</p>
-</blockquote>
-
-<p></br></p>
-
-<blockquote>
-<p>点: </p>
+<p><strong>CALayer</strong>有一个属性叫做<strong>contentsRect</strong>, 它是可以根据输入的坐标轴来显示区域块的图层, 而<strong>frame</strong>,<strong>bounds</strong>则是以点来计算的, 在这里它们有一些区别.<br/>
+<dr/><br/>
+还有一个注意点, <strong>contentsRect</strong>的坐标轴默认是<strong>{0, 0, 1, 1}</strong>, 单位坐标一般指定的是<strong>0~1</strong>之间, 如果小于这个数, 或者是大于这个数, 哼哼, 你自己试试看吧~<br/>
+<dr/><br/>
+说到这里, 应该会有人有些疑惑, 神马是点? 难道和像素不一样的么? 那就先来普及一下先吧(这里我是搜到的一些比较中肯的说法)~<br/>
+</br><br/>
+点: <br/>
+<dr/> </p>
 
 <ul>
 <li>在<strong>iOS</strong>和<strong>Mac OS</strong>中最常见的坐标体系。</li>
@@ -3143,35 +3408,23 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <li>在标准设备上, 一个点就是一个像素, 但是在<strong>Retina</strong>设备上, 一个点等于<strong>2*2</strong>个像素。</li>
 <li><strong>iOS</strong>用点作为屏幕的坐标测算体系就是为了在<strong>Retina</strong>设备和普通设备上能有一致的视觉效果。</li>
 </ul>
-</blockquote>
 
-<p></br></p>
-
-<blockquote>
-<p>像素:</p>
+<p></br><br/>
+像素:<br/>
+<dr/></p>
 
 <ul>
 <li>物理像素坐标并不会用来屏幕布局, 但是仍然与图片有相对关系。 </li>
 <li><strong>UIImage</strong>是一个屏幕分辨率解决方案, 所以指定点来度量大小。</li>
-<li>但是一些底层的图片表示如<strong>CGImage</strong>就会使用像素, 所以你要清楚在<strong>Retina</strong>设备和普通设备上, 他们表现出来了不同的大小。</li>
+<li><p>但是一些底层的图片表示如<strong>CGImage</strong>就会使用像素, 所以你要清楚在<strong>Retina</strong>设备和普通设备上, 他们表现出来了不同的大小。<br/>
+</br><br/>
+单位: <br/>
+<dr/></p></li>
+<li><p>对于与图片大小或是图层边界相关的显示, 单位坐标是一个方便的度量方式, 当大小改变的时候, 也不需要再次调整。</p></li>
+<li><p>单位坐标在<strong>OpenGL</strong>这种纹理坐标系统中用得很多,<strong>Core Animation</strong>中也用到了单位坐标。<br/>
+</br><br/>
+这里我们还是继续拿刚刚的工程来演示: </p></li>
 </ul>
-</blockquote>
-
-<p></br></p>
-
-<blockquote>
-<p>单位: </p>
-
-<ul>
-<li>对于与图片大小或是图层边界相关的显示, 单位坐标是一个方便的度量方式, 当大小改变的时候, 也不需要再次调整。</li>
-<li>单位坐标在<strong>OpenGL</strong>这种纹理坐标系统中用得很多,<strong>Core Animation</strong>中也用到了单位坐标。</li>
-</ul>
-</blockquote>
-
-<p></br></p>
-
-<blockquote>
-<p>这里我们还是继续拿刚刚的工程来演示: </p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewDidLoad {
@@ -3205,13 +3458,13 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/2.CALayer/images/7.png" alt="7"/></p>
 
 <blockquote>
-<p>补充一些额外的知识点:</p>
-
-<p><strong>contentsRect</strong>在<strong>App</strong>当中, 还有一个更好玩的用法叫做<strong>image sprites</strong>, 如果你有游戏开发经验的话, 你肯定对<strong>image sprites</strong>不陌生, 甚至是非常熟练的使用, 可以使图片独立的变更在屏幕上显示的位置.</p>
-
-<p>但如果我们抛开游戏开发来说的话, 在我们日常生活当中, 微博就是一个经典的代表, 把图片拼接成一张大图片, 然后再分享出去, 这里使用的就是<strong>contentsRect</strong>, 这样子的好处就是可以减少内存的使用, 载入的时间, 还有渲染的性能等等.</p>
-
-<p>这里我就不做演示了, 感兴趣的童鞋可以 到网上找找资料.</p>
+<p>补充一些额外的知识点:<br/>
+<dr/><br/>
+<strong>contentsRect</strong>在<strong>App</strong>当中, 还有一个更好玩的用法叫做<strong>image sprites</strong>, 如果你有游戏开发经验的话, 你肯定对<strong>image sprites</strong>不陌生, 甚至是非常熟练的使用, 可以使图片独立的变更在屏幕上显示的位置.<br/>
+<dr/><br/>
+但如果我们抛开游戏开发来说的话, 在我们日常生活当中, 微博就是一个经典的代表, 把图片拼接成一张大图片, 然后再分享出去, 这里使用的就是<strong>contentsRect</strong>, 这样子的好处就是可以减少内存的使用, 载入的时间, 还有渲染的性能等等.<br/>
+<dr/><br/>
+这里我就不做演示了, 感兴趣的童鞋可以 到网上找找资料.</p>
 </blockquote>
 
 <hr/>
@@ -3219,11 +3472,11 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <h3 id="toc_7">CALayer的ContentsCenter属性</h3>
 
 <blockquote>
-<p>讲到这里, 已经算是<strong>CALayer</strong>最后的一个属性了, 它叫做<strong>contentsCenter</strong>, 它的意思比较拗口, 它是一个<strong>CGRect</strong>, 且定义了一个固定的边框和一个图层上可拉伸的区域.</p>
-
-<p>如果你只是单单改变<strong>contentsCenter</strong>的值, 并不会影响到<strong>CALayer</strong>的显示效果, 要同时去改变这个图层的大小, 才能看到效果.</p>
-
-<p>我们还是直接看代码吧, 在我们原先的项目上添加一个方法, 并且加多一个<strong>UIView</strong>类:</p>
+<p>讲到这里, 已经算是<strong>CALayer</strong>最后的一个属性了, 它叫做<strong>contentsCenter</strong>, 它的意思比较拗口, 它是一个<strong>CGRect</strong>, 且定义了一个固定的边框和一个图层上可拉伸的区域.<br/>
+<dr/><br/>
+如果你只是单单改变<strong>contentsCenter</strong>的值, 并不会影响到<strong>CALayer</strong>的显示效果, 要同时去改变这个图层的大小, 才能看到效果.<br/>
+<dr/><br/>
+我们还是直接看代码吧, 在我们原先的项目上添加一个方法, 并且加多一个<strong>UIView</strong>类:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)viewDidLoad {
@@ -3298,45 +3551,46 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <h3 id="toc_8">CALayer的Delegate</h3>
 
 <blockquote>
-<p>降到这里, 基本上就已经介绍完了<strong>CALayer</strong>, 但还有一点也是需要提一提的, <strong>CALayer</strong>除了使用<strong>contents</strong>赋值<strong>CGImage</strong>来显示图层之后, 还可以使用<strong>Core Graphics</strong>去进行绘制, 在<strong>UIView</strong>就可以看到这个方法, 叫做<strong>-drawRect:</strong>.</p>
-
-<p><strong>-drawRect:</strong>方法默认没有去实现, 因为在<strong>UIView</strong>中,<strong>backing image</strong>并不是必须的, 但如果你去调用<strong>-drawRect:</strong>方法, 那么UIView就会给你生成一个新的<strong>backing image</strong>, 而这个<strong>backing image</strong>的像素尺寸等于视图大小乘以<strong>contentsScale</strong>的值.</p>
-
-<p>这里需要注意一个点, 如果你的视图里不需要创建一个<strong>backing image</strong>的话, 千万不要去写一个空的<strong>-drawRect:</strong>方法, 这样子就会对CPU与内存造成浪费, 这也是苹果官方建议的.</p>
-
-<p>我们先来解释一下<strong>-drawRect:</strong>方法的实现原理:</p>
+<p>降到这里, 基本上就已经介绍完了<strong>CALayer</strong>, 但还有一点也是需要提一提的, <strong>CALayer</strong>除了使用<strong>contents</strong>赋值<strong>CGImage</strong>来显示图层之后, 还可以使用<strong>Core Graphics</strong>去进行绘制, 在<strong>UIView</strong>就可以看到这个方法, 叫做<strong>-drawRect:</strong>.<br/>
+<dr/><br/>
+<strong>-drawRect:</strong>方法默认没有去实现, 因为在<strong>UIView</strong>中,<strong>backing image</strong>并不是必须的, 但如果你去调用<strong>-drawRect:</strong>方法, 那么UIView就会给你生成一个新的<strong>backing image</strong>, 而这个<strong>backing image</strong>的像素尺寸等于视图大小乘以<strong>contentsScale</strong>的值.<br/>
+<dr/><br/>
+这里需要注意一个点, 如果你的视图里不需要创建一个<strong>backing image</strong>的话, 千万不要去写一个空的<strong>-drawRect:</strong>方法, 这样子就会对CPU与内存造成浪费, 这也是苹果官方建议的.<br/>
+<dr/><br/>
+我们先来解释一下<strong>-drawRect:</strong>方法的实现原理:<br/>
+<dr/></p>
 
 <ul>
 <li>当<strong>-drawRect:</strong>被调用,<strong>UIView</strong>会创建一个新的<strong>backing image</strong>.</li>
 <li>会使用<strong>Core Graphics</strong>对<strong>backing image</strong>进行描绘.</li>
-<li>然后这个描绘好的<strong>backing image</strong>会被缓存起来, 等到它需要被更新的时候, 就会去使用.</li>
+<li>然后这个描绘好的<strong>backing image</strong>会被缓存起来, 等到它需要被更新的时候, 就会去使用.
+<dr/>
+当然, 我们自己也可以手动去调用, 比如去调用<strong>-setNeedsDisplay:</strong>, 那么被重新绘制的<strong>backing image</strong>就会立马显示出来了.
+<dr/>
+总而言之, <strong>-drawRect:</strong>看似是<strong>UIView</strong>的方法, 但实际上都是在内部对CALayer进行了重绘以及缓存的操作.
+<dr/>
+还有, <strong>CALayer</strong>也有一个<strong>delegate</strong>的属性, 而且是<strong>id</strong>类型, 并实现<strong>CALayerDelegate</strong>协议, 当<strong>CALayer</strong>需要一个特定内容时, 就会从代理方法里去请求, 由于<strong>CALayerDelegate</strong>是一个非正式的协议, 所以并没有神马属性给你引用, 直接调用代理方法就可以了.
+<dr/>
+当需要被重绘的时候, <strong>CALayer</strong>就会去调用:</li>
 </ul>
-
-<p>当然, 我们自己也可以手动去调用, 比如去调用<strong>-setNeedsDisplay:</strong>, 那么被重新绘制的<strong>backing image</strong>就会立马显示出来了.</p>
-
-<p>总而言之, <strong>-drawRect:</strong>看似是<strong>UIView</strong>的方法, 但实际上都是在内部对CALayer进行了重绘以及缓存的操作.</p>
-
-<p>还有, <strong>CALayer</strong>也有一个<strong>delegate</strong>的属性, 而且是<strong>id</strong>类型, 并实现<strong>CALayerDelegate</strong>协议, 当<strong>CALayer</strong>需要一个特定内容时, 就会从代理方法里去请求, 由于<strong>CALayerDelegate</strong>是一个非正式的协议, 所以并没有神马属性给你引用, 直接调用代理方法就可以了.</p>
-
-<p>当需要被重绘的时候, <strong>CALayer</strong>就会去调用:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">    -(void)displayLayer:(CALayer *)layer;
 </code></pre>
 
 <blockquote>
-<p>如果你还想再重绘的时候设置一下<strong>contents</strong>的话, 那么就要在这个方法里去实现, 不然在别的方法里就没法做到了.</p>
-
-<p>但如果没有实现以上的方法时, 那么就会去调用:</p>
+<p>如果你还想再重绘的时候设置一下<strong>contents</strong>的话, 那么就要在这个方法里去实现, 不然在别的方法里就没法做到了.<br/>
+<dr/><br/>
+但如果没有实现以上的方法时, 那么就会去调用:</p>
 </blockquote>
 
 <pre><code class="language-objectivec">    - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx;
 </code></pre>
 
 <blockquote>
-<p>在调用这个方法之前, <strong>CALayer</strong>会创建一个适合尺寸的<strong>backing image</strong>, 当然, 尺寸肯定是由<strong>bounds</strong>和<strong>contentsScale</strong>决定的, 还有一个<strong>Core Graphics</strong>绘制的上下文, 未绘制<strong>backing image</strong>做准备, 等的就是<strong>ctx</strong>的传入.</p>
-
-<p>说了那么多我们直接用代码演示吧~</p>
+<p>在调用这个方法之前, <strong>CALayer</strong>会创建一个适合尺寸的<strong>backing image</strong>, 当然, 尺寸肯定是由<strong>bounds</strong>和<strong>contentsScale</strong>决定的, 还有一个<strong>Core Graphics</strong>绘制的上下文, 未绘制<strong>backing image</strong>做准备, 等的就是<strong>ctx</strong>的传入.<br/>
+<dr/><br/>
+说了那么多我们直接用代码演示吧~</p>
 </blockquote>
 
 <pre><code class="language-objectivec">- (void)createNewLayerWithSuperView {
@@ -3379,16 +3633,18 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/2.CALayer/images/10.png" alt="10"/></p>
 
 <blockquote>
-<p>看到效果图代码之后, 有两点我们是需要注意一下的:</p>
+<p>看到效果图代码之后, 有两点我们是需要注意一下的:<br/>
+<dr/></p>
 
 <ul>
 <li>不同的<strong>CALayer</strong>在不同的<strong>UIView</strong>视图中使用, 是不会自动去重载它的内容的, 所以在事例当中, 我们用<strong>blueLayer</strong>调用了<strong>display</strong>这个方法.</li>
 <li>在事例当中, 我们并没有对<strong>blueLayer</strong>设置<strong>masksToBounds</strong>属性, 但所绘制的那个圆仍然被裁剪了一些, 这个是因为我们在使用<strong>CALayerDelegate</strong>的时候, 并没有让需要描绘的<strong>backing image</strong>支持超出边界外的支持.</li>
 </ul>
 
-<p>聊到这里, 虽然我们知道了<strong>CALayerDelegate</strong>, 但在实际开发当中, 我们基本上非常非常少去接触它, 因为当<strong>UIView</strong>创建<strong>backing image</strong>的时候, 就会默认把<strong>CALayerDelegate</strong>设置为它自己, 同时也会提供一个<strong>- (void)displayLayer:(CALayer *)layer;</strong>的实现, 所以基本上不会遇到什么问题.</p>
-
-<p>当你使用有<strong>backing image</strong>的<strong>UIView</strong>时, 你也不必实现下面两个方法</p>
+<p><dr/><br/>
+聊到这里, 虽然我们知道了<strong>CALayerDelegate</strong>, 但在实际开发当中, 我们基本上非常非常少去接触它, 因为当<strong>UIView</strong>创建<strong>backing image</strong>的时候, 就会默认把<strong>CALayerDelegate</strong>设置为它自己, 同时也会提供一个<strong>- (void)displayLayer:(CALayer *)layer;</strong>的实现, 所以基本上不会遇到什么问题.<br/>
+<dr/><br/>
+当你使用有<strong>backing image</strong>的<strong>UIView</strong>时, 你也不必实现下面两个方法</p>
 </blockquote>
 
 <pre><code class="language-objectivec">    - (void)displayLayer:(CALayer *)layer;
@@ -3404,7 +3660,8 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <h3 id="toc_9">总结一下</h3>
 
 <blockquote>
-<p>不得不说, 这次的内容有些多, 还是来总结一下:</p>
+<p>不得不说, 这次的内容有些多, 还是来总结一下:<br/>
+<dr/></p>
 
 <ul>
 <li><strong>contents</strong>是给<strong>CALayer</strong>设置内容的一个属性</li>
@@ -5988,150 +6245,6 @@ fi
 <h3 id="toc_7">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：界面调试工具《Reveal》]]></title>
-    <link href="https://cainrun.github.io/14719229534493.html"/>
-    <updated>2016-08-23T11:29:13+08:00</updated>
-    <id>https://cainrun.github.io/14719229534493.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>这次的<strong><code>Reveal</code></strong>研究，让我发现调试UI再也不像会以前那么的困难, 更加不会那么的蛋疼, 不需要每次都在脑海里想象出那个画面, 自从使用了<strong><code>Reveal</code></strong>之后, 麻麻再也不用担心我调界面难过了~</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Reveal</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">疑问</h3>
-
-<blockquote>
-<p>有童鞋可能会问, <strong><code>Xcode</code></strong>不是自带了有<a href="https://developer.apple.com/library/ios/recipes/xcode_help-debugger/using_view_debugger/using_view_debugger.html">Debug View Hierarchy in Xcode</a>么, 为啥还要用第三方的Reveal, 答案就是:&quot;因为苹果所提供的<strong><code>Debug View Hierarchy in Xcode</code></strong>弱爆了, 只能看看, 啥都不能操作, 而且还容易造成<strong><code>Xcode</code></strong>的卡顿, 比如一些电脑比较低配的, 卡死, 然后<strong><code>Xcode</code></strong>就一闪而过, 直接就<strong><code>Crash</code></strong>了.&quot;</p>
-
-<p><a href="http://revealapp.com">Reveal</a>就不会出现这个问题, Reveal是一款图形调试工具, 支持iOS全设备的UI调试, 支持模拟器以及真机调试, 同时也支持实时UI效果的展示.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">添加Debug命令</h3>
-
-<blockquote>
-<p>打开<strong><code>Terminal</code></strong>, 输入命令</p>
-</blockquote>
-
-<pre><code class="language-vim">vim ~/.lldbinit 
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/0.png" alt="0"/></p>
-
-<blockquote>
-<p>添加命令</p>
-</blockquote>
-
-<pre><code class="language-vim">command alias reveal_load_sim expr (void*)dlopen(&quot;/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib&quot;, 0x2);  
-command alias reveal_load_dev expr (void*)dlopen([(NSString*)[(NSBundle*)[NSBundle mainBundle] pathForResource:@&quot;libReveal&quot; ofType:@&quot;dylib&quot;] cStringUsingEncoding:0x4], 0x2);  
-command alias reveal_start expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStart&quot; object:nil];  
-command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@&quot;IBARevealRequestStop&quot; object: nil nil]; 
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/1.png" alt="1"/></p>
-
-<p>这里解释一下命令的意思</p>
-
-<blockquote>
-<p><strong><code>reveal_load_sim</code></strong> 为模拟器加载reveal调试用的动态链接库<br/>
-<strong><code>reveal_load_dev</code></strong> 为真机加载<br/>
-<strong><code>reveal_start</code></strong>       启动reveal调试功能<br/>
-<strong><code>reveal_stop</code></strong>         结束reveal调试功能</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_3">在Xcode中启动Reveal</h3>
-
-<blockquote>
-<p>首先打开<strong><code>Xcode</code></strong>的工程, 去到<strong><code>AppDelegate</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/2.png" alt="2"/></p>
-
-<blockquote>
-<p>然后在<strong><code>application:didFinishLaunchingWithOptions</code></strong>方法中添加断点</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/3.png" alt="3"/></p>
-
-<blockquote>
-<p>编辑断点, 添加对应的代码</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/4.png" alt="4"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/5.png" alt="5"/></p>
-
-<blockquote>
-<p>运行工程, 如果看到控制台里输出以下酱紫的一行字, 就代表设置成功了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/6.png" alt="6"/></p>
-
-<hr/>
-
-<h3 id="toc_4">查看Reveal效果</h3>
-
-<blockquote>
-<p>看完上面的操作步骤, 只要你设置的都是正确的, 那就可以打开<strong><code>Reveal</code></strong>查看效果了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/7.png" alt="7"/></p>
-
-<blockquote>
-<p>如果你的模拟器切换了页面, <strong><code>Reveal</code></strong>是不会自动刷新的, 既然是酱紫, 那我们就需要做对应的操作</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/8.png" alt="8"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/9.png" alt="9"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/10.png" alt="10"/></p>
-
-<hr/>
-
-<h3 id="toc_5">特殊教程(无限试用)</h3>
-
-<blockquote>
-<p>打开你的<strong><code>Terminal</code></strong>, 然后输入以下命令</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/11.png" alt="11"/></p>
-
-<blockquote>
-<p>找到<strong><code>com.ittybittyapps.Reveal.plist</code></strong>文件删掉</p>
-
-<p>PS: 这个文件每次运行的时候<strong><code>Reveal</code></strong>都会创建一次, 每次都是从第一天开始, 每次<strong><code>Reveal</code></strong>还有几天的时候, 再删掉, 就会再次从第一天开始.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DeveloperDocument/master/%E7%8E%A9%E8%BD%ACiOS%E5%BC%80%E5%8F%91%EF%BC%9A%E7%95%8C%E9%9D%A2%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7%E3%80%8AReveal%E3%80%8B/12.png" alt="12"/></p>
-
-<blockquote>
-<p><strong><font color=red>这里声明一点, 作者是希望大家都去购买正版, 而不是去寻找什么破解方法, 毕竟我们本身就是做软件的, 所以希望大家可以去支持支持正版.</font></strong></p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_6">附件</h3>
-
-<blockquote>
-<p>由于真机调试是需要修改<strong><code>Xcode</code></strong>工程配置, 不太适合团队协作, 所以这里我只提供了模拟器UI调试的方法, 如果有朋友需要真机调试, 这里有一个<a href="http://support.revealapp.com/kb/getting-started/integrating-reveal-add-reveal-to-your-xcode-project">官方教程</a>, 有兴趣的童鞋可以自行去查看</p>
-</blockquote>
 
 ]]></content>
   </entry>
