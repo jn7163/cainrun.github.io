@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	iOS 10特性 - Cain For iOS
+  	玩转iOS开发：iOS 10 新特性《Thread Sanitizer》 - Cain For iOS
   	
 	</title>
 
@@ -120,85 +120,153 @@
 		</div>	
 		<div class="mid-col">
 			<div class="mid-col-container"> <div id="content" class="inner">
-<div itemscope itemtype="http://schema.org/Blog">
 
-
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-11T20:11:04+08:00" itemprop="datePublished">2017/6/11</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14971830645415.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《Thread Sanitizer》</a></h1>
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：iOS 10 新特性《Thread Sanitizer》</h1>
 		<div class="entry-content" itemprop="articleBody">
-			
 			<h3 id="toc_0">Thread Sanitizer(TSan)</h3>
 
 <blockquote>
 <p><code>Thread Sanitizer</code>这个怎么翻译呢...其实我想了很久, <code>线程洗手液</code>? <code>线程清扫车</code>? 感觉都不太对....于是乎还是不翻译了, 我们只要知道这个东西是用来解决线程问题的就哦了, 我这个是<code>Objective-c</code>版本的, 如果你们喜欢<code>Swift</code>版本的话, 可以去找找<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/02%20-%20Thread%20Sanitizer">Swift版本</a></p>
 </blockquote>
 
+<span id="more"></span><!-- more -->
 
+<hr/>
 
-			 
-			<a href="14971830645415.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
+<h3 id="toc_1">使用场景</h3>
 
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-09T14:32:04+08:00" itemprop="datePublished">2017/6/9</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14969899245168.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《Message Extension》</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">说点废话</h3>
+<p>那么在什么时候会用到这个<code>Thread Sanitizer</code>呢? 其实就是在我们精心开发好一个App之后, 发现有断断续续不停的小Bug, 然后会导致<code>Crash</code>等问题, 你又没法找到的时候, 就可以用这个东西试试看啦.</p>
+
+<p>那一般会在什么情况下会发生呢? 我找到了一段比较官方的文字, 大家凑合着看看吧.</p>
 
 <blockquote>
-<p>中途因为发生了点事, 所以有一段时间没有写博文了, 现在开始开始慢慢写回, 写的风格也改了一些, 大家不懂得可以去各大博客, 论坛, 等等地方翻翻资料, 如果一定要找我问问题的话, 麻烦先用红包来打一下我, 祝大家学习愉快.</p>
+<p>通常， 这些都是多个线程同时访问内存中的同一段地址造成的。相信线程问题是许多开发人员的噩梦。它们难以跟踪，因为错误只发生在某些条件下，所以确定问题的根本原因可能是非常棘手的。通常的原因是所谓的“race condition”。</p>
+
+<p>当两个线程并发访问同一个变量，并且至少有一个访问是写时，会发生数据竞争。</p>
 </blockquote>
 
+<hr/>
 
+<h3 id="toc_2">Thread Sanitizer(TSan)可以检查的类型错误</h3>
 
-			 
-			<a href="14969899245168.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
+<p>虽然说<code>Thread Sanitizer</code>这个工具很牛逼, 但也不是万能的, 它只能够检测出以下几种错误.</p>
+
+<ul>
+<li>Use of uninitialized mutexes</li>
+<li>Thread leaks (missing phread_johin)</li>
+<li>Unsafe calls in signal handlers (ex:malloc)</li>
+<li>Unlock from wrong thread</li>
+<li>Data race</li>
+</ul>
+
+<hr/>
+
+<h3 id="toc_3">打开Thread Sanitizer工具</h3>
+
+<p><code>Thread Sanitizer</code>工具是在工程里的<code>Edit Scheme</code> -&gt; <code>Diagnostics</code>打开, <br/>
+并不像<code>Instruments</code>那样在<code>Developer Tools</code>里打开.</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/2.Thread%20Sanitizer/Images/1.png" alt="1"/></p>
+
+<hr/>
+
+<h3 id="toc_4">创建项目</h3>
+
+<p>一切所有的东西, 都要从代码入手, 这里我们也是一样, 写一个小小的<code>Demo</code>来演示演示, <code>UI</code>略丑, 大家凑合着看吧....代码的话, 在工程里自行去翻查吧~</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/2.Thread%20Sanitizer/Images/2.png" alt="2"/></p>
+
+<p>里面的布局代码也没有什么好看的, 这里直接用的是<code>Masonry</code>, 感谢<code>Masonry</code>作者的无私奉献~~</p>
+
+<hr/>
+
+<h3 id="toc_5">运算逻辑</h3>
+
+<p>这里我就不写那么大的数额了, 就取十位数哦了(别说我小气), </p>
+
+<p>这里的存入逻辑灰常的简单, 计算完结果之后就传入进去:</p>
+
+<pre><code class="language-objectivec">- (void)setMoneyInTheBank {
+    
+    NSString *amount = [NSString stringWithFormat:@&quot;总额: ¥%ld&quot;, self.bankView.amount + 10];
+    
+    [self.bankView changeLabelContentWithString:amount];
+}
+</code></pre>
+
+<p>本来接着要去写取得逻辑, 但这里想到一个情况, 快速的按存和取, 那就会发生刚刚在文章开头所说的数据竞争问题, 这里经过思考后, 发现要使用一丢丢多线程的技巧.</p>
+
+<pre><code class="language-objectivec">- (void)getMoneyOfBanek {
+    
+    dispatch_async(dispatch_queue_create(&quot;com.threadsanitizer.ThreadSanitizer&quot;, nil), ^{
+        
+        if (self.amount &lt;= 0) {
+            NSLog(@&quot;你都没钱啦, 怎么取?&quot;);
+            
+            return;
+        }
+        
+        // 这是让线程先休息一秒先~
+        sleep(1);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSString *amount = [NSString stringWithFormat:@&quot;总额: ¥%ld&quot;, self.amount -= 10];
+
+            [self.bankView changeLabelContentWithString:amount];
+        });
+    });
+}
+</code></pre>
+
+<p>写完之后, 然后运行, 狂点存和取, 然后就会出现下面酱紫的画面:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/2.Thread%20Sanitizer/Images/3.png" alt="3"/></p>
+
+<p>是不是很容易就找出问题的所在呢?</p>
+
+<blockquote>
+<p>原理的话, 大概就和你吃饭一样, 先咽下第一口再咽下第二口, 不然一起咽下, 就会呛着了.</p>
+</blockquote>
+
+<p>顺便说说: </p>
+
+<ul>
+<li>TSan 是一个检查 Runtime Issues 的工具 (不支持静态检查)</li>
+<li>只能运行在语言版本3编写的Swift代码上 (Objective-C也可兼容)，</li>
+<li>只能在64位macOS 或 64位模拟器上运行 (所有真机设备都不可以用来调试)。</li>
+</ul>
+
+<hr/>
+
+<h3 id="toc_6">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/2.Thread%20Sanitizer">https://github.com/CainRun/iOS-10-Characteristic/tree/master/2.Thread%20Sanitizer</a></p>
+
+<hr/>
+
+<h3 id="toc_7">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
 		</div>
-
 	</article>
-  
-
-</div>
-<nav id="pagenavi">
+	<div class="share-comment">
 	 
-	
-	<div class="center"><a href="archives.html">Blog Archives</a></div>
 
-</nav>
+	  
 
-</div>
+	  
+	      <div class="ds-thread" data-thread-key="14971830645415.html" data-url="https://cainrun.github.io/14971830645415.html" data-title="玩转iOS开发：iOS 10 新特性《Thread Sanitizer》"></div>
+	  
 
-
-
-        </div>
+	</div>
+</div>        </div>
 			<footer id="footer" class="inner">Copyright &copy; 2014
 Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
 Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>

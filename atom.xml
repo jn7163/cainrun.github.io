@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-11T00:09:02+08:00</updated>
+  <updated>2017-06-12T00:26:53+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,145 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Thread Sanitizer》]]></title>
+    <link href="https://cainrun.github.io/14971830645415.html"/>
+    <updated>2017-06-11T20:11:04+08:00</updated>
+    <id>https://cainrun.github.io/14971830645415.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">Thread Sanitizer(TSan)</h3>
+
+<blockquote>
+<p><code>Thread Sanitizer</code>这个怎么翻译呢...其实我想了很久, <code>线程洗手液</code>? <code>线程清扫车</code>? 感觉都不太对....于是乎还是不翻译了, 我们只要知道这个东西是用来解决线程问题的就哦了, 我这个是<code>Objective-c</code>版本的, 如果你们喜欢<code>Swift</code>版本的话, 可以去找找<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/02%20-%20Thread%20Sanitizer">Swift版本</a></p>
+</blockquote>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">使用场景</h3>
+
+<p>那么在什么时候会用到这个<code>Thread Sanitizer</code>呢? 其实就是在我们精心开发好一个App之后, 发现有断断续续不停的小Bug, 然后会导致<code>Crash</code>等问题, 你又没法找到的时候, 就可以用这个东西试试看啦.</p>
+
+<p>那一般会在什么情况下会发生呢? 我找到了一段比较官方的文字, 大家凑合着看看吧.</p>
+
+<blockquote>
+<p>通常， 这些都是多个线程同时访问内存中的同一段地址造成的。相信线程问题是许多开发人员的噩梦。它们难以跟踪，因为错误只发生在某些条件下，所以确定问题的根本原因可能是非常棘手的。通常的原因是所谓的“race condition”。</p>
+
+<p>当两个线程并发访问同一个变量，并且至少有一个访问是写时，会发生数据竞争。</p>
+</blockquote>
+
+<hr/>
+
+<h3 id="toc_2">Thread Sanitizer(TSan)可以检查的类型错误</h3>
+
+<p>虽然说<code>Thread Sanitizer</code>这个工具很牛逼, 但也不是万能的, 它只能够检测出以下几种错误.</p>
+
+<ul>
+<li>Use of uninitialized mutexes</li>
+<li>Thread leaks (missing phread_johin)</li>
+<li>Unsafe calls in signal handlers (ex:malloc)</li>
+<li>Unlock from wrong thread</li>
+<li>Data race</li>
+</ul>
+
+<hr/>
+
+<h3 id="toc_3">打开Thread Sanitizer工具</h3>
+
+<p><code>Thread Sanitizer</code>工具是在工程里的<code>Edit Scheme</code> -&gt; <code>Diagnostics</code>打开, <br/>
+并不像<code>Instruments</code>那样在<code>Developer Tools</code>里打开.</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/2.Thread%20Sanitizer/Images/1.png" alt="1"/></p>
+
+<hr/>
+
+<h3 id="toc_4">创建项目</h3>
+
+<p>一切所有的东西, 都要从代码入手, 这里我们也是一样, 写一个小小的<code>Demo</code>来演示演示, <code>UI</code>略丑, 大家凑合着看吧....代码的话, 在工程里自行去翻查吧~</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/2.Thread%20Sanitizer/Images/2.png" alt="2"/></p>
+
+<p>里面的布局代码也没有什么好看的, 这里直接用的是<code>Masonry</code>, 感谢<code>Masonry</code>作者的无私奉献~~</p>
+
+<hr/>
+
+<h3 id="toc_5">运算逻辑</h3>
+
+<p>这里我就不写那么大的数额了, 就取十位数哦了(别说我小气), </p>
+
+<p>这里的存入逻辑灰常的简单, 计算完结果之后就传入进去:</p>
+
+<pre><code class="language-objectivec">- (void)setMoneyInTheBank {
+    
+    NSString *amount = [NSString stringWithFormat:@&quot;总额: ¥%ld&quot;, self.bankView.amount + 10];
+    
+    [self.bankView changeLabelContentWithString:amount];
+}
+</code></pre>
+
+<p>本来接着要去写取得逻辑, 但这里想到一个情况, 快速的按存和取, 那就会发生刚刚在文章开头所说的数据竞争问题, 这里经过思考后, 发现要使用一丢丢多线程的技巧.</p>
+
+<pre><code class="language-objectivec">- (void)getMoneyOfBanek {
+    
+    dispatch_async(dispatch_queue_create(&quot;com.threadsanitizer.ThreadSanitizer&quot;, nil), ^{
+        
+        if (self.amount &lt;= 0) {
+            NSLog(@&quot;你都没钱啦, 怎么取?&quot;);
+            
+            return;
+        }
+        
+        // 这是让线程先休息一秒先~
+        sleep(1);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSString *amount = [NSString stringWithFormat:@&quot;总额: ¥%ld&quot;, self.amount -= 10];
+
+            [self.bankView changeLabelContentWithString:amount];
+        });
+    });
+}
+</code></pre>
+
+<p>写完之后, 然后运行, 狂点存和取, 然后就会出现下面酱紫的画面:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/2.Thread%20Sanitizer/Images/3.png" alt="3"/></p>
+
+<p>是不是很容易就找出问题的所在呢?</p>
+
+<blockquote>
+<p>原理的话, 大概就和你吃饭一样, 先咽下第一口再咽下第二口, 不然一起咽下, 就会呛着了.</p>
+</blockquote>
+
+<p>顺便说说: </p>
+
+<ul>
+<li>TSan 是一个检查 Runtime Issues 的工具 (不支持静态检查)</li>
+<li>只能运行在语言版本3编写的Swift代码上 (Objective-C也可兼容)，</li>
+<li>只能在64位macOS 或 64位模拟器上运行 (所有真机设备都不可以用来调试)。</li>
+</ul>
+
+<hr/>
+
+<h3 id="toc_6">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/2.Thread%20Sanitizer">https://github.com/CainRun/iOS-10-Characteristic/tree/master/2.Thread%20Sanitizer</a></p>
+
+<hr/>
+
+<h3 id="toc_7">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Message Extension》]]></title>
@@ -6142,117 +6281,6 @@ fi
 <blockquote>
 <p>好啦, 教程到这里就结束了, 谢谢大家的耐心观看</p>
 </blockquote>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：《iOS设计模式 — 观察者模式》]]></title>
-    <link href="https://cainrun.github.io/14719369255829.html"/>
-    <updated>2016-08-23T15:22:05+08:00</updated>
-    <id>https://cainrun.github.io/14719369255829.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>这几天在捣鼓新项目, 在用通知中心的时候突然想到自己用了那么久的通知中心, 为啥不自己动手实现一个呢? 说干就干, 于是乎就研究通知中心的原理, 当然包括<strong><code>KVO</code></strong>, 这些都是基于<strong><code>观察者模式</code></strong>实现的, 既然知道了原理, 我们就Do It!!!</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>工厂模式</code><strong>, 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/ObserverUML.jpg" alt="ObserverUML"/></p>
-
-<blockquote>
-<p>说起观察模式, 其实可以举酱紫的一个例子, 就拿实验对象来说明, 研究者是<strong><code>观察者</code></strong>, 小白鼠是<strong><code>被观察者</code></strong>, 当研究者往小白鼠身上做某些实验的时候, 小白鼠会产生某些反应, 而研究者就会记录以及反馈观察对应的现象, 这种情况就叫做<strong><code>观察者模式</code></strong>.</p>
-
-<p>说那么多废话, 直接上代码演示吧~~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">新建工程</h3>
-
-<blockquote>
-<p>依旧打开我们之前的那个<strong><code>workSpace</code></strong>工程, 然后新建一个<strong><code>ObserverPattern</code></strong>工程.</p>
-
-<p>这里我们就拿微信公众号来举个例子, 首先我们要有一个微信公众号中心, 方便我们用来寻找我们想要的公众号.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/1.png" alt="1"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/2.png" alt="2"/></p>
-
-<hr/>
-
-<h3 id="toc_3">针对接口编程</h3>
-
-<blockquote>
-<p>这里普及一个思想, 就是<strong><code>针对接口编程</code></strong>, 说起<strong><code>针对接口编程</code></strong>, 估计会有一些道友会有迷惑, 啥是<strong><code>针对接口编程</code></strong>? 其实在我们日常开发当中, 我们就已经做到了<strong><code>针对接口编程</code></strong>, 只是我们本身没有意识到, 其实所谓的<strong><code>针对接口编程</code></strong>, 就是我们在写模块或者是在写SDK的时候, 我们会先设计对外公开的API, 然后再内部实现对应的逻辑, 这就是<strong><code>针对接口编程</code></strong>.</p>
-
-<p>这里有一篇我觉得不错的文章<a href="http://blog.chinaunix.net/uid-20478213-id-1942005.html">针对接口编程</a>, 如果觉得不好, 可以去吐槽博主, 这我是不会反对的~</p>
-
-<p>现在我们先去声明一些我们需要用到的API先.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/3.png" alt="3"/></p>
-
-<hr/>
-
-<h3 id="toc_4">限制用户</h3>
-
-<blockquote>
-<p>虽然我们声明了一些接口, 但其实是还不够的, 因为公众号并不知道你是否有没有订阅, 如果没有订阅的话, 公众号发出来的消息, 你不可能会收到, 所以在这里我们需要声明一个<strong><code>Protocol</code></strong>, 用来限制<br/>
-用户, 因为订阅号所发送的消息不是全部用户都能接收的, 只要订阅了该订阅号的用户才能收到订阅号所发出来的消息.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/4.png" alt="4"/></p>
-
-<blockquote>
-<p>记得要把对象换一下, 换成了遵守了改协议的对象才能去接收消息</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/5.png" alt="5"/></p>
-
-<hr/>
-
-<h3 id="toc_5">实现内部方法</h3>
-
-<blockquote>
-<p>现在我们对应的接口和限制用户的协议都已经写好了, 接下来我们就要去实现<strong><code>PublicNumberCenter</code></strong>里的方法, 这样子我们就可以完完整整的实现一个观察者模式了.</p>
-
-<p>由于通知中心是属于单例, 首先我们肯定是要来实现一下单例模式</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/6.png" alt="6"/></p>
-
-<blockquote>
-<p>实现完通知中心之后, 我们就要来实现内部的方法, 这样子我们要的通知中心就完成了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/7.png" alt="7"/></p>
-
-<hr/>
-
-<h3 id="toc_6">调用自定义通知中心</h3>
-
-<blockquote>
-<p>写了那么久, 现在我们来尝试调用一下通知中心, 这里我们就简单实现一下, 就让<strong><code>ViewController</code></strong>成为用户, 遵守<strong><code>PublicNumberProtocol</code></strong>就好了.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/DesignPattern/master/ObserverPattern/ObserverPattern%E8%AF%B4%E6%98%8E/8.png" alt="8"/></p>
-
-<hr/>
-
-<h3 id="toc_7">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/DesignPattern">https://github.com/CainRun/DesignPattern</a></p>
 
 ]]></content>
   </entry>
