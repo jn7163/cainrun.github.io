@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	iOS 10特性 - Cain For iOS
+  	玩转iOS开发：iOS 10 新特性《Xcode Extension》 - Cain For iOS
   	
 	</title>
 
@@ -120,24 +120,10 @@
 		</div>	
 		<div class="mid-col">
 			<div class="mid-col-container"> <div id="content" class="inner">
-<div itemscope itemtype="http://schema.org/Blog">
 
-
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-12T10:49:57+08:00" itemprop="datePublished">2017/6/12</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14972357977664.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《Xcode Extension》</a></h1>
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：iOS 10 新特性《Xcode Extension》</h1>
 		<div class="entry-content" itemprop="articleBody">
-			
 			<h3 id="toc_0">Xcode Extension</h3>
 
 <p>做<code>macOS</code>, <code>watchOS</code>, <code>tvOS</code>, <code>iOS</code>开发, 最离不开的工具就是<code>Xcode</code>, 但<code>Xcode</code>真的让我们又爱又恨, 虽然有很多强大的功能, 但细节方面真的很难<code>Care</code>到, 于是乎<a href="http://alcatraz.io">Alcatraz</a>诞生了, 在当时火的不要不要的, 只要是老司机都会装一个.</p>
@@ -146,92 +132,113 @@
 
 <p>严格来说这不是<code>iOS</code>的东西, 但又刚刚好是随着<code>iOS 10</code>一起出来的, 想了想, 还是集合在这里吧.</p>
 
+<span id="more"></span><!-- more -->
 
+<hr/>
 
-			 
-			<a href="14972357977664.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
+<h3 id="toc_1">创建项目</h3>
+
+<p>这里我们需要创建的是<code>macOS</code>的项目:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/1.png" alt="1"/></p>
+
+<p>然后在项目的<code>General</code>里找到添加<code>Extension</code>的选项:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/2.png" alt="2"/></p>
+
+<p>选择<code>Xcode Editor Extension</code>:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/3.png" alt="3"/></p>
+
+<p>这就是<code>Xcode Extension</code>啦:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/4.png" alt="4"/></p>
+
+<p>顺便说说, 我在这个<code>info.plist</code>改了一下参数:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/5.png" alt="5"/></p>
+
+<hr/>
+
+<h3 id="toc_2">注意</h3>
+
+<p>这里有一个小坑, 注意要给我们<code>Xcode Extension</code>申请一个证书, 两边都要申请哦.</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/6.png" alt="6"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/7.png" alt="7"/></p>
+
+<p>不然就会报-67050错误:</p>
+
+<pre><code class="language-vim">IDESourceEditorExtension: Xcode Source Editor Extension does not meet code signing requirement: me.ocean.XcodeExt.XcodeExtTest ((null)), Error Domain=DVTSecErrorDomain Code=-67050 &quot;code failed to satisfy specified code requirement(s)&quot; UserInfo={NSLocalizedDescription=code failed to satisfy specified code requirement(s)}
+</code></pre>
+
+<p>这里还有一个诡异的错误代码4097, 但我<code>clean</code>了一下工程之后就消失了, 大家注意注意.</p>
+
+<pre><code class="language-vim">Hub connection error Error Domain=NSCocoaErrorDomain Code=4097
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_3">代码代码!!!</h3>
+
+<p>这里我就随手写两句代码好了, <code>Xcode</code>的扩展还是靠各位大神去发挥想象, 我以后再掺和咯.</p>
+
+<pre><code class="language-objectivec">    XCSourceTextBuffer *textBuffer = invocation.buffer;
+    XCSourceTextRange *insertPointRange = textBuffer.selections[0];
+    
+    NSInteger startLine = insertPointRange.start.line;
+    
+    [textBuffer.lines insertObject:@&quot;这是什么鬼👻&quot; atIndex:startLine];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_4">运行</h3>
+
+<p>一切就绪之后, 我们就运行, 然后选择为<code>Xcode</code>添加插件:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/8.png" alt="8"/></p>
+
+<p>等待运行完成之后, 会弹出一个灰色的<code>Xcode</code>:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/9.png" alt="9"/></p>
+
+<p>这时不用理会, 我们回到正常的<code>Xcode</code>, 然后找到<code>Editor</code>, 点击它, 我们就会发现插件在这里啦:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/10.png" alt="10"/></p>
+
+<p>但这里多说一句, 当我们停止运行之后, 插件又会不见了的, 这个需要大家自行去打包然后发布出来~~这里就不多说了, 详细大家去参考<a href="https://github.com/qfish/XAlign">XAlign</a>吧</p>
+
+<hr/>
+
+<h3 id="toc_5">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/3.Xcode%20Extensions">https://github.com/CainRun/iOS-10-Characteristic/tree/master/3.Xcode%20Extensions</a></p>
+
+<hr/>
+
+<h3 id="toc_6">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
 		</div>
-
 	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-11T20:11:04+08:00" itemprop="datePublished">2017/6/11</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14971830645415.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《Thread Sanitizer》</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">Thread Sanitizer(TSan)</h3>
-
-<blockquote>
-<p><code>Thread Sanitizer</code>这个怎么翻译呢...其实我想了很久, <code>线程洗手液</code>? <code>线程清扫车</code>? 感觉都不太对....于是乎还是不翻译了, 我们只要知道这个东西是用来解决线程问题的就哦了, 我这个是<code>Objective-c</code>版本的, 如果你们喜欢<code>Swift</code>版本的话, 可以去找找<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/02%20-%20Thread%20Sanitizer">Swift版本</a></p>
-</blockquote>
-
-
-
-			 
-			<a href="14971830645415.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-09T14:32:04+08:00" itemprop="datePublished">2017/6/9</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14969899245168.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《Message Extension》</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">说点废话</h3>
-
-<blockquote>
-<p>中途因为发生了点事, 所以有一段时间没有写博文了, 现在开始开始慢慢写回, 写的风格也改了一些, 大家不懂得可以去各大博客, 论坛, 等等地方翻翻资料, 如果一定要找我问问题的话, 麻烦先用红包来打一下我, 祝大家学习愉快.</p>
-</blockquote>
-
-
-
-			 
-			<a href="14969899245168.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
-  
-
-</div>
-<nav id="pagenavi">
+	<div class="share-comment">
 	 
-	
-	<div class="center"><a href="archives.html">Blog Archives</a></div>
 
-</nav>
+	  
 
-</div>
+	  
+	      <div class="ds-thread" data-thread-key="14972357977664.html" data-url="https://cainrun.github.io/14972357977664.html" data-title="玩转iOS开发：iOS 10 新特性《Xcode Extension》"></div>
+	  
 
-
-
-        </div>
+	</div>
+</div>        </div>
 			<footer id="footer" class="inner">Copyright &copy; 2014
 Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
 Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
