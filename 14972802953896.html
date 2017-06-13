@@ -1,0 +1,423 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	玩转iOS开发：iOS 10 新特性《UIViewPropertyAnimator》 - Cain For iOS
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Cain For iOS" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+				 
+				 	<div class="profilepic">
+						<img src="asset/icon.png" style="width:160px;">
+					</div>
+            	
+					
+					<h1><a href="index.html">Cain For iOS</a></h1>
+					<p class="subtitle">指弹吉他演奏爱好者, 摄影爱好者, iOS 开发工程师, 如果您有更好的建议或者其他不明白的地方, 可以联系我QQ: 350116542</p>
+					<nav id="main-nav">
+						<ul class="main">
+						
+						  <li id=""><a target="self" href="index.html">Home</a></li>
+						
+						  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+						
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+
+
+
+<a target="_blank" class="linkedin" href="www.linkedin.com/in/cainluo" title="LinkedIn">LinkedIn</a>
+
+
+
+<a target="_blank" class="weibo" href="http://weibo.com/1826190094" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/CainRun" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:zhebushimengfei@qq.com" title="Email">Email</a>
+
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：iOS 10 新特性《UIViewPropertyAnimator》</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">UIViewPropertyAnimator</h3>
+
+<p>我们之前在做基础动画效果的时候, 基本上的代码都是:</p>
+
+<pre><code class="language-objectivec">    [UIView animateWithDuration:1
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         
+                         // Do Something
+                     } completion:^(BOOL finished) {
+                         
+                         // Do Something
+                     }];
+</code></pre>
+
+<p>一般都会自己去封装一下, 免得大串代码在这里恶心....</p>
+
+<p>但现在不用了咯, 自从苹果爸爸在<code>iOS 10</code>推出了一个框架<code>UIViewPropertyAnimator</code>, 可以更简洁的去省略很多代码, 我这里是<code>Objective-C</code>版本的, 如果想要看<code>Swift</code>版本, 可以到这里去看<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/04%20-%20UIViewPropertyAnimator">Swift版本</a></p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">创建项目</h3>
+
+<p>废话就少说了, 直接看代码吧:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/1.png" alt="1"/></p>
+
+<p>对外开放的方法有:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/2.png" alt="2"/></p>
+
+<p>用<code>UIViewPropertyAnimator</code>运行动画的代码:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/3.png" alt="3"/></p>
+
+<p>效果:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/4.png" alt="4"/></p>
+
+<p>看完之后估计很多人都会说, 这个有什么的, 之前的那个<code>API</code>也可以搞定, 那我们就继续往下看看吧.</p>
+
+<hr/>
+
+<h3 id="toc_2">为什么要用UIViewPropertyAnimator</h3>
+
+<p>这里我找到了一段比较官方的说法:</p>
+
+<blockquote>
+<p><code>UIViewPropertyAnimator</code> 的 <code>API</code> 设计得很完善，可扩展性也很好。它<code>cover</code>了传统 <code>UIView animation</code>动画的绝大部分功能，并且大大增强了你对动画过程的掌控能力。具体来说，你可以在动画过程中任意时刻暂停，可以随后再选择继续，甚至还能在动画过程中动态改变动画的属性（例如，本来动画终点在屏幕左下角的，可以在动画过程中把终点改到右上角）。</p>
+</blockquote>
+
+<p>看完介绍之后, 到底是不是酱紫呢, 我们来加一句代码看看:</p>
+
+<pre><code class="language-objectivec">    // 添加多一个渐渐消失的动画
+    [propertyAnimator addAnimations:^{
+        self.basicsView.alpha = 0;
+    }];
+</code></pre>
+
+<p>效果:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/5.png" alt="5"/></p>
+
+<p>除了这个, 如果要添加动画完成后的处理, 甚至是在动画进行中的一些操作也是可以的:</p>
+
+<pre><code class="language-objectivec">    [propertyAnimator addCompletion:^(UIViewAnimatingPosition finalPosition) {
+        
+        NSLog(@&quot;动画结束咯&quot;);
+    }];
+    
+    [propertyAnimator addCompletion:^(UIViewAnimatingPosition finalPosition) {
+        
+        switch (finalPosition) {
+                
+            case UIViewAnimatingPositionStart:
+                
+                NSLog(@&quot;动画开始了&quot;);
+                
+                break;
+                
+            case UIViewAnimatingPositionCurrent:
+                
+                NSLog(@&quot;动画结束咯&quot;);
+
+                break;
+                
+            case UIViewAnimatingPositionEnd:
+                
+                NSLog(@&quot;正在执行动画&quot;);
+
+                break;
+            default:
+                break;
+        }
+    }];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_3">添加个拖拽器</h3>
+
+<p><code>UIViewPropertyAnimator</code>不只是可以写好了规定的动画, 也可以和其他控件一起配合使用, 比如<code>UISlider</code>, 为了方便, 我就把<code>UIViewPropertyAnimator *propertyAnimator</code>设置成一个全局属性:</p>
+
+<pre><code class="language-objectivec">@property (nonatomic, strong) UIViewPropertyAnimator *propertyAnimator;
+</code></pre>
+
+<p>然后开始实现我们的拖拽动画:</p>
+
+<pre><code class="language-objectivec">- (void)addSliderWithSuperView {
+    
+    self.propertyAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:5
+                                                                       curve:UIViewAnimationCurveEaseIn
+                                                                  animations:^{
+                                                                                         
+                                                                      [self.basicsView moveViewToBottmRight];
+                                                                  }];
+
+    UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 40)];
+    
+    [slider addTarget:self
+               action:@selector(sliderValueChanged:)
+     forControlEvents:UIControlEventValueChanged];
+    
+    [self.basicsView addSubview:slider];
+}
+
+- (void)sliderValueChanged:(UISlider *)slider {
+    
+    self.propertyAnimator.fractionComplete = slider.value;
+}
+</code></pre>
+
+<p>效果图:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/6.png" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_4">反向动画</h3>
+
+<p>如果你觉得就酱紫结束了, 那就太没意思了:</p>
+
+<pre><code class="language-objectivec">/**
+ 反向动画
+ */
+- (void)viewAnimationCurveEaseInOut {
+    
+    UIButton *resetButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width / 2) - 100, 100, 200, 50)];
+    
+    [resetButton setTitleColor:[UIColor blackColor]
+                      forState:UIControlStateNormal];
+    [resetButton setTitle:@&quot;开始反向动画&quot;
+                 forState:UIControlStateNormal];
+    [resetButton addTarget:self
+                    action:@selector(resetButtonAction)
+          forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:resetButton];
+    
+    self.propertyAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:3
+                                                                       curve:UIViewAnimationCurveEaseInOut
+                                                                  animations:^{
+                                                                      
+                                                                      [self.basicsView moveViewToBottmRight];
+                                                                  }];
+    [self.propertyAnimator startAnimation];
+}
+
+/**
+ 按钮点击事件
+ */
+- (void)resetButtonAction {
+    
+    self.propertyAnimator.reversed = YES;
+}
+</code></pre>
+
+<p>效果:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/7.png" alt="7"/></p>
+
+<hr/>
+
+<h3 id="toc_5">UISpringTimingParameters</h3>
+
+<p>这里还可以配合着<code>UISpringTimingParameters</code>来使用:</p>
+
+<pre><code class="language-objectivec">- (void)springTimingParameters {
+    
+    weakSelf(weakSelf);
+
+    UISpringTimingParameters *springTimingParameters = [[UISpringTimingParameters alloc] initWithDampingRatio:0.3
+                                                                                              initialVelocity:CGVectorMake(0, 0)];
+    
+    self.propertyAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:4
+                                                            timingParameters:springTimingParameters];
+    
+    [self.propertyAnimator addAnimations:^{
+        
+                            [weakSelf.basicsView moveViewToBottmRight];
+    } delayFactor:3.0];
+    
+    [self.propertyAnimator startAnimation];
+}
+</code></pre>
+
+<p>效果:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/8.png" alt="8"/></p>
+
+<hr/>
+
+<h3 id="toc_6">UICubicTimingParameters</h3>
+
+<p>这里也可以配合着<code>UICubicTimingParameters</code>来玩耍~~</p>
+
+<pre><code class="language-objectivec">/**
+ UICubicTimingParameters 动画
+ */
+- (void)cubicTimingParameters {
+    
+    weakSelf(weakSelf);
+
+    UICubicTimingParameters *cubicTimingParameters = [[UICubicTimingParameters alloc] initWithControlPoint1:CGPointMake(0.05, 0.95)
+                                                                                              controlPoint2:CGPointMake(0.15, 0.95)];
+    
+    self.propertyAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:4
+                                                            timingParameters:cubicTimingParameters];
+    
+    
+    [self.propertyAnimator addAnimations:^{
+        
+        [weakSelf.basicsView moveViewToBottmRight];
+    } delayFactor:0.25];
+    
+    [self.propertyAnimator startAnimation];
+}
+</code></pre>
+
+<p>效果:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/9.png" alt="9"/></p>
+
+<p>大概就介绍到这里吧, 更复杂的玩法就有待各位大神去慢慢挖掘了~~</p>
+
+<hr/>
+
+<h3 id="toc_7">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/4.UIViewPropertyAnimator">https://github.com/CainRun/iOS-10-Characteristic/tree/master/4.UIViewPropertyAnimator</a></p>
+
+<hr/>
+
+<h3 id="toc_8">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	 
+
+	  
+
+	  
+	      <div class="ds-thread" data-thread-key="14972802953896.html" data-url="https://cainrun.github.io/14972802953896.html" data-title="玩转iOS开发：iOS 10 新特性《UIViewPropertyAnimator》"></div>
+	  
+
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+  
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:'cainluo'};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+    
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+</body>
+</html>

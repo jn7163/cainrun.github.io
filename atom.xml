@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-12T00:27:33+08:00</updated>
+  <updated>2017-06-12T14:23:57+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,272 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《UIViewPropertyAnimator》]]></title>
+    <link href="https://cainrun.github.io/14972802953896.html"/>
+    <updated>2017-06-12T23:11:35+08:00</updated>
+    <id>https://cainrun.github.io/14972802953896.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">UIViewPropertyAnimator</h3>
+
+<p>我们之前在做基础动画效果的时候, 基本上的代码都是:</p>
+
+<pre><code class="language-objectivec">    [UIView animateWithDuration:1
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         
+                         // Do Something
+                     } completion:^(BOOL finished) {
+                         
+                         // Do Something
+                     }];
+</code></pre>
+
+<p>一般都会自己去封装一下, 免得大串代码在这里恶心....</p>
+
+<p>但现在不用了咯, 自从苹果爸爸在<code>iOS 10</code>推出了一个框架<code>UIViewPropertyAnimator</code>, 可以更简洁的去省略很多代码, 我这里是<code>Objective-C</code>版本的, 如果想要看<code>Swift</code>版本, 可以到这里去看<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/04%20-%20UIViewPropertyAnimator">Swift版本</a></p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">创建项目</h3>
+
+<p>废话就少说了, 直接看代码吧:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/1.png" alt="1"/></p>
+
+<p>对外开放的方法有:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/2.png" alt="2"/></p>
+
+<p>用<code>UIViewPropertyAnimator</code>运行动画的代码:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/3.png" alt="3"/></p>
+
+<p>效果:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/4.png" alt="4"/></p>
+
+<p>看完之后估计很多人都会说, 这个有什么的, 之前的那个<code>API</code>也可以搞定, 那我们就继续往下看看吧.</p>
+
+<hr/>
+
+<h3 id="toc_2">为什么要用UIViewPropertyAnimator</h3>
+
+<p>这里我找到了一段比较官方的说法:</p>
+
+<blockquote>
+<p><code>UIViewPropertyAnimator</code> 的 <code>API</code> 设计得很完善，可扩展性也很好。它<code>cover</code>了传统 <code>UIView animation</code>动画的绝大部分功能，并且大大增强了你对动画过程的掌控能力。具体来说，你可以在动画过程中任意时刻暂停，可以随后再选择继续，甚至还能在动画过程中动态改变动画的属性（例如，本来动画终点在屏幕左下角的，可以在动画过程中把终点改到右上角）。</p>
+</blockquote>
+
+<p>看完介绍之后, 到底是不是酱紫呢, 我们来加一句代码看看:</p>
+
+<pre><code class="language-objectivec">    // 添加多一个渐渐消失的动画
+    [propertyAnimator addAnimations:^{
+        self.basicsView.alpha = 0;
+    }];
+</code></pre>
+
+<p>效果:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/5.png" alt="5"/></p>
+
+<p>除了这个, 如果要添加动画完成后的处理, 甚至是在动画进行中的一些操作也是可以的:</p>
+
+<pre><code class="language-objectivec">    [propertyAnimator addCompletion:^(UIViewAnimatingPosition finalPosition) {
+        
+        NSLog(@&quot;动画结束咯&quot;);
+    }];
+    
+    [propertyAnimator addCompletion:^(UIViewAnimatingPosition finalPosition) {
+        
+        switch (finalPosition) {
+                
+            case UIViewAnimatingPositionStart:
+                
+                NSLog(@&quot;动画开始了&quot;);
+                
+                break;
+                
+            case UIViewAnimatingPositionCurrent:
+                
+                NSLog(@&quot;动画结束咯&quot;);
+
+                break;
+                
+            case UIViewAnimatingPositionEnd:
+                
+                NSLog(@&quot;正在执行动画&quot;);
+
+                break;
+            default:
+                break;
+        }
+    }];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_3">添加个拖拽器</h3>
+
+<p><code>UIViewPropertyAnimator</code>不只是可以写好了规定的动画, 也可以和其他控件一起配合使用, 比如<code>UISlider</code>, 为了方便, 我就把<code>UIViewPropertyAnimator *propertyAnimator</code>设置成一个全局属性:</p>
+
+<pre><code class="language-objectivec">@property (nonatomic, strong) UIViewPropertyAnimator *propertyAnimator;
+</code></pre>
+
+<p>然后开始实现我们的拖拽动画:</p>
+
+<pre><code class="language-objectivec">- (void)addSliderWithSuperView {
+    
+    self.propertyAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:5
+                                                                       curve:UIViewAnimationCurveEaseIn
+                                                                  animations:^{
+                                                                                         
+                                                                      [self.basicsView moveViewToBottmRight];
+                                                                  }];
+
+    UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(0, 100, self.view.frame.size.width, 40)];
+    
+    [slider addTarget:self
+               action:@selector(sliderValueChanged:)
+     forControlEvents:UIControlEventValueChanged];
+    
+    [self.basicsView addSubview:slider];
+}
+
+- (void)sliderValueChanged:(UISlider *)slider {
+    
+    self.propertyAnimator.fractionComplete = slider.value;
+}
+</code></pre>
+
+<p>效果图:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/6.png" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_4">反向动画</h3>
+
+<p>如果你觉得就酱紫结束了, 那就太没意思了:</p>
+
+<pre><code class="language-objectivec">/**
+ 反向动画
+ */
+- (void)viewAnimationCurveEaseInOut {
+    
+    UIButton *resetButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width / 2) - 100, 100, 200, 50)];
+    
+    [resetButton setTitleColor:[UIColor blackColor]
+                      forState:UIControlStateNormal];
+    [resetButton setTitle:@&quot;开始反向动画&quot;
+                 forState:UIControlStateNormal];
+    [resetButton addTarget:self
+                    action:@selector(resetButtonAction)
+          forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:resetButton];
+    
+    self.propertyAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:3
+                                                                       curve:UIViewAnimationCurveEaseInOut
+                                                                  animations:^{
+                                                                      
+                                                                      [self.basicsView moveViewToBottmRight];
+                                                                  }];
+    [self.propertyAnimator startAnimation];
+}
+
+/**
+ 按钮点击事件
+ */
+- (void)resetButtonAction {
+    
+    self.propertyAnimator.reversed = YES;
+}
+</code></pre>
+
+<p>效果:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/7.png" alt="7"/></p>
+
+<hr/>
+
+<h3 id="toc_5">UISpringTimingParameters</h3>
+
+<p>这里还可以配合着<code>UISpringTimingParameters</code>来使用:</p>
+
+<pre><code class="language-objectivec">- (void)springTimingParameters {
+    
+    weakSelf(weakSelf);
+
+    UISpringTimingParameters *springTimingParameters = [[UISpringTimingParameters alloc] initWithDampingRatio:0.3
+                                                                                              initialVelocity:CGVectorMake(0, 0)];
+    
+    self.propertyAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:4
+                                                            timingParameters:springTimingParameters];
+    
+    [self.propertyAnimator addAnimations:^{
+        
+                            [weakSelf.basicsView moveViewToBottmRight];
+    } delayFactor:3.0];
+    
+    [self.propertyAnimator startAnimation];
+}
+</code></pre>
+
+<p>效果:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/8.png" alt="8"/></p>
+
+<hr/>
+
+<h3 id="toc_6">UICubicTimingParameters</h3>
+
+<p>这里也可以配合着<code>UICubicTimingParameters</code>来玩耍~~</p>
+
+<pre><code class="language-objectivec">/**
+ UICubicTimingParameters 动画
+ */
+- (void)cubicTimingParameters {
+    
+    weakSelf(weakSelf);
+
+    UICubicTimingParameters *cubicTimingParameters = [[UICubicTimingParameters alloc] initWithControlPoint1:CGPointMake(0.05, 0.95)
+                                                                                              controlPoint2:CGPointMake(0.15, 0.95)];
+    
+    self.propertyAnimator = [[UIViewPropertyAnimator alloc] initWithDuration:4
+                                                            timingParameters:cubicTimingParameters];
+    
+    
+    [self.propertyAnimator addAnimations:^{
+        
+        [weakSelf.basicsView moveViewToBottmRight];
+    } delayFactor:0.25];
+    
+    [self.propertyAnimator startAnimation];
+}
+</code></pre>
+
+<p>效果:<br/>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/9.png" alt="9"/></p>
+
+<p>大概就介绍到这里吧, 更复杂的玩法就有待各位大神去慢慢挖掘了~~</p>
+
+<hr/>
+
+<h3 id="toc_7">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/4.UIViewPropertyAnimator">https://github.com/CainRun/iOS-10-Characteristic/tree/master/4.UIViewPropertyAnimator</a></p>
+
+<hr/>
+
+<h3 id="toc_8">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Xcode Extension》]]></title>
@@ -5924,282 +6190,6 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
 <h3 id="toc_8">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/ActivityControllerDemo/tree/master/UIActivityViewControllerDemo">https://github.com/CainRun/ActivityControllerDemo/tree/master/UIActivityViewControllerDemo</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：非脚本版本《模拟器与真机静态Framework合成教程》]]></title>
-    <link href="https://cainrun.github.io/14729651532234.html"/>
-    <updated>2016-09-04T12:59:13+08:00</updated>
-    <id>https://cainrun.github.io/14729651532234.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>为了写这篇文章, 我翻查了许多资料, 都没有找到详细点的可参考资料, 外国的文章就不用说了, 光是看鸡肠就头晕了, 所以我自己总结了一些经验, 整理了一番, 决定分享出来, 希望大家喜欢</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Framework</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<blockquote>
-<p>在我们做<strong><code>iOS开发中</code></strong>, 有时候我们会自己动手写一些库, 方便自己去调用, 但是我们又不想这个库的内部实现代码被别人知道, 这个时候我们就需要把这个库打包成<strong><code>Framework</code></strong>或者是<strong><code>lib.a</code></strong>文件, 这里我们只做<strong><code>Framework</code></strong>的打包教程, <strong><code>lib.a</code></strong>的打包方式和<strong><code>Framework</code></strong>趋同差异, 如果有需要, 后面我再补上.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">创建静态包工程</h3>
-
-<blockquote>
-<p>在开始合成之前, 我们肯定是需要创建一个生成<strong><code>Framework</code></strong>的工程, 这里推荐用<strong><code>WorkSpace</code></strong>来创建, 因为可以方便我们去测试<strong><code>Framework</code></strong>库.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/1.png" alt="1 | center | 1080x0"/></p>
-
-<blockquote>
-<p>添加新的工程</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/2.png" alt="2 | center | 1080x0"/></p>
-
-<blockquote>
-<p>选择创建<strong><code>Cocoa Touch Framework</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/3.png" alt="3 | center | 1080x0"/></p>
-
-<blockquote>
-<p>给<strong><code>Framework</code></strong>命名, 喜欢啥名字, 自己看着办呗, 我个人的习惯就是, 这个是什么库, 我就命名是啥, 如果是用在某个工程的话, 我就会以该工程的名字来命名</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/4.png" alt="4 | center | 1080x0"/></p>
-
-<blockquote>
-<p>创建完之后, 我们会看到<strong><code>Framework</code></strong>里有一个头文件, 头文件里有一堆不明所以的代码, 这个时候我们不需要管, 直接干掉它</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/5.png" alt="5 | center | 1080x0"/></p>
-
-<blockquote>
-<p>这样子, 我们就创建<strong><code>Framework</code></strong>完毕了, 下面让我们来创建一个测试类.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_3">添加测试类</h3>
-
-<blockquote>
-<p>给这个测试类, 添加一个类方法</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/6.png" alt="6 | cneter | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/7.png" alt="7 | cneter | 1080x0"/></p>
-
-<blockquote>
-<p>添加完测试类之后, 下面让我们来配置一下整个<strong><code>Framework</code></strong>工程, 让它同时支持模拟器和真机.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_4">配置静态包工程</h3>
-
-<blockquote>
-<p>Xcode默认是会把Framework变成Debug模式, 这时候我们需要去改成Release模式</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/8.png" alt="8 | cneter | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/9.png" alt="9 | cneter | 1080x0"/></p>
-
-<blockquote>
-<p>然后我们去配置项目工程, 首先我们来添加一个模拟器的支持</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/10.png" alt="10 | cneter | 1080x0"/></p>
-
-<blockquote>
-<p>修改Framework最低支持iOS的版本, 我这里最低支持的是iOS7</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/11.png" alt="11 | cneter | 1080x0"/></p>
-
-<blockquote>
-<p>把默认的动态库, 切换成静态库</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/12.png" alt="12 | cneter | 1080x0"/></p>
-
-<blockquote>
-<p>配置需要暴露的<strong><code>.h</code></strong>文件</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/13.png" alt="13 | cneter | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/14.png" alt="14 | cneter | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/15.png" alt="15 | cneter | 1080x0"/></p>
-
-<blockquote>
-<p>最后, 我们在<strong><code>Test.h</code></strong>中导入<strong><code>TestClass.h</code></strong>, 当然, 我们也不需要这么做, 因为我们已经在配置中暴露了<strong><code>TestClass.h</code></strong>文件, 所以不需要引用也是可以的</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/16.png" alt="16 | cneter | 1080x0"/></p>
-
-<blockquote>
-<p>这个时候, 我们先来测试一下能不能生成<strong><code>Framework</code></strong>库</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/17.png" alt="17 | cneter | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/18.png" alt="18 | cneter | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/19.png" alt="19 | cneter | 1080x0"/></p>
-
-<blockquote>
-<p>最终测试, 是成功生成<strong><code>Framework</code></strong>库的, 但这个是模拟器库, 如果你需要支持真机的话, 那么只要切换运行的选项就好了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/20.png" alt="20 | center | 1080x0"/></p>
-
-<blockquote>
-<p>这时候我们再去查看文件夹, 就会有两个<strong><code>Framework</code></strong>文件夹了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/21.png" alt="21 | center | 1080x0"/></p>
-
-<hr/>
-
-<h3 id="toc_5">检测静态包</h3>
-
-<blockquote>
-<p>虽然我们把<strong><code>Framework</code></strong>都打包好了, 但是我们需要检测一下是否符合我们的需求, 这是我们要打开<strong><code>Terminal</code></strong>, 并且输入命令.</p>
-</blockquote>
-
-<pre><code>lipo -info (Framework二进制文件地址)
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/22.png" alt="22 | center | 1080x0"/></p>
-
-<blockquote>
-<p>检测真机Framework包</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/23.png" alt="23 | center | 1080x0"/></p>
-
-<blockquote>
-<p>检测模拟器Framework包</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/24.png" alt="24 | center | 1080x0"/></p>
-
-<hr/>
-
-<h3 id="toc_6">合成真机与模拟器通用的静态包</h3>
-
-<blockquote>
-<p>前面做了那么多的事情, 就为了现在这一步, 就是将模拟器与真机两个Framework包合成一个通用的Framework包, 由于我这里没有通用的Shell脚本, 只能用最笨的办法合成两个包了, 下面让我们一起来看看.</p>
-
-<p>打开终端输入合成命令<br/>
-<code><br/>
-lipo -create (真机Framework路径) (模拟器Framework路径) -output (真机/模拟器路径)<br/>
-</code></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/25.png" alt="25 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/26.png" alt="26 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/27.png" alt="27 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/28.png" alt="28 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/29.png" alt="29 | center | 1080x0"/></p>
-
-<blockquote>
-<p>检测合成后的通用Framework, 只有看到<strong><code>armv7 arm64 i386 x86_64</code></strong>这四个同时存在, 才真正的合成成功</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/30.png" alt="30 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/31.png" alt="31 | center | 1080x0"/></p>
-
-<hr/>
-
-<h3 id="toc_7">注意!!!!!</h3>
-
-<blockquote>
-<p>这里有一个注意事项, 有时候用<strong><code>lipo</code></strong>合成会报一个错误(我这里没有发现)</p>
-</blockquote>
-
-<pre><code>crun: error: active developer path (“/Applications/Xcode 2.app/Contents/Developer”) does not exist, use xcode-select --switch path/to/Xcode.app to specify the Xcode that you wish to use for command line developer tools (or see man xcode-select)
-</code></pre>
-
-<blockquote>
-<p>这时候不要慌, 只要再输入下面的命令, 输入电脑密码后, 然后再次运行合成<strong><code>Framework</code></strong>的命令, 就可以合成了</p>
-</blockquote>
-
-<pre><code>sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_8">测试静态包</h3>
-
-<blockquote>
-<p>既然我们那么辛苦的合成了一个通用的<strong><code>Framework</code></strong>, 不用用, 怎么对得起我们的付出呢? 再次回到<strong><code>Workspace</code></strong>, 新建一个测试工程.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/32.png" alt="32 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/33.png" alt="33 | center | 1080x0"/></p>
-
-<blockquote>
-<p>注意, 创建测试工程的时候, 不要新建到<strong><code>Framework</code></strong>的工程内</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/34.png" alt="34 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/35.png" alt="35 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/36.png" alt="36 | center | 1080x0"/></p>
-
-<blockquote>
-<p>模拟器测试</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/37.png" alt="37 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/38.png" alt="38 | center | 1080x0"/></p>
-
-<blockquote>
-<p>真机测试</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/39.png" alt="39 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CreateGeneralFramework/master/NotAggregateFramework/images/40.png" alt="40 | center | 1080x0"/></p>
-
-<hr/>
-
-<h3 id="toc_9">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/CreateGeneralFramework">https://github.com/CainRun/CreateGeneralFramework</a></p>
-
-<hr/>
-
-<h3 id="toc_10">结束语</h3>
-
-<blockquote>
-<p>好啦, 教程到这里就结束了, 谢谢大家的耐心观看</p>
-</blockquote>
 
 ]]></content>
   </entry>
