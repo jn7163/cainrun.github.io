@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	iOS 10特性 - Cain For iOS
+  	玩转iOS开发：iOS 10 新特性《UserNotifications》 - Cain For iOS
   	
 	</title>
 
@@ -120,24 +120,10 @@
 		</div>	
 		<div class="mid-col">
 			<div class="mid-col-container"> <div id="content" class="inner">
-<div itemscope itemtype="http://schema.org/Blog">
 
-
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-14T00:07:38+08:00" itemprop="datePublished">2017/6/14</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14973700585982.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《UserNotifications》</a></h1>
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：iOS 10 新特性《UserNotifications》</h1>
 		<div class="entry-content" itemprop="articleBody">
-			
 			<h3 id="toc_0">UserNotifications</h3>
 
 <p><code>Notification</code>在<code>iOS</code>以来发展以来都是一个非常重要的功能之一, 各类<code>App</code>都需要通过通知来推送消息, 不然怎么告诉用户, <code>App</code>来消息推送啦, 或者有什么安排事项到点要告诉你了, 这些都是需要推送的.</p>
@@ -146,170 +132,124 @@
 
 <p>同样我这里也是<code>Objective-C</code>版本, 喜欢看<code>Swift</code>版本的可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/05%20-%20User%20Notifications">这里</a>去看.</p>
 
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">UNUserNotification Of iOS 10</h3>
+
+<p>那么在<code>iOS 10</code>苹果爸爸推出了<code>UNUserNotification</code>这套框架, 除去了以前那套硬邦邦的通知之外, 我们可以额外给通知添加一些<code>Action Button</code>, 或者是一些不一样的内容, 说那么多废话, 直接来看项目吧.</p>
+
+<hr/>
+
+<h3 id="toc_2">创建项目</h3>
+
+<p>新工程和我们以前创建的一毛一样, 这里就不过多的演示了, 文章后面有项目地址, 大家可以自行去看.</p>
+
+<p>我们来看看<code>AppDelegate.m</code>文件:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/2.png" alt="2"/></p>
+
+<p>这里要自己写代码的地方我都标上去了, 如果还是看不懂, 那我就真的没办法了...</p>
+
+<p>再来看看<code>NotificationController.m</code>文件, 这里我们直接忽略掉<code>UI</code>的布局, 因为这不是重点:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/3.png" alt="3"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/4.png" alt="4"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/5.png" alt="5"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/6.png" alt="6"/></p>
+
+<p>由于这里没有仔细的去封装代码, 所以看起来有些臃肿, 这个大家就不要喷了....</p>
+
+<p>对了, 我想起一个坑, 在我导入<code>MP4</code>文件的时候, 我发现文件的<code>Path</code>居然为<code>nil</code>, 于是乎<code>Google</code>了一下, 发现是我傻缺了, 忘记在这里点一下:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/7.png" alt="7"/></p>
+
+<p>关于怎么添加一些<code>Action Button</code>, 项目里面没有弄, 这里给大家贴句代码吧:</p>
+
+<pre><code class="language-objectivec">UNTextInputNotificationAction *inputAction = [UNTextInputNotificationAction
+                                                  actionWithIdentifier:@&quot;inputAction&quot;
+                                                  title:@&quot;输入&quot;
+                                                  options:UNNotificationActionOptionForeground
+                                                  textInputButtonTitle:@&quot;发送&quot;
+                                                  textInputPlaceholder:@&quot;随便说说&quot;];
+
+    UNNotificationAction *goodbyeAction = [UNNotificationAction actionWithIdentifier:@&quot;goodbyeAction&quot;
+                                                                               title:@&quot;再见&quot;
+                                                                             options:UNNotificationActionOptionForeground];
+
+    UNNotificationAction *cancelAction = [UNNotificationAction actionWithIdentifier:@&quot;cancelAction&quot;
+                                                                              title:@&quot;取消&quot;
+                                                                            options:UNNotificationActionOptionDestructive];
 
 
-			 
-			<a href="14973700585982.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
+    UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:@&quot;inputCategory&quot; actions:@[inputAction,goodbyeAction,cancelAction] intentIdentifiers:@[] options:UNNotificationCategoryOptionCustomDismissAction];
 
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-12T23:11:35+08:00" itemprop="datePublished">2017/6/12</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14972802953896.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《UIViewPropertyAnimator》</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">UIViewPropertyAnimator</h3>
-
-<p>我们之前在做基础动画效果的时候, 基本上的代码都是:</p>
-
-<pre><code class="language-objectivec">    [UIView animateWithDuration:1
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         
-                         // Do Something
-                     } completion:^(BOOL finished) {
-                         
-                         // Do Something
-                     }];
+    [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:@[category]];
 </code></pre>
 
-<p>一般都会自己去封装一下, 免得大串代码在这里恶心....</p>
+<hr/>
 
-<p>但现在不用了咯, 自从苹果爸爸在<code>iOS 10</code>推出了一个框架<code>UIViewPropertyAnimator</code>, 可以更简洁的去省略很多代码, 我这里是<code>Objective-C</code>版本的, 如果想要看<code>Swift</code>版本, 可以到这里去看<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/04%20-%20UIViewPropertyAnimator">Swift版本</a></p>
+<h3 id="toc_3">一切就绪</h3>
 
+<p>一切就绪之后, 我们就运行来看看:</p>
 
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/8.png" alt="8"/></p>
 
-			 
-			<a href="14972802953896.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
+<p>这是一个正常通知:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/9.png" alt="9"/></p>
+
+<p>这是添加了<code>Image</code>的通知:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/10.png" alt="10"/></p>
+
+<p>这是添加了一个<code>Video</code>的通知, 重点是还可以播放:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/11.png" alt="11"/></p>
+
+<hr/>
+
+<h3 id="toc_4">注意!!!</h3>
+
+<p>虽然说苹果爸爸在<code>UNUserNotification</code>有了些花样, 但这里还是需要注意一点, 这是有限制的, 不然这也太不苹果了, 那么是什么限制呢? 可以点进去这里看看<a href="https://developer.apple.com/documentation/usernotifications/unnotificationattachment?language=objc">UNUserNotification类型文件限制</a>, 一旦超出了, 出现什么问题, 我就母鸡了.</p>
+
+<p>再搜这篇文章的时候, 突然发现了有大神总结了<a href="http://www.jianshu.com/p/9b720efe3779">WWDC2016笔记</a>, 大家有需要可以去看看~~</p>
+
+<hr/>
+
+<h3 id="toc_5">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/5.UserNotifications">https://github.com/CainRun/iOS-10-Characteristic/tree/master/5.UserNotifications</a></p>
+
+<hr/>
+
+<h3 id="toc_6">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
 		</div>
-
 	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-12T10:49:57+08:00" itemprop="datePublished">2017/6/12</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14972357977664.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《Xcode Extension》</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">Xcode Extension</h3>
-
-<p>做<code>macOS</code>, <code>watchOS</code>, <code>tvOS</code>, <code>iOS</code>开发, 最离不开的工具就是<code>Xcode</code>, 但<code>Xcode</code>真的让我们又爱又恨, 虽然有很多强大的功能, 但细节方面真的很难<code>Care</code>到, 于是乎<a href="http://alcatraz.io">Alcatraz</a>诞生了, 在当时火的不要不要的, 只要是老司机都会装一个.</p>
-
-<p>但现在苹果爸爸貌似看到了开发者的需求, 所以现在给<code>Xcode</code>加了一个功能, 就是<code>Xcode Extension</code>.</p>
-
-<p>严格来说这不是<code>iOS</code>的东西, 但又刚刚好是随着<code>iOS 10</code>一起出来的, 想了想, 还是集合在这里吧.</p>
-
-
-
-			 
-			<a href="14972357977664.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-11T20:11:04+08:00" itemprop="datePublished">2017/6/11</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14971830645415.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《Thread Sanitizer》</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">Thread Sanitizer(TSan)</h3>
-
-<blockquote>
-<p><code>Thread Sanitizer</code>这个怎么翻译呢...其实我想了很久, <code>线程洗手液</code>? <code>线程清扫车</code>? 感觉都不太对....于是乎还是不翻译了, 我们只要知道这个东西是用来解决线程问题的就哦了, 我这个是<code>Objective-c</code>版本的, 如果你们喜欢<code>Swift</code>版本的话, 可以去找找<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/02%20-%20Thread%20Sanitizer">Swift版本</a></p>
-</blockquote>
-
-
-
-			 
-			<a href="14971830645415.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-09T14:32:04+08:00" itemprop="datePublished">2017/6/9</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14969899245168.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《Message Extension》</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">说点废话</h3>
-
-<blockquote>
-<p>中途因为发生了点事, 所以有一段时间没有写博文了, 现在开始开始慢慢写回, 写的风格也改了一些, 大家不懂得可以去各大博客, 论坛, 等等地方翻翻资料, 如果一定要找我问问题的话, 麻烦先用红包来打一下我, 祝大家学习愉快.</p>
-</blockquote>
-
-
-
-			 
-			<a href="14969899245168.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
-  
-
-</div>
-<nav id="pagenavi">
+	<div class="share-comment">
 	 
-	
-	<div class="center"><a href="archives.html">Blog Archives</a></div>
 
-</nav>
+	  
 
-</div>
+	  
+	      <div class="ds-thread" data-thread-key="14973700585982.html" data-url="https://cainrun.github.io/14973700585982.html" data-title="玩转iOS开发：iOS 10 新特性《UserNotifications》"></div>
+	  
 
-
-
-        </div>
+	</div>
+</div>        </div>
 			<footer id="footer" class="inner">Copyright &copy; 2014
 Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
 Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>

@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-12T14:23:57+08:00</updated>
+  <updated>2017-06-13T20:35:01+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,128 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《UserNotifications》]]></title>
+    <link href="https://cainrun.github.io/14973700585982.html"/>
+    <updated>2017-06-14T00:07:38+08:00</updated>
+    <id>https://cainrun.github.io/14973700585982.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">UserNotifications</h3>
+
+<p><code>Notification</code>在<code>iOS</code>以来发展以来都是一个非常重要的功能之一, 各类<code>App</code>都需要通过通知来推送消息, 不然怎么告诉用户, <code>App</code>来消息推送啦, 或者有什么安排事项到点要告诉你了, 这些都是需要推送的.</p>
+
+<p>但我们都知道, 在之前的消息推送里, 无论是<code>UI</code>还是内容, 都是非常的死, 不够人性化, 好在苹果爸爸也看到了这一点, 在<code>iOS 10</code>就改善了这个东西.</p>
+
+<p>同样我这里也是<code>Objective-C</code>版本, 喜欢看<code>Swift</code>版本的可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/05%20-%20User%20Notifications">这里</a>去看.</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">UNUserNotification Of iOS 10</h3>
+
+<p>那么在<code>iOS 10</code>苹果爸爸推出了<code>UNUserNotification</code>这套框架, 除去了以前那套硬邦邦的通知之外, 我们可以额外给通知添加一些<code>Action Button</code>, 或者是一些不一样的内容, 说那么多废话, 直接来看项目吧.</p>
+
+<hr/>
+
+<h3 id="toc_2">创建项目</h3>
+
+<p>新工程和我们以前创建的一毛一样, 这里就不过多的演示了, 文章后面有项目地址, 大家可以自行去看.</p>
+
+<p>我们来看看<code>AppDelegate.m</code>文件:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/2.png" alt="2"/></p>
+
+<p>这里要自己写代码的地方我都标上去了, 如果还是看不懂, 那我就真的没办法了...</p>
+
+<p>再来看看<code>NotificationController.m</code>文件, 这里我们直接忽略掉<code>UI</code>的布局, 因为这不是重点:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/3.png" alt="3"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/4.png" alt="4"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/5.png" alt="5"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/6.png" alt="6"/></p>
+
+<p>由于这里没有仔细的去封装代码, 所以看起来有些臃肿, 这个大家就不要喷了....</p>
+
+<p>对了, 我想起一个坑, 在我导入<code>MP4</code>文件的时候, 我发现文件的<code>Path</code>居然为<code>nil</code>, 于是乎<code>Google</code>了一下, 发现是我傻缺了, 忘记在这里点一下:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/7.png" alt="7"/></p>
+
+<p>关于怎么添加一些<code>Action Button</code>, 项目里面没有弄, 这里给大家贴句代码吧:</p>
+
+<pre><code class="language-objectivec">UNTextInputNotificationAction *inputAction = [UNTextInputNotificationAction
+                                                  actionWithIdentifier:@&quot;inputAction&quot;
+                                                  title:@&quot;输入&quot;
+                                                  options:UNNotificationActionOptionForeground
+                                                  textInputButtonTitle:@&quot;发送&quot;
+                                                  textInputPlaceholder:@&quot;随便说说&quot;];
+
+    UNNotificationAction *goodbyeAction = [UNNotificationAction actionWithIdentifier:@&quot;goodbyeAction&quot;
+                                                                               title:@&quot;再见&quot;
+                                                                             options:UNNotificationActionOptionForeground];
+
+    UNNotificationAction *cancelAction = [UNNotificationAction actionWithIdentifier:@&quot;cancelAction&quot;
+                                                                              title:@&quot;取消&quot;
+                                                                            options:UNNotificationActionOptionDestructive];
+
+
+    UNNotificationCategory *category = [UNNotificationCategory categoryWithIdentifier:@&quot;inputCategory&quot; actions:@[inputAction,goodbyeAction,cancelAction] intentIdentifiers:@[] options:UNNotificationCategoryOptionCustomDismissAction];
+
+    [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:@[category]];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_3">一切就绪</h3>
+
+<p>一切就绪之后, 我们就运行来看看:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/8.png" alt="8"/></p>
+
+<p>这是一个正常通知:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/9.png" alt="9"/></p>
+
+<p>这是添加了<code>Image</code>的通知:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/10.png" alt="10"/></p>
+
+<p>这是添加了一个<code>Video</code>的通知, 重点是还可以播放:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/5.UserNotifications/Images/11.png" alt="11"/></p>
+
+<hr/>
+
+<h3 id="toc_4">注意!!!</h3>
+
+<p>虽然说苹果爸爸在<code>UNUserNotification</code>有了些花样, 但这里还是需要注意一点, 这是有限制的, 不然这也太不苹果了, 那么是什么限制呢? 可以点进去这里看看<a href="https://developer.apple.com/documentation/usernotifications/unnotificationattachment?language=objc">UNUserNotification类型文件限制</a>, 一旦超出了, 出现什么问题, 我就母鸡了.</p>
+
+<p>再搜这篇文章的时候, 突然发现了有大神总结了<a href="http://www.jianshu.com/p/9b720efe3779">WWDC2016笔记</a>, 大家有需要可以去看看~~</p>
+
+<hr/>
+
+<h3 id="toc_5">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/5.UserNotifications">https://github.com/CainRun/iOS-10-Characteristic/tree/master/5.UserNotifications</a></p>
+
+<hr/>
+
+<h3 id="toc_6">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《UIViewPropertyAnimator》]]></title>
@@ -5857,339 +5979,6 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
 <h3 id="toc_9">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/CALToolBarView">https://github.com/CainRun/CALToolBarView</a></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：使用自定义《UIActivity》进行内容分享]]></title>
-    <link href="https://cainrun.github.io/14729665774054.html"/>
-    <updated>2016-09-04T13:22:57+08:00</updated>
-    <id>https://cainrun.github.io/14729665774054.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>在我写这篇文章的时候, 虽然国内有一堆文章介绍<strong><code>UIActivityViewController</code></strong>和<strong><code>UIActivity</code></strong>, 但都是零零散散的, 哪怕我翻墙出去看<strong><code>YouTube</code></strong>, 或者是著名的<strong><a href="http://nshipster.com/uiactivityviewcontroller/">黑胡子博客</a></strong>, 都没有详细的讲解怎么去自定义所需的<strong><code>UIActivity</code></strong>, 最后基本上翻遍了谷歌, 才找到了所需的.</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>UIActivityViewController</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<blockquote>
-<p>这段时间有很多朋友都问我关于怎么去集成<strong><code>ShareSDK</code></strong>或者<strong><code>友盟社会化分享SDK</code></strong>的问题, 其实我想说, <strong><code>Apple</code></strong>一开始就提供了一个类, 供我们去使用分享了, 在<strong><code>iOS 6</code></strong>之后更加增强了这个类, 使我们不再需要集成第三方的, 而且还支持自定义分享的<strong><code>item</code></strong>.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">创建新工程</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/1.png" alt="1 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/2.png" alt="2 | center | 1080x0"/></p>
-
-<hr/>
-
-<h3 id="toc_3">创建一个继承与UIActivityViewController的类</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/3.png" alt="3 | center | 1080x0"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/4.png" alt="4 | center | 1080x0"/></p>
-
-<hr/>
-
-<h3 id="toc_4">创建一个继承与UIActivity的类</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/5.png" alt="5 | center | 1080x0"/></p>
-
-<blockquote>
-<p>这时候我们就要来给这个自定义的<strong><code>UIActivity</code></strong>类写上我们需要的内容, 首先我们可以去到系统提供的<strong><code>UIActivity</code></strong>头文件看<strong><code>API</code></strong>, 获取我们所需的<strong><code>API</code></strong>.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/6.png" alt="6  | center | 1080x0"/></p>
-
-<hr/>
-
-<h3 id="toc_5">配置UIActivity和UIActivityViewController</h3>
-
-<blockquote>
-<p>下面是我写好的自定义<strong><code>WeiboActivity</code></strong> <strong><code>API</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/7.png" alt="7  | center | 1080x0"/></p>
-
-<blockquote>
-<p>具体实现的代码:</p>
-</blockquote>
-
-<pre><code class="language-Objective-c">#import &quot;WeiboActivity.h&quot;
-
-@implementation WeiboActivity
-
-- (NSString *)activityType {
-    
-    return @&quot;CustomWeiboActivity&quot;;
-}
-
-- (NSString *)activityTitle {
-    
-    return @&quot;新浪微博&quot;;
-}
-
-- (UIImage *)activityImage {
-    
-    return [UIImage imageNamed:@&quot;ShareBundle.bundle/share_icon_1&quot;];
-}
-
-- (void)performActivity {
-    [self activityDidFinish:YES];
-}
-
-@end
-</code></pre>
-
-<blockquote>
-<p>下面是我写好的自定义<strong><code>UIActivityController</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/8.png" alt="8  | center | 1080x0"/></p>
-
-<blockquote>
-<p>具体实现的代码:</p>
-</blockquote>
-
-<pre><code class="language-Objective-c">#import &quot;UIActivityController.h&quot;
-#import &quot;WeiboActivity.h&quot;
-
-#define CAL_GET_OBJECT(objc) if (objc) return objc
-
-@interface UIActivityController ()
-
-@property (nonatomic, strong) WeiboActivity *weiboActivity;
-
-@end
-
-@implementation UIActivityController
-
-- (instancetype)initAspActivityControllerWithContent:(NSArray *)activityContent {
-    
-    NSArray *activitys = @[self.weiboActivity];
-    
-    if (self = [super initWithActivityItems:activityContent applicationActivities:activitys]) {
-        
-        self.excludedActivityTypes = @[UIActivityTypePostToFacebook,
-                                       UIActivityTypePostToTwitter,
-                                       UIActivityTypePostToWeibo,
-                                       UIActivityTypeMail,
-                                       UIActivityTypePrint,
-                                       UIActivityTypeCopyToPasteboard,
-                                       UIActivityTypeAssignToContact,
-                                       UIActivityTypeSaveToCameraRoll,
-                                       UIActivityTypeAddToReadingList,
-                                       UIActivityTypePostToFlickr,
-                                       UIActivityTypePostToVimeo,
-                                       UIActivityTypePostToTencentWeibo,
-                                       UIActivityTypeAirDrop,
-                                       UIActivityTypeOpenInIBooks];
-    }
-    
-    return self;
-}
-
-- (WeiboActivity *)weiboActivity {
-    
-    CAL_GET_OBJECT(_weiboActivity);
-    
-    _weiboActivity = [[WeiboActivity alloc] init];
-    
-    return _weiboActivity;
-}
-
-@end
-</code></pre>
-
-<blockquote>
-<p>这里和大家说说<strong><code>excludedActivityTypes</code></strong>这个属性, 这个属性其实是一个数组属性, 代表的是, 如果我们不需要系统的服务就可以给它赋值, 这样子<strong><code>UIActivityViewController</code></strong>就不会显示对应的服务, 我这里默认全部干掉, 一个服务都不需要, 当然如果需要干掉我们自定义的<strong><code>UIActivity</code></strong>, 也可以在这里写上.</p>
-
-<p>还有一点, 就是我们给<strong><code>UIActivityViewController</code></strong>赋值自定义的<strong><code>UIActivity</code></strong></p>
-
-<p>PS: 注意一点, 这个赋值只能在<strong><code>initWithActivityItems: applicationActivities:</code></strong>这个方法的<strong><code>applicationActivities:</code></strong>赋值, 而且只能在初始化的时候赋值, 一旦赋值之后就不能再修改了.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/9.png" alt="9  | center | 1080x0"/></p>
-
-<hr/>
-
-<h3 id="toc_6">调起UIActivityViewController</h3>
-
-<blockquote>
-<p>最重要的地方来了, 就是调起我们自定义的<strong><code>UIActivityController</code></strong>.</p>
-
-<p>首先我们要在<strong><code>Main.storyboard</code></strong>中拖一个<strong><code>UIButton</code></strong>, 然后添加对应的代码.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/10.png" alt="10  | center | 1080x0"/></p>
-
-<blockquote>
-<p>代码: </p>
-</blockquote>
-
-<pre><code class="language-Objective-c">#import &quot;ViewController.h&quot;
-#import &quot;UIActivityController.h&quot;
-
-@interface ViewController ()
-
-@property (nonatomic, strong) UIActivityController *activityController;
-
-@end
-
-@implementation ViewController
-
-- (IBAction)popActivityController:(UIButton *)sender {
-    
-    [self presentViewController:self.activityController animated:YES completion:nil];
-}
-
-- (UIActivityController *)activityController {
-    
-    NSString *shareTitle = @&quot;分享的标题&quot;;
-    UIImage *shareImage = [UIImage imageNamed:@&quot;ShareBundle.bundle/share_icon_1&quot;];
-    
-    if (!_activityController) {
-        
-        _activityController = [[UIActivityController alloc] initAspActivityControllerWithContent:@[shareTitle, shareImage]];
-    }
-    
-    return _activityController;
-}
-
-@end
-</code></pre>
-
-<blockquote>
-<p>最后我们运行一下看看效果</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/11.png" alt="10  | center | 720x0"/></p>
-
-<blockquote>
-<p>发现什么都没有, 肯定在喷我, 觉得我是在耍你们, 哈哈, 其实在这里我们少了一个方法没有添加, 回到我们自定义的<strong><code>WeiboActivity</code></strong>中, 添加上就OK了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/12.png" alt="12  | center | 1080x0"/></p>
-
-<blockquote>
-<p>具体实现的代码:</p>
-</blockquote>
-
-<pre><code class="language-Objective-c">- (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
-    
-    if (activityItems.count &gt; 0) {
-        
-        return YES;
-    }
-    
-    return NO;
-}
-</code></pre>
-
-<blockquote>
-<p>再来运行看看效果</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/13.png" alt="13  | center | 720x0"/></p>
-
-<blockquote>
-<p>好了, <strong><code>item</code></strong>出来了, 但好像有什么不对, 图标呢???!!! 为啥是灰色的? 楼主你耍我, 我要去爆你菊花!!!!!</p>
-
-<p>别紧张, 在系统默认的<strong><code>UIActivityViewController</code></strong>中, 下面这部分是属于系统服务, 默认只会显示一个轮廓, 并不会显示整张图片, 下面我们把自定义的<strong><code>WeiboActivity</code></strong>显示图片的方法改改就好了.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/14.png" alt="14  | center | 1080x0"/></p>
-
-<blockquote>
-<p>代码:</p>
-</blockquote>
-
-<pre><code class="language-Objective-c">- (UIImage *)_activityImage {
-    
-    return [UIImage imageNamed:@&quot;ShareBundle.bundle/share_icon_1&quot;];
-}
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/15.png" alt="15  | center | 720x0"/></p>
-
-<blockquote>
-<p>好了, 我的菊花保住了, 图标出来了, 把我吓了一身冷汗</p>
-
-<p>图标出来了, 我们就要给这个<strong><code>item</code></strong>添加点击事件了, 做什么好呢, 总不可能让我去导个微信微博等SDK进来演示, 毕竟还要去申请<strong><code>AppID</code></strong>和<strong><code>AppKey</code></strong>呢, 我们来个弹框吧~~~</p>
-
-<p>我一般喜欢写个<strong><code>Block</code></strong>把点击事件抛出去做处理, 这次我也不例外~~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/16.png" alt="16  | center | 1080x0"/></p>
-
-<blockquote>
-<p>具体实现的代码:</p>
-</blockquote>
-
-<pre><code class="language-Objective-c">- (void)performActivity {
-    [self activityDidFinish:YES];
-    
-    if (self.weiboBlock) {
-        self.weiboBlock();
-    }
-}
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/17.png" alt="17  | center | 1080x0"/></p>
-
-<blockquote>
-<p>具体实现的代码: </p>
-</blockquote>
-
-<pre><code class="language-Objective-c">- (WeiboActivity *)weiboActivity {
-    
-    CAL_GET_OBJECT(_weiboActivity);
-    
-    _weiboActivity = [[WeiboActivity alloc] init];
-    
-    [_weiboActivity setWeiboBlock:^{
-        
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@&quot;新浪微博&quot;
-                                                            message:@&quot;分享至新浪微博&quot;
-                                                           delegate:nil
-                                                  cancelButtonTitle:@&quot;好的&quot;
-                                                  otherButtonTitles:nil, nil];
-        
-        [alertView show];
-    }];
-
-    return _weiboActivity;
-}
-</code></pre>
-
-<blockquote>
-<p>PS: 由于我这里是做示范, 所以使用<strong><code>UIAlertView</code></strong>, 如果大家要在项目中使用的话, 尽量使用<strong><code>UIAlertController</code></strong>.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_7">最终效果</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/ActivityControllerDemo/master/Image-file/18.png" alt="15  | center | 720x0"/></p>
-
-<hr/>
-
-<h3 id="toc_8">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/ActivityControllerDemo/tree/master/UIActivityViewControllerDemo">https://github.com/CainRun/ActivityControllerDemo/tree/master/UIActivityViewControllerDemo</a></p>
 
 ]]></content>
   </entry>
