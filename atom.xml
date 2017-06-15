@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-15T00:28:52+08:00</updated>
+  <updated>2017-06-15T14:42:05+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -142,6 +142,8 @@
     }
 }
 </code></pre>
+
+<p>如果不懂这个动画应用的话, 我在度娘里看到了一篇文章, 可以来看看<a href="http://www.tuicool.com/articles/jeYfIv">IOS 核心动画之CAKeyframeAnimation</a></p>
 
 <p>整体的运行效果:</p>
 
