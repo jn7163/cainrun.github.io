@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-13T20:35:01+08:00</updated>
+  <updated>2017-06-15T00:28:52+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,159 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Notification Content Extensions》]]></title>
+    <link href="https://cainrun.github.io/14974988224036.html"/>
+    <updated>2017-06-15T11:53:42+08:00</updated>
+    <id>https://cainrun.github.io/14974988224036.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">Notification Content Extensions</h3>
+
+<p>在之前我们就讲过苹果爸爸在<code>iOS 10</code>推出了一个新的<code>UserNotification</code>框架, 但苹果爸爸的野心不小, 不单单推出框架那么简单, 而且连<code>Extension</code>都给你搞了一个, 哼哼, 我看还有谁~</p>
+
+<p>这里所演示的项目是和之前一样的, 如果找不到的盆友可以到<a href="https://cainrun.github.io/14973700585982.html">这里</a>去看看.</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">添加Notification Extension</h3>
+
+<p>回到我们的项目, 拷贝一份新的, 然后添加<code>Notification Extension</code>:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/6.Notification%20Content%20Extension/Images/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/6.Notification%20Content%20Extension/Images/2.png" alt="2"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/6.Notification%20Content%20Extension/Images/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_2">配置Notification Extension Info</h3>
+
+<p>添加完<code>Extension</code>之后, 我们需要来配置一下<code>Info.plist</code>文件, 这里我们要添加点东西:</p>
+
+<ul>
+<li>UNNotificationExtensionDefaultContentHidden
+
+<ul>
+<li>设置成为YES</li>
+</ul></li>
+<li>UNNotificationExtensionCategory
+
+<ul>
+<li>和我们之前项目的<code>AppDelegate.m</code>文件所添加的<code>Category</code>保持一致, 我这里是<code>reminder</code></li>
+</ul></li>
+<li>UNNotificationExtensionInitialContentSizeRatio
+
+<ul>
+<li>这个东东我改为0.5</li>
+</ul></li>
+</ul>
+
+<p>修改完成后的结果:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/6.Notification%20Content%20Extension/Images/4.png" alt="4"/></p>
+
+<p>来通知的效果:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/6.Notification%20Content%20Extension/Images/5.png" alt="5"/></p>
+
+<hr/>
+
+<h3 id="toc_3">自定义一个小方法</h3>
+
+<p>上面的东西都搞定了之后, 那么接下来就是要自定义一个小方法:</p>
+
+<pre><code class="language-objectivec">- (void)addShakeAnimation {
+    
+    CAKeyframeAnimation *frameAnimation = [CAKeyframeAnimation animation];
+
+    frameAnimation.keyPath        = @&quot;transform.translation.x&quot;;
+    frameAnimation.duration       = 1;
+    frameAnimation.repeatCount    = MAXFLOAT;
+    frameAnimation.values         = @[@-20.0, @20.0, @-20.0, @20.0, @-10.0, @10.0, @-5.0, @5.0, @0.0];
+    frameAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    
+    [self.view.layer addAnimation:frameAnimation
+                           forKey:@&quot;shake&quot;];
+}
+
+- (void)removeShakeAnimation {
+    
+    [self.view.layer removeAnimationForKey:@&quot;shake&quot;];
+}
+</code></pre>
+
+<ul>
+<li><p>addShakeAnimation添加摇摆动画的方法</p></li>
+<li><p>removeShakeAnimation删除摇摆动画的方法</p></li>
+</ul>
+
+<p>效果:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/6.Notification%20Content%20Extension/Images/6.gif" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_4">- didReceiveNotificationResponse:completionHandler:方法</h3>
+
+<p>在<code>Notification Extension</code>里, 有这么一个方法叫做: <code>- didReceiveNotificationResponse:completionHandler:</code>, 这个方法可以获取通知里的<code>Action</code>事件, 我这里是这么写的:</p>
+
+<pre><code class="language-objectivec">- (void)didReceiveNotificationResponse:(UNNotificationResponse *)response
+                     completionHandler:(void (^)(UNNotificationContentExtensionResponseOption))completion {
+    
+    if ([response.actionIdentifier isEqualToString:@&quot;cancel&quot;]) {
+        
+        UNNotificationRequest *request = response.notification.request;
+        
+        NSArray *identifiers = @[request.identifier];
+        
+        // 根据标识符删除等待通知
+        [[UNUserNotificationCenter currentNotificationCenter] removePendingNotificationRequestsWithIdentifiers:identifiers];
+        
+        // 根据标识符删除发送通知
+        [[UNUserNotificationCenter currentNotificationCenter] removeDeliveredNotificationsWithIdentifiers:identifiers];
+        
+        self.label.text = @&quot;点击了取消按钮&quot;;
+        
+        // 删除动画效果
+        [self removeShakeAnimation];
+        
+        // 不隐藏通知页面
+        completion(UNNotificationContentExtensionResponseOptionDoNotDismiss);
+        
+    } else {
+        
+        // 隐藏通知页面
+        completion(UNNotificationContentExtensionResponseOptionDismiss);
+    }
+}
+</code></pre>
+
+<p>整体的运行效果:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/6.Notification%20Content%20Extension/Images/7.gif" alt="7"/></p>
+
+<hr/>
+
+<h3 id="toc_5">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/6.Notification%20Content%20Extension">https://github.com/CainRun/iOS-10-Characteristic/tree/master/6.Notification%20Content%20Extension</a></p>
+
+<hr/>
+
+<h3 id="toc_6">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《UserNotifications》]]></title>
@@ -5746,239 +5899,6 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
 <p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
 
 <p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：横向滑动条《CALToolBarListView》]]></title>
-    <link href="https://cainrun.github.io/14729678790305.html"/>
-    <updated>2016-09-04T13:44:39+08:00</updated>
-    <id>https://cainrun.github.io/14729678790305.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>关于横向滑动条, 我一直都想自己封装一个, 但由于精力有限, 目前只能封装个比较简陋的, 如果有朋友想帮忙完善一下的话, 可以私聊我, 我给你开通一下权限哈~~</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>CALToolBarListView</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<blockquote>
-<p><strong><code>CALToolBarListView</code></strong>是一个仿<strong><code>UISegmentedControl</code></strong>的一个<strong><code>UI控件</code></strong>, 在刚开始设计的时候, 注重点就是为了灵活性, 可以自定义标题颜色, 选中提示条的颜色等等, 目前只有两个样式, 当然, 你可以根据我提供的源码来自行添加你所喜欢的样式</p>
-</blockquote>
-
-<hr/>
-
-<h2 id="toc_2"><p align="center">使用说明</p></h2>
-
-<h3 id="toc_3">初始化</h3>
-
-<blockquote>
-<p>在使用<strong><code>CALToolBarListView</code></strong>的时候必须得通过以下的初始化方法来进行初始化, 并且<strong><code>titleArray</code></strong>不能为空, 否则就会<strong><code>Crash</code></strong>.</p>
-</blockquote>
-
-<pre><code class="language-objectivec">/**
- *  初始化TooBar
- *
- *  @param frame      设置TooBar的Frame
- *
- *  @return self
- */
-- (instancetype)initToolBarWithFrame:(CGRect)frame;
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_4">通用属性</h3>
-
-<pre><code class="language-objectivec">/**
- *  是否根据按钮宽度自动缩小标题, default: NO
- */
-@property (nonatomic, assign) BOOL titleAdjustsFontSizeToFitWidth;
-
-/**
- *  选中的按钮文字的颜色, default: redColor
- */
-@property (nonatomic, strong) UIColor *selectedColor;
-
-/**
- *  非选中的按钮文字的颜色, default: blackColor
- */
-@property (nonatomic, strong) UIColor *deselectColor;
-
-/**
- *  背景颜色, default: whiteColor
- */
-@property (nonatomic, strong) UIColor *barBakcgroundColor;
-
-/**
- *  底部线条的颜色, default: grayColor
- */
-@property (nonatomic, strong) UIColor *bottomLineColor;
-
-/**
- *  选中按钮提示条的颜色, default: cyanColor
- */
-@property (nonatomic, strong) UIColor *selectedLineColor;
-
-/**
- *  按钮文字大小, default: 16
- */
-@property (nonatomic, assign) NSInteger textFont;
-
-/**
- *  按钮之间的间距, default: 10
- */
-@property (nonatomic, assign) CGFloat buttonSpacing;
-
-/**
- *  是否需要底部线
- */
-@property (nonatomic, assign) BOOL isNeedLine;
-
-/**
- *  是否需要选中提示条
- */
-@property (nonatomic, assign) BOOL isNeedSelectedLine;
-
-/**
- *  当前点击的currentIndex, default: 0
- */
-@property (nonatomic, getter=currentIndex) NSInteger currentIndex;
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_5">显示样式</h3>
-
-<blockquote>
-<p>在这里我提供了两个显示的样式</p>
-</blockquote>
-
-<pre><code class="language-objectivec">typedef NS_ENUM(NSInteger, CALToolBarStyle) {
-    CALToolBarNormalStyle = 0,
-    CALToolBarSeparationStyle
-};
-</code></pre>
-
-<blockquote>
-<p>可以通过下面这个属性进行设置, 默认是<strong><code>CALToolBarNormalStyle</code></strong></p>
-</blockquote>
-
-<pre><code class="language-objectivec">/**
- *  设置ToolBar显示的样式, default: CALToolBarNormalStyle
- */
-@property (nonatomic, assign) CALToolBarStyle toolBarStyle;
-</code></pre>
-
-<blockquote>
-<p><strong><code>CALToolBarNormalStyle</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CALToolBarView/master/images-File/CALToolBarNormalStyle.png" alt="1"/></p>
-
-<blockquote>
-<p><strong><code>CALToolBarSeparationStyle</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CALToolBarView/master/images-File/CALToolBarSeparationStyle.png" alt="2"/></p>
-
-<blockquote>
-<p>选择样式二的时候, 可通过以下的属性修改显示的颜色</p>
-</blockquote>
-
-<pre><code class="language-objectivec">/**
- *  Seoaration分割线的颜色
- *  注意: 前提是你设置了toolBarStyle为CALToolBarSeparationStyle才有效, 默认为grayColor
- */
-@property (nonatomic, strong) UIColor *separationColor;
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_6">通用方法</h3>
-
-<blockquote>
-<p>首先肯定是最常用的方法<strong><code>reloadData</code></strong>, 是用来刷新整个<strong><code>CALToolBarListView</code></strong>数据的方法, 只有调用了这个方法, <strong><code>CALToolBarListView</code></strong>才会显示对应的数据.<br/>
-<code>objectivec<br/>
-/**<br/>
- *  刷新整个列表<br/>
- */<br/>
-- (void)reloadData;<br/>
-</code></p>
-
-<p>以下这个方法是默认选中指定<strong><code>Index</code></strong>的按钮, 但需要注意一点就是, 必须现有数据才能调用, 否则直接调用时无效的.<br/>
-<code>objectivec<br/>
-/**<br/>
- *  指定当前选中的Button Index<br/>
- *  @param 注意: 使用该方法, 必须先得实现reloadData的方法, 否则不生效<br/>
- *  @param index 指定当前选中的Button Index<br/>
- */<br/>
-- (void)didSelectedButton:(NSInteger)index;<br/>
-</code></p>
-
-<p>以下这个方法是获取对应按钮的点击事件, 在这里我就没有使用代理来写, 毕竟写代理会增加更多的代码, 直接用一个<strong><code>Block</code></strong>就完事<br/>
-<code>objectivec<br/>
-/**<br/>
- *  点击事件Block<br/>
- */<br/>
-@property (nonatomic, copy) void(^calToolBarSelectedBlock)(NSInteger index);<br/>
-</code></p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_7">演示代码</h3>
-
-<blockquote>
-<p>以下就是使用的演示代码, 方便大家直接查看代码</p>
-</blockquote>
-
-<pre><code class="language-objectivec">    NSArray *titleArray = @[@&quot;标题一&quot;, @&quot;标题二&quot;, @&quot;标题三&quot;, @&quot;标题四&quot;, @&quot;标题五&quot;];
-
-    CALToolBarListView *toolBarList = [[CALToolBarListView alloc] initToolBarWithFrame:CGRectMake(0, 250, self.view.frame.size.width, 40)
-                                                                            titleArray:titleArray];
-    toolBarList.barBakcgroundColor = [UIColor greenColor];
-    toolBarList.selectedLineColor  = [UIColor redColor];
-    toolBarList.bottomLineColor    = [UIColor blueColor];
-    toolBarList.toolBarStyle       = CALToolBarSeparationStyle;
-    toolBarList.separationColor    = [UIColor grayColor];
-    
-    [toolBarList reloadData];
-    [toolBarList didSelectedButton:3];
-    
-    NSLog(@&quot;currentIndex: %zd&quot;, toolBarList.currentIndex);
-    
-    [toolBarList setCalToolBarSelectedBlock:^(NSInteger index) {
-        NSLog(@&quot;index: %zd&quot;, index);
-    }];
-    
-    [self.view addSubview:toolBarList];
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_8">展示效果</h3>
-
-<blockquote>
-<p>请原谅我用的渣渣<strong><code>GIF</code></strong>录制工具....</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CALToolBarView/master/images-File/demo.gif" alt="demo"/></p>
-
-<hr/>
-
-<h3 id="toc_9">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/CALToolBarView">https://github.com/CainRun/CALToolBarView</a></p>
 
 ]]></content>
   </entry>
