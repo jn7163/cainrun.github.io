@@ -146,85 +146,11 @@
 
 <p>这里的项目是<code>Objective-C</code>版本的, 如果喜欢<code>Swift</code>版本的话, 可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/07%20-%20Measurement">这里</a>去查看.</p>
 
-<!--- more --->
-
-<hr/>
-
-<h3 id="toc_1">创建项目</h3>
-
-<p>由于这里要讲的东西很简单, 我就不过多的复杂化直接看代码好了:</p>
-
-<pre><code class="language-objectivec">    // 初始化一个秒数的基数
-    NSMeasurement *seconds = [[NSMeasurement alloc] initWithDoubleValue:666
-                                                                       unit:NSUnitDuration.seconds];
-    
-    // 转换为分钟
-    NSMeasurement *minutes = [seconds measurementByConvertingToUnit:NSUnitDuration.minutes];
-    
-    // 转换为小时
-    NSMeasurement *hours   = [seconds measurementByConvertingToUnit:NSUnitDuration.hours];
-
-    NSString *secondsString = [NSString stringWithFormat:@&quot;%.2f 秒&quot;, seconds.doubleValue];
-    NSString *minutesString = [NSString stringWithFormat:@&quot;%.2f 分钟&quot;, minutes.doubleValue];
-    NSString *hoursString   = [NSString stringWithFormat:@&quot;%.2f 小时&quot;, hours.doubleValue];
-</code></pre>
-
-<p><code>UI</code>的代码我就不贴上来了, 大伙可以去项目里自己去看看, 整体效果就酱紫:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/7.Measurement/Images/1.png" alt="1"/></p>
-
-<hr/>
-
-<h3 id="toc_2">支持换算单位的类型</h3>
-
-<ul>
-<li>NSDimension 维度</li>
-<li>NSUnitAcceleration 每秒/平方米</li>
-<li>NSUnitAngle 角度</li>
-<li>NSUnitArea 平方米</li>
-<li>NSUnitConcentrationMass 每克/升</li>
-<li>NSUnitDispersion 百万分之</li>
-<li>NSUnitDuration 秒</li>
-<li>NSUnitElectricCharge 库仑</li>
-<li>NSUnitElectricCurrent 安培</li>
-<li>NSUnitElectricPotentialDifference 伏</li>
-<li>NSUnitElectricResistance 欧姆</li>
-<li>NSUnitEnergy 焦耳</li>
-<li>NSUnitFrequency 赫兹</li>
-<li>NSUnitFuelEfficiency 升/每100公里</li>
-<li>NSUnitLength 米</li>
-<li>NSUnitIlluminance 公斤</li>
-<li>NSUnitPower 美国瓦茨</li>
-<li>NSUnitPressure 牛顿/每平方米</li>
-<li>NSUnitSpeed 秒/米</li>
-<li>NSUnitTemperature 开尔文</li>
-<li>NSUnitVolume 升</li>
-</ul>
-
-<hr/>
-
-<h3 id="toc_3">总结</h3>
-
-<p>苹果爸爸在这个库里提供了<code>170</code>多种不同的单位换算, 我这里只是用了一丢丢, 更多的方法有待各位去挖掘, 如果想了解更多的话, 可以去看看<a href="https://developer.apple.com/videos/play/wwdc2016/238/">WWDC 2016</a>的视频讲解.</p>
-
-<hr/>
-
-<h3 id="toc_4">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/7.Measurement">https://github.com/CainRun/iOS-10-Characteristic/tree/master/7.Measurement</a></p>
-
-<hr/>
-
-<h3 id="toc_5">最后</h3>
-
-<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
 
 
-			
+			 
+			<a href="14975320210226.html#more" class="more-link">Read on &rarr;</a>
+    		
 			
 		</div>
 
