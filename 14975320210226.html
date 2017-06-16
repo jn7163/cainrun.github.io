@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	玩转iOS开发：iOS 10 新特性《Xcode Extension》 - Cain For iOS
+  	玩转iOS开发：iOS 10 新特性《Measurement》 - Cain For iOS
   	
 	</title>
 
@@ -122,109 +122,86 @@
 			<div class="mid-col-container"> <div id="content" class="inner">
 
 	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-		<h1 class="title" itemprop="name">玩转iOS开发：iOS 10 新特性《Xcode Extension》</h1>
+		<h1 class="title" itemprop="name">玩转iOS开发：iOS 10 新特性《Measurement》</h1>
 		<div class="entry-content" itemprop="articleBody">
-			<h3 id="toc_0">Xcode Extension</h3>
+			<h3 id="toc_0">单位换算</h3>
 
-<p>做<code>macOS</code>, <code>watchOS</code>, <code>tvOS</code>, <code>iOS</code>开发, 最离不开的工具就是<code>Xcode</code>, 但<code>Xcode</code>真的让我们又爱又恨, 虽然有很多强大的功能, 但细节方面真的很难<code>Care</code>到, 于是乎<a href="http://alcatraz.io">Alcatraz</a>诞生了, 在当时火的不要不要的, 只要是老司机都会装一个.</p>
+<p>单位换算其实在iOS开发中, 一直是一个问题, 虽然在大部分<code>App</code>里不一定会遇到换算, 但在一些专业级的App里, 比如导航, 测量, 计算, 汽车辅助类等<code>App</code>就蛋疼了, 因为官方并没有提供这类的<code>API</code>, 基本上都是自己写, 或者是集成第三方库.</p>
 
-<p>但现在苹果爸爸貌似看到了开发者的需求, 所以现在给<code>Xcode</code>加了一个功能, 就是<code>Xcode Extension</code>.</p>
+<p>苹果爸爸为了再一次完善<code>API</code>, 在<code>Foundation</code>库里加了这么一个叫做<code>Measurement</code>的库, 就是为了解决单位换算的问题.</p>
 
-<p>严格来说这不是<code>iOS</code>的东西, 但又刚刚好是随着<code>iOS 10</code>一起出来的, 想了想, 还是集合在这里吧.</p>
+<p>这里的项目是<code>Objective-C</code>版本的, 如果喜欢<code>Swift</code>版本的话, 可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/07%20-%20Measurement">这里</a>去查看.</p>
 
-<span id="more"></span><!-- more -->
+<!--- more --->
 
 <hr/>
 
 <h3 id="toc_1">创建项目</h3>
 
-<p>这里我们需要创建的是<code>macOS</code>的项目:</p>
+<p>由于这里要讲的东西很简单, 我就不过多的复杂化直接看代码好了:</p>
 
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/1.png" alt="1"/></p>
-
-<p>然后在项目的<code>General</code>里找到添加<code>Extension</code>的选项:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/2.png" alt="2"/></p>
-
-<p>选择<code>Xcode Editor Extension</code>:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/3.png" alt="3"/></p>
-
-<p>这就是<code>Xcode Extension</code>啦:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/4.png" alt="4"/></p>
-
-<p>顺便说说, 我在这个<code>info.plist</code>改了一下参数:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/5.png" alt="5"/></p>
-
-<hr/>
-
-<h3 id="toc_2">注意</h3>
-
-<p>这里有一个小坑, 注意要给我们<code>Xcode Extension</code>申请一个证书, 两边都要申请哦.</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/6.png" alt="6"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/7.png" alt="7"/></p>
-
-<p>不然就会报-67050错误:</p>
-
-<pre><code class="language-vim">IDESourceEditorExtension: Xcode Source Editor Extension does not meet code signing requirement: me.ocean.XcodeExt.XcodeExtTest ((null)), Error Domain=DVTSecErrorDomain Code=-67050 &quot;code failed to satisfy specified code requirement(s)&quot; UserInfo={NSLocalizedDescription=code failed to satisfy specified code requirement(s)}
-</code></pre>
-
-<p>这里还有一个诡异的错误代码4097, 但我<code>clean</code>了一下工程之后就消失了, 大家注意注意.</p>
-
-<pre><code class="language-vim">Hub connection error Error Domain=NSCocoaErrorDomain Code=4097
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_3">代码代码!!!</h3>
-
-<p>这里我就随手写两句代码好了, <code>Xcode</code>的扩展还是靠各位大神去发挥想象, 我以后再掺和咯.</p>
-
-<pre><code class="language-objectivec">    XCSourceTextBuffer *textBuffer = invocation.buffer;
-    XCSourceTextRange *insertPointRange = textBuffer.selections[0];
+<pre><code class="language-objectivec">    // 初始化一个秒数的基数
+    NSMeasurement *seconds = [[NSMeasurement alloc] initWithDoubleValue:666
+                                                                       unit:NSUnitDuration.seconds];
     
-    NSInteger startLine = insertPointRange.start.line;
+    // 转换为分钟
+    NSMeasurement *minutes = [seconds measurementByConvertingToUnit:NSUnitDuration.minutes];
     
-    [textBuffer.lines insertObject:@&quot;这是什么鬼👻&quot; atIndex:startLine];
+    // 转换为小时
+    NSMeasurement *hours   = [seconds measurementByConvertingToUnit:NSUnitDuration.hours];
+
+    NSString *secondsString = [NSString stringWithFormat:@&quot;%.2f 秒&quot;, seconds.doubleValue];
+    NSString *minutesString = [NSString stringWithFormat:@&quot;%.2f 分钟&quot;, minutes.doubleValue];
+    NSString *hoursString   = [NSString stringWithFormat:@&quot;%.2f 小时&quot;, hours.doubleValue];
 </code></pre>
 
-<hr/>
+<p><code>UI</code>的代码我就不贴上来了, 大伙可以去项目里自己去看看, 整体效果就酱紫:</p>
 
-<h3 id="toc_4">运行</h3>
-
-<p>一切就绪之后, 我们就运行, 然后选择为<code>Xcode</code>添加插件:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/8.png" alt="8"/></p>
-
-<p>等待运行完成之后, 会弹出一个灰色的<code>Xcode</code>:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/9.png" alt="9"/></p>
-
-<p>这时不用理会, 我们回到正常的<code>Xcode</code>, 然后找到<code>Editor</code>, 点击它, 我们就会发现插件在这里啦:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/10.png" alt="10"/></p>
-
-<p>但这里多说一句, 当我们停止运行之后, 插件又会不见了的, 这个需要大家自行去打包然后发布出来~~这里就不多说了, 详细大家去参考<a href="https://github.com/qfish/XAlign">XAlign</a>吧</p>
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/7.Measurement/Images/1.png" alt="1"/></p>
 
 <hr/>
 
-<h3 id="toc_5">总结</h3>
+<h3 id="toc_2">支持换算单位的类型</h3>
 
-<p>文章里只是简单的讲解, 如果还想了解更多的话, 可以自行去查看<a href="https://developer.apple.com/videos/play/wwdc2016/414/">WWDC 2016</a>的视频讲解.</p>
+<ul>
+<li>NSDimension 维度</li>
+<li>NSUnitAcceleration 每秒/平方米</li>
+<li>NSUnitAngle 角度</li>
+<li>NSUnitArea 平方米</li>
+<li>NSUnitConcentrationMass 每克/升</li>
+<li>NSUnitDispersion 百万分之</li>
+<li>NSUnitDuration 秒</li>
+<li>NSUnitElectricCharge 库仑</li>
+<li>NSUnitElectricCurrent 安培</li>
+<li>NSUnitElectricPotentialDifference 伏</li>
+<li>NSUnitElectricResistance 欧姆</li>
+<li>NSUnitEnergy 焦耳</li>
+<li>NSUnitFrequency 赫兹</li>
+<li>NSUnitFuelEfficiency 升/每100公里</li>
+<li>NSUnitLength 米</li>
+<li>NSUnitIlluminance 公斤</li>
+<li>NSUnitPower 美国瓦茨</li>
+<li>NSUnitPressure 牛顿/每平方米</li>
+<li>NSUnitSpeed 秒/米</li>
+<li>NSUnitTemperature 开尔文</li>
+<li>NSUnitVolume 升</li>
+</ul>
 
 <hr/>
 
-<h3 id="toc_6">工程地址</h3>
+<h3 id="toc_3">总结</h3>
 
-<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/3.Xcode%20Extensions">https://github.com/CainRun/iOS-10-Characteristic/tree/master/3.Xcode%20Extensions</a></p>
+<p>苹果爸爸在这个库里提供了<code>170</code>多种不同的单位换算, 我这里只是用了一丢丢, 更多的方法有待各位去挖掘, 如果想了解更多的话, 可以去看看<a href="https://developer.apple.com/videos/play/wwdc2016/238/">WWDC 2016</a>的视频讲解.</p>
 
 <hr/>
 
-<h3 id="toc_7">最后</h3>
+<h3 id="toc_4">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/7.Measurement">https://github.com/CainRun/iOS-10-Characteristic/tree/master/7.Measurement</a></p>
+
+<hr/>
+
+<h3 id="toc_5">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
@@ -240,7 +217,7 @@
 	  
 
 	  
-	      <div class="ds-thread" data-thread-key="14972357977664.html" data-url="https://cainrun.github.io/14972357977664.html" data-title="玩转iOS开发：iOS 10 新特性《Xcode Extension》"></div>
+	      <div class="ds-thread" data-thread-key="14975320210226.html" data-url="https://cainrun.github.io/14975320210226.html" data-title="玩转iOS开发：iOS 10 新特性《Measurement》"></div>
 	  
 
 	</div>

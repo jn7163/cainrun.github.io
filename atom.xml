@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-15T14:42:05+08:00</updated>
+  <updated>2017-06-15T14:45:11+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Measurement》]]></title>
+    <link href="https://cainrun.github.io/14975320210226.html"/>
+    <updated>2017-06-15T21:07:01+08:00</updated>
+    <id>https://cainrun.github.io/14975320210226.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">单位换算</h3>
+
+<p>单位换算其实在iOS开发中, 一直是一个问题, 虽然在大部分<code>App</code>里不一定会遇到换算, 但在一些专业级的App里, 比如导航, 测量, 计算, 汽车辅助类等<code>App</code>就蛋疼了, 因为官方并没有提供这类的<code>API</code>, 基本上都是自己写, 或者是集成第三方库.</p>
+
+<p>苹果爸爸为了再一次完善<code>API</code>, 在<code>Foundation</code>库里加了这么一个叫做<code>Measurement</code>的库, 就是为了解决单位换算的问题.</p>
+
+<p>这里的项目是<code>Objective-C</code>版本的, 如果喜欢<code>Swift</code>版本的话, 可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/07%20-%20Measurement">这里</a>去查看.</p>
+
+<!--- more --->
+
+<hr/>
+
+<h3 id="toc_1">创建项目</h3>
+
+<p>由于这里要讲的东西很简单, 我就不过多的复杂化直接看代码好了:</p>
+
+<pre><code class="language-objectivec">    // 初始化一个秒数的基数
+    NSMeasurement *seconds = [[NSMeasurement alloc] initWithDoubleValue:666
+                                                                       unit:NSUnitDuration.seconds];
+    
+    // 转换为分钟
+    NSMeasurement *minutes = [seconds measurementByConvertingToUnit:NSUnitDuration.minutes];
+    
+    // 转换为小时
+    NSMeasurement *hours   = [seconds measurementByConvertingToUnit:NSUnitDuration.hours];
+
+    NSString *secondsString = [NSString stringWithFormat:@&quot;%.2f 秒&quot;, seconds.doubleValue];
+    NSString *minutesString = [NSString stringWithFormat:@&quot;%.2f 分钟&quot;, minutes.doubleValue];
+    NSString *hoursString   = [NSString stringWithFormat:@&quot;%.2f 小时&quot;, hours.doubleValue];
+</code></pre>
+
+<p><code>UI</code>的代码我就不贴上来了, 大伙可以去项目里自己去看看, 整体效果就酱紫:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/7.Measurement/Images/1.png" alt="1"/></p>
+
+<hr/>
+
+<h3 id="toc_2">支持换算单位的类型</h3>
+
+<ul>
+<li>NSDimension 维度</li>
+<li>NSUnitAcceleration 每秒/平方米</li>
+<li>NSUnitAngle 角度</li>
+<li>NSUnitArea 平方米</li>
+<li>NSUnitConcentrationMass 每克/升</li>
+<li>NSUnitDispersion 百万分之</li>
+<li>NSUnitDuration 秒</li>
+<li>NSUnitElectricCharge 库仑</li>
+<li>NSUnitElectricCurrent 安培</li>
+<li>NSUnitElectricPotentialDifference 伏</li>
+<li>NSUnitElectricResistance 欧姆</li>
+<li>NSUnitEnergy 焦耳</li>
+<li>NSUnitFrequency 赫兹</li>
+<li>NSUnitFuelEfficiency 升/每100公里</li>
+<li>NSUnitLength 米</li>
+<li>NSUnitIlluminance 公斤</li>
+<li>NSUnitPower 美国瓦茨</li>
+<li>NSUnitPressure 牛顿/每平方米</li>
+<li>NSUnitSpeed 秒/米</li>
+<li>NSUnitTemperature 开尔文</li>
+<li>NSUnitVolume 升</li>
+</ul>
+
+<hr/>
+
+<h3 id="toc_3">总结</h3>
+
+<p>苹果爸爸在这个库里提供了<code>170</code>多种不同的单位换算, 我这里只是用了一丢丢, 更多的方法有待各位去挖掘, 如果想了解更多的话, 可以去看看<a href="https://developer.apple.com/videos/play/wwdc2016/238/">WWDC 2016</a>的视频讲解.</p>
+
+<hr/>
+
+<h3 id="toc_4">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/7.Measurement">https://github.com/CainRun/iOS-10-Characteristic/tree/master/7.Measurement</a></p>
+
+<hr/>
+
+<h3 id="toc_5">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Notification Content Extensions》]]></title>
@@ -151,13 +245,19 @@
 
 <hr/>
 
-<h3 id="toc_5">工程地址</h3>
+<h3 id="toc_5">总结</h3>
+
+<p>文章里只是简单的讲解, 如果还想了解更多的话, 可以自行去查看<a href="https://developer.apple.com/videos/play/wwdc2016/708/">WWDC 2016</a>的视频讲解.</p>
+
+<hr/>
+
+<h3 id="toc_6">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/6.Notification%20Content%20Extension">https://github.com/CainRun/iOS-10-Characteristic/tree/master/6.Notification%20Content%20Extension</a></p>
 
 <hr/>
 
-<h3 id="toc_6">最后</h3>
+<h3 id="toc_7">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
@@ -273,13 +373,19 @@
 
 <hr/>
 
-<h3 id="toc_5">工程地址</h3>
+<h3 id="toc_5">总结</h3>
+
+<p>文章里只是简单的讲解, 如果还想了解更多的话, 可以自行去查看<a href="https://developer.apple.com/videos/play/wwdc2016/707/">WWDC 2016</a>的视频讲解.</p>
+
+<hr/>
+
+<h3 id="toc_6">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/5.UserNotifications">https://github.com/CainRun/iOS-10-Characteristic/tree/master/5.UserNotifications</a></p>
 
 <hr/>
 
-<h3 id="toc_6">最后</h3>
+<h3 id="toc_7">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
@@ -539,13 +645,19 @@
 
 <hr/>
 
-<h3 id="toc_7">工程地址</h3>
+<h3 id="toc_7">总结</h3>
+
+<p>文章里只是简单的讲解, 如果还想了解更多的话, 可以自行去查看<a href="https://developer.apple.com/videos/play/wwdc2016/216/">WWDC 2016</a>的视频讲解.</p>
+
+<hr/>
+
+<h3 id="toc_8">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/4.UIViewPropertyAnimator">https://github.com/CainRun/iOS-10-Characteristic/tree/master/4.UIViewPropertyAnimator</a></p>
 
 <hr/>
 
-<h3 id="toc_8">最后</h3>
+<h3 id="toc_9">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
@@ -650,13 +762,19 @@
 
 <hr/>
 
-<h3 id="toc_5">工程地址</h3>
+<h3 id="toc_5">总结</h3>
+
+<p>文章里只是简单的讲解, 如果还想了解更多的话, 可以自行去查看<a href="https://developer.apple.com/videos/play/wwdc2016/414/">WWDC 2016</a>的视频讲解.</p>
+
+<hr/>
+
+<h3 id="toc_6">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/3.Xcode%20Extensions">https://github.com/CainRun/iOS-10-Characteristic/tree/master/3.Xcode%20Extensions</a></p>
 
 <hr/>
 
-<h3 id="toc_6">最后</h3>
+<h3 id="toc_7">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
@@ -789,13 +907,19 @@
 
 <hr/>
 
-<h3 id="toc_6">工程地址</h3>
+<h3 id="toc_6">总结</h3>
+
+<p>文章里只是简单的讲解, 如果还想了解更多的话, 可以自行去查看<a href="https://developer.apple.com/videos/play/wwdc2016/412/">WWDC 2016</a>的视频讲解.</p>
+
+<hr/>
+
+<h3 id="toc_7">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/2.Thread%20Sanitizer">https://github.com/CainRun/iOS-10-Characteristic/tree/master/2.Thread%20Sanitizer</a></p>
 
 <hr/>
 
-<h3 id="toc_7">最后</h3>
+<h3 id="toc_8">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
@@ -1066,13 +1190,19 @@
 
 <hr/>
 
-<h3 id="toc_8">工程地址</h3>
+<h3 id="toc_8">总结</h3>
+
+<p>文章里只是简单的讲解, 如果还想了解更多的话, 可以自行去查看<a href="https://developer.apple.com/videos/play/wwdc2016/224/">WWDC 2016</a>的视频讲解.</p>
+
+<hr/>
+
+<h3 id="toc_9">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/1.Message">https://github.com/CainRun/iOS-10-Characteristic/tree/master/1.Message</a></p>
 
 <hr/>
 
-<h3 id="toc_9">最后</h3>
+<h3 id="toc_10">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
@@ -5778,123 +5908,6 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
 <hr/>
 
 <h3 id="toc_15">最后</h3>
-
-<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：iOS 8 新特性《UIVisualEffect》]]></title>
-    <link href="https://cainrun.github.io/14730058185822.html"/>
-    <updated>2016-09-05T00:16:58+08:00</updated>
-    <id>https://cainrun.github.io/14730058185822.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>在iOS 8发布的时候, <strong><code>Apple</code></strong>介绍了很多<strong><code>iOS 8</code></strong>的新特性, 比如什么<strong><code>Extensions</code></strong>,<strong><code>Photo</code></strong>,<strong><code>Siri</code></strong>等等之类的, 虽然讲了不少, 但也有很多东西被忽略掉的, 比如今天我们所讲的<strong><code>UIVisualEffect</code></strong>.<br/>
-<dr/><br/>
-有人会问, 这个类是干嘛的呢? 有人又会说, 这个类我用过, 但不好用等等之类的<br/>
-<dr/><br/>
-的确, 这个类的确是不太好用, 限制性太强了, 能使用的<strong><code>API</code></strong>也就一丢丢, 对于现在的需求逐渐多元化来说, 是远远不够的, 但我们可以期待一下, 或许以后苹果会逐渐的开放这个控件呢~</p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<blockquote>
-<p><strong><code>UIVisualEffect</code></strong>这个控件其实就是一个高斯模糊的一个实现的类, 它继承与<strong><code>NSObject</code></strong>, 有三种样式, 分别是: </p>
-
-<ul>
-<li><strong><code>UIBlurEffectStyleExtraLight</code></strong></li>
-<li><strong><code>UIBlurEffectStyleLight</code></strong></li>
-<li><strong><code>UIBlurEffectStyleDark</code></strong></li>
-</ul>
-
-<p><dr/><br/>
-有一个子类叫做<strong><code>UIVibrancyEffect</code></strong>, 还有一个可调用<strong><code>UIVisualEffect</code></strong>的类叫做<strong><code>UIVisualEffectView</code></strong>, 下面让我们来看看怎么去使用吧.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">新建工程</h3>
-
-<blockquote>
-<p>这里我们建了一个叫做<strong><code>UIVisualEffect</code></strong>的工程</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/0.png" alt="0"/></p>
-
-<hr/>
-
-<h3 id="toc_3">布局UI界面</h3>
-
-<blockquote>
-<p>建完一个工程之后, 我们来布局一下UI, 由于这个类有三种样式, 所以我们这里就建立三个<strong><code>UIButton</code></strong>, 并且新建三个<strong><code>ViewController</code></strong>, 这样子我们就能比较清晰的看到三种不同的效果了.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/1.png" alt="1"/></p>
-
-<blockquote>
-<p>这个是和<strong><code>Storyboard</code></strong>绑定好的页面, 这样子, 我们就可以根据点击自己想要的按钮就跳转到对应的页面去了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/2.png" alt="2"/></p>
-
-<blockquote>
-<p>在实现之前, 我偷偷的丢了一张图片在工程里面, 也对UI进行了一个布局, 并且关联了其中一个图片的属性, 这里大家凑合着看吧, 毕竟丑~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/3.png" alt="3"/></p>
-
-<hr/>
-
-<h3 id="toc_4">实现对应的效果</h3>
-
-<blockquote>
-<p>这里我只拿<strong><code>ExtraLight</code></strong>效果来做演示, 其他的两种效果大家可以自行去翻查一下<strong><code>Demo</code></strong>代码, 代码都是比较简单的~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/4.png" alt="4"/></p>
-
-<blockquote>
-<p>这样子就完成了, 下面是具体实现的代码:</p>
-</blockquote>
-
-<pre><code class="language-Objectivec">    self.title = NSStringFromClass(self.class);
-    
-    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    
-    UIVisualEffectView *visualEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-    
-    visualEffectView.alpha = 0.5;
-    
-    visualEffectView.frame = self.imageView.bounds;
-    
-    [self.imageView addSubview:visualEffectView];
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_5">最终效果</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/New-Features-For-iOS-8/master/03.UIVisualEffect/images/5.gif" alt="5"/></p>
-
-<hr/>
-
-<h3 id="toc_6">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/New-Features-For-iOS-8">https://github.com/CainRun/New-Features-For-iOS-8</a></p>
-
-<h3 id="toc_7">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 

@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	玩转iOS开发：iOS 10 新特性《Xcode Extension》 - Cain For iOS
+  	Cain For iOS
   	
 	</title>
 
@@ -120,131 +120,57 @@
 		</div>	
 		<div class="mid-col">
 			<div class="mid-col-container"> <div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
 
-	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-		<h1 class="title" itemprop="name">玩转iOS开发：iOS 10 新特性《Xcode Extension》</h1>
-		<div class="entry-content" itemprop="articleBody">
-			<h3 id="toc_0">Xcode Extension</h3>
 
-<p>做<code>macOS</code>, <code>watchOS</code>, <code>tvOS</code>, <code>iOS</code>开发, 最离不开的工具就是<code>Xcode</code>, 但<code>Xcode</code>真的让我们又爱又恨, 虽然有很多强大的功能, 但细节方面真的很难<code>Care</code>到, 于是乎<a href="http://alcatraz.io">Alcatraz</a>诞生了, 在当时火的不要不要的, 只要是老司机都会装一个.</p>
-
-<p>但现在苹果爸爸貌似看到了开发者的需求, 所以现在给<code>Xcode</code>加了一个功能, 就是<code>Xcode Extension</code>.</p>
-
-<p>严格来说这不是<code>iOS</code>的东西, 但又刚刚好是随着<code>iOS 10</code>一起出来的, 想了想, 还是集合在这里吧.</p>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">创建项目</h3>
-
-<p>这里我们需要创建的是<code>macOS</code>的项目:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/1.png" alt="1"/></p>
-
-<p>然后在项目的<code>General</code>里找到添加<code>Extension</code>的选项:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/2.png" alt="2"/></p>
-
-<p>选择<code>Xcode Editor Extension</code>:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/3.png" alt="3"/></p>
-
-<p>这就是<code>Xcode Extension</code>啦:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/4.png" alt="4"/></p>
-
-<p>顺便说说, 我在这个<code>info.plist</code>改了一下参数:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/5.png" alt="5"/></p>
-
-<hr/>
-
-<h3 id="toc_2">注意</h3>
-
-<p>这里有一个小坑, 注意要给我们<code>Xcode Extension</code>申请一个证书, 两边都要申请哦.</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/6.png" alt="6"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/7.png" alt="7"/></p>
-
-<p>不然就会报-67050错误:</p>
-
-<pre><code class="language-vim">IDESourceEditorExtension: Xcode Source Editor Extension does not meet code signing requirement: me.ocean.XcodeExt.XcodeExtTest ((null)), Error Domain=DVTSecErrorDomain Code=-67050 &quot;code failed to satisfy specified code requirement(s)&quot; UserInfo={NSLocalizedDescription=code failed to satisfy specified code requirement(s)}
-</code></pre>
-
-<p>这里还有一个诡异的错误代码4097, 但我<code>clean</code>了一下工程之后就消失了, 大家注意注意.</p>
-
-<pre><code class="language-vim">Hub connection error Error Domain=NSCocoaErrorDomain Code=4097
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_3">代码代码!!!</h3>
-
-<p>这里我就随手写两句代码好了, <code>Xcode</code>的扩展还是靠各位大神去发挥想象, 我以后再掺和咯.</p>
-
-<pre><code class="language-objectivec">    XCSourceTextBuffer *textBuffer = invocation.buffer;
-    XCSourceTextRange *insertPointRange = textBuffer.selections[0];
-    
-    NSInteger startLine = insertPointRange.start.line;
-    
-    [textBuffer.lines insertObject:@&quot;这是什么鬼👻&quot; atIndex:startLine];
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_4">运行</h3>
-
-<p>一切就绪之后, 我们就运行, 然后选择为<code>Xcode</code>添加插件:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/8.png" alt="8"/></p>
-
-<p>等待运行完成之后, 会弹出一个灰色的<code>Xcode</code>:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/9.png" alt="9"/></p>
-
-<p>这时不用理会, 我们回到正常的<code>Xcode</code>, 然后找到<code>Editor</code>, 点击它, 我们就会发现插件在这里啦:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/3.Xcode%20Extensions/Images/10.png" alt="10"/></p>
-
-<p>但这里多说一句, 当我们停止运行之后, 插件又会不见了的, 这个需要大家自行去打包然后发布出来~~这里就不多说了, 详细大家去参考<a href="https://github.com/qfish/XAlign">XAlign</a>吧</p>
-
-<hr/>
-
-<h3 id="toc_5">总结</h3>
-
-<p>文章里只是简单的讲解, 如果还想了解更多的话, 可以自行去查看<a href="https://developer.apple.com/videos/play/wwdc2016/414/">WWDC 2016</a>的视频讲解.</p>
-
-<hr/>
-
-<h3 id="toc_6">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/3.Xcode%20Extensions">https://github.com/CainRun/iOS-10-Characteristic/tree/master/3.Xcode%20Extensions</a></p>
-
-<hr/>
-
-<h3 id="toc_7">最后</h3>
-
-<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
-
+	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+		<div class="meta">
+			<div class="date">
+				<time datetime="2016-08-22T14:52:59+08:00" itemprop="datePublished">2016/8/22</time>
+			</div>
+			<div class="tags">posted in 
+			
+			    <a class='category' href='%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7.html'>第三方工具</a>&nbsp;
+			 
+			</div>
 		</div>
+		<h1 class="title" itemprop="name"><a href="14718487794778.html" itemprop="url">
+		玩转iOS开发：《CocoaPods》安装及使用教程</a></h1>
+		<div class="entry-content" itemprop="articleBody">
+			
+			<h3 id="toc_0">作者感言</h3>
+
+<blockquote>
+<p>这次的<strong><code>CocoaPods</code></strong>的<strong><code>Review</code></strong>，让我知道了新版的<strong><code>CocoaPods</code></strong>和旧版的<strong><code>CocoaPods</code></strong>的区别, 在声明<strong><code>Podfile</code></strong>文件中, 需要加入对应的<strong><code>target</code></strong>才可以执行, 我个人感觉这个操作有些不太友好, 但他们要这么做, 我也没办法, 毕竟我只是小白用户而已.<br/>
+<dr/><br/>
+<strong><font color=purple>最后:</font></strong><br/>
+<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>CocoaPods</code>** 如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font>**</p>
+</blockquote>
+
+
+
+			 
+			<a href="14718487794778.html#more" class="more-link">Read on &rarr;</a>
+    		
+			
+		</div>
+
 	</article>
-	<div class="share-comment">
-	 
+  
 
-	  
+</div>
+<nav id="pagenavi">
+	 <a class="prev" href="all_3.html">Prev</a>  
+	
+	<div class="center"><a href="archives.html">Blog Archives</a></div>
 
-	  
-	      <div class="ds-thread" data-thread-key="14972357977664.html" data-url="https://cainrun.github.io/14972357977664.html" data-title="玩转iOS开发：iOS 10 新特性《Xcode Extension》"></div>
-	  
+</nav>
 
-	</div>
-</div>        </div>
+</div>
+
+
+
+        </div>
 			<footer id="footer" class="inner">Copyright &copy; 2014
 Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
 Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
