@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-16T12:05:06+08:00</updated>
+  <updated>2017-06-16T12:23:33+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,103 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Speech》]]></title>
+    <link href="https://cainrun.github.io/14976719349322.html"/>
+    <updated>2017-06-17T11:58:54+08:00</updated>
+    <id>https://cainrun.github.io/14976719349322.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">语音识别</h3>
+
+<p>之前在看锤子的发布会的时候, 看到了一个很屌的事情就是讯飞的语音识别杠杠的, 可以根据人说的语句来输入文字, 而且错别率很低, 业界都说<code>666</code>.</p>
+
+<p>好在苹果爸爸也不认输, 也有个原生的语音识别框架<code>Speech</code>, 废话少说了, 我们直接来看看<code>Speech</code>框架.</p>
+
+<p>我这里是<code>Objective-C</code>版本, 如果想看<code>Swift</code>版本的话, 可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/08%20-%20Speech">这里</a>去看.</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">New Project</h3>
+
+<p>怎么创建新项目这里就不多说了, 直接上项目架构图:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/8.Speech/Images/1.png" alt="1"/></p>
+
+<hr/>
+
+<h3 id="toc_2">配置项目</h3>
+
+<p>由于现在苹果越来越注重用户的隐私, 就连最简单的请求使用麦克风, 摄像头都需要经过用户的允许, 这里我们就需要配置一下这些请求:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/8.Speech/Images/2.png" alt="2"/></p>
+
+<p>请求麦克风</p>
+
+<ul>
+<li>Privacy - Microphone Usage Description</li>
+</ul>
+
+<p>请求语音识别系统</p>
+
+<ul>
+<li>Privacy - Speech Recognition Usage Description</li>
+</ul>
+
+<p>里面的提示文字就根据大家的喜爱来自行编写吧, 还有更多的请求这里就不写了, 有需要的朋友可以自行去查资料把.</p>
+
+<hr/>
+
+<h3 id="toc_3">SpeechLogic</h3>
+
+<p>我这里新建了一个类, 专门用来管理<code>Speech</code>, 由于我用不上<code>Speech</code>这个框架, 这里我就随便封装了, 用到上的朋友可以自行另外封装哈.</p>
+
+<p>方法, 属性都已经在文件里备注好了, 自行查看就好了.</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/8.Speech/Images/3.png" alt="3"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/8.Speech/Images/4.png" alt="4"/></p>
+
+<p><code>UI</code>界面也很简单, 这里就更加不用去解释了</p>
+
+<hr/>
+
+<h3 id="toc_4">开始语音识别</h3>
+
+<p>由于我没能在模拟器上面实现, 这里我就用了另外的方法, 有些蛋疼:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/8.Speech/Images/5.gif" alt="5"/></p>
+
+<p>苹果爸爸的语音识别, 不只是能够识别人的语音, 还可以读取音频文件:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/8.Speech/Images/6.gif" alt="6"/></p>
+
+<hr/>
+
+<h3 id="toc_5">总结</h3>
+
+<p>我这里讲的东西比较少, 有兴趣的朋友可以去看看<a href="https://my.oschina.net/u/2340880/blog/751442">Speech框架API解释</a>, 或者是苹果爸爸的<a href="https://developer.apple.com/reference/speech">官方文档</a>, <a href="https://developer.apple.com/videos/play/wwdc2016/509/">WWDC 2016 Speech十分钟视频</a>以及我在Github上看到的<a href="https://github.com/suifengqjn/IOS10Speech">iOS 10 Speech项目</a>, 这些都是挺不错的资料, 方便大家去学习.</p>
+
+<hr/>
+
+<h3 id="toc_6">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/8.Speech">https://github.com/CainRun/iOS-10-Characteristic/tree/master/8.Speech</a></p>
+
+<hr/>
+
+<h3 id="toc_7">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Measurement》]]></title>
@@ -5567,347 +5664,6 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
 <hr/>
 
 <h3 id="toc_13">最后</h3>
-
-<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：集成 WeChat SDK - 支付篇]]></title>
-    <link href="https://cainrun.github.io/14735762460993.html"/>
-    <updated>2016-09-11T14:44:06+08:00</updated>
-    <id>https://cainrun.github.io/14735762460993.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>惯例, 开头都是要说些东西的了, 随着现在的App越来越商业化, 很多公司的App都会集成第三方的支付SDK, 这样子的成本就比较低, 但是呢, 有很多朋友还是不太会集成, 也不太爱看集成文档(我也是~), 想了想, 还是写一篇关于支付的文章吧, 现在写的是<strong><code>微信支付</code></strong>, 过段时间就把<strong><code>支付宝</code></strong>, <strong><code>银联</code></strong>, <strong><code>Apple Pay</code></strong>的也补上.</p>
-
-<p><strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>WeChat支付</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<blockquote>
-<p>微信SDK, 一个集成了社会化分享以及财付通支付功能的SDK, 需要商家先去微信开放平台先登记注册, 审批过后才能获得商家ID, 这样子才能使用支付功能, 下面让我们一起来看看吧.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">准备工作</h3>
-
-<blockquote>
-<p>首先, 我们要来做好准备工作: </p>
-
-<ul>
-<li>1.申请商家ID</li>
-<li>2.申请App ID</li>
-<li>3.下载, 集成SDK包</li>
-<li>4.添加依赖包</li>
-<li>5.最后, 调起支付<br/><br/></li>
-</ul>
-
-<p>做好以上的工作, 微信的SDK集成就告一段落了~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_3">申请商家ID</h3>
-
-<blockquote>
-<p>这里就不做详细介绍了, 毕竟我们这里讲的是如何集成SDK, 如果想了解的童鞋, 可以自行去<strong><a href="https://mp.weixin.qq.com/">微信公众平台</a></strong>自行查看哈~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_4">申请App ID</h3>
-
-<blockquote>
-<p>申请<strong><code>App ID</code></strong>这里也不做介绍, 这个步骤也很简单, 直接去<strong><a href="https://open.weixin.qq.com/">微信开放平台</a></strong>, 根据对应的指导信息, 一步一步的往下填写就OK了, 微信的<strong><code>App ID</code></strong>是需要审核时间的, 快的话几分钟, 慢的话, 慢慢等吧~~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_5">下载SDK包</h3>
-
-<blockquote>
-<p>下载SDK包, 这个更加的简单了, 直接去到<strong><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419319164&amp;token=&amp;lang=zh_CN">资源中心</a></strong>看到<strong><code>iOS开发工具包64位<br/>
-</code></strong>就赶紧毫不犹豫的直接点下载, </p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/1.png" alt="1"/></p>
-
-<blockquote>
-<p>下载完成之后, 我们来看看SDK包里都有啥</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/2.png" alt="2"/></p>
-
-<blockquote>
-<p>我看了看2.0版本的Demo, 里面居然是没有微信支付的相关代码, 这相当蛋疼, 如果是第一次集成的童鞋们, 那就要哭了...不过好在我们用庞大的互联网搜索引擎, 谷歌, 百度, 这些问题都是可以解决的, </p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_6">再废话一段</h3>
-
-<blockquote>
-<p>废话讲了那么多, 现在让我们来看看怎么集成DSK包, 我们先创建一个<strong><code>WorkSpace</code></strong>文件, 叫<strong><code>PayProject</code></strong>, 然后再创建我们的第一个工程<strong><code>WeChatPay-Objective-C</code></strong>, 由于之前有人和我反应过, 为啥没有<strong><code>Swift</code></strong>版本的, 其实不是我想写<strong><code>Swift</code></strong>版本, 是它的语法到现在居然都还没有定型, 每个版本改一丢丢, 这比较蛋疼, 现在有人反应, 那我今后也把<strong><code>Swift</code></strong>版本给补上吧, 如果以后语法继续有更改, 那大家就根据自己的编程经验以及<strong><code>Xcode</code></strong>的提示自行修改哈~~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_7">配置工程</h3>
-
-<blockquote>
-<p>打开我们创建好的<strong><code>WeChatPay-Objective-C</code></strong>工程, 把<strong><code>SDK</code></strong>包拖进去, 这里的文件夹我改名字了, 你们也可以根据你们自己的喜好来改</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/3.png" alt="3"/></p>
-
-<blockquote>
-<p>添加完<strong><code>SDK</code></strong>包之后, 我们还要操作某些东西, 因为在<strong><code>iOS 9</code></strong>之后, 苹果限制了正常的<strong><code>HTTP</code></strong>请求, 如果我们要继续用, 就得先配置一下~~在微信的<strong><code>SDK</code></strong>文件夹里也有声明</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/4.png" alt="4"/></p>
-
-<blockquote>
-<p>打开工程, 找到工程的<strong><code>Info.plist</code></strong>文件, 直接添加就好了, 有时候Xcode不会提示, 需要我们手动填入, 这个就比较蛋疼了, 我这里就列举出来吧</p>
-
-<ul>
-<li>Application requires iPhone environment</li>
-<li>LSApplicationQueriesSchemes</li>
-<li>App Transport Security Settings
-
-<ul>
-<li>Allow Arbitrary Loads</li>
-</ul></li>
-</ul>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/5.png" alt="5"/></p>
-
-<blockquote>
-<p>添加完这些之后, 还是不够的, 我们需要去添加一个<strong><code>URL Schemes</code></strong>, 这里我先提供一个<strong><code>App ID</code></strong>, 是从以前的微信官方Demo里拷贝下来的~~<strong><code>wxb4ba3c02aa476ea1</code></strong>, 童鞋们自动复制粘贴哈, 这个时候, 我们就要打开工程配置了, 然后添加微信的<strong><code>URL Schemes</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/6.png" alt="6"/></p>
-
-<blockquote>
-<p>到这一步, 基本上这个阶段已经告已段落了, 继续下一个阶段~~~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_8">添加依赖包</h3>
-
-<blockquote>
-<p>使用第三方<strong><code>SDK</code></strong>最蛋疼的一件事就是需要添加很多的依赖包, 因为第三方需要做数据的收集, 或者其他操作之类的, 这样子你才能在他们的后台列表了查询到你的App流量, 微信的依赖包有好几个, </p>
-
-<ul>
-<li>UIKit.framework</li>
-<li>Foundation.framework</li>
-<li>SystemConfiguration.framework</li>
-<li>CoreTelephony.framework</li>
-<li>Security.framework</li>
-<li>libz.tbd</li>
-<li>libc++.tbd</li>
-<li>libsqlite3.tbd<br/><br/></li>
-</ul>
-
-<p>现在我们就来添加这些依赖包吧, 怎么添加应该不用我说了吧0.0</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/7.png" alt="7"/></p>
-
-<hr/>
-
-<h3 id="toc_9">注册AppID</h3>
-
-<blockquote>
-<p>前期工作我们都做完了, 现在我们就用代码来实现微信支付~, 首先我们肯定要先注册一下微信<strong><code>App ID</code></strong>, 不然别说支付了, 就连分享神马之类的功能你都没法用, 打开<strong><code>AppDelegate.m</code></strong>, 导入<strong><code>WXApi.h</code></strong>文件, 注册<strong><code>App ID</code></strong>, 这个<strong><code>App ID</code></strong>, 就是我刚刚提供的那个<strong><code>wxb4ba3c02aa476ea1</code></strong>.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/8.png" alt="8"/></p>
-
-<hr/>
-
-<h3 id="toc_10">布局UI</h3>
-
-<blockquote>
-<p>要调起微信支付, 我们肯定要有一个点击事件, 这里的<strong><code>UI</code></strong>, 我们就只给个<strong><code>UIButton</code></strong>和一个<strong><code>Action</code></strong>事件就好了.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/9.png" alt="9"/></p>
-
-<hr/>
-
-<h3 id="toc_11">调起微信支付</h3>
-
-<blockquote>
-<p>重头戏来了, 前面做了那么多的工作, 写了那么多的废话, 只为了现在真正的调起微信支付进行支付~~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/10.png" alt="10"/></p>
-
-<blockquote>
-<p>实现代码都给你们贴出来了~这是我在以前的官方Demo中拷贝出来的~ <br/>
-<br/></p>
-
-<p><strong><font color=red>PS: 这里是Demo, 所以这里拿到的神马签名啊, 商户ID, 支付链接神马的, 都是写在客户端的, 但在实际开发当中, 这是强烈不建议在客户端内自己生成, 一定一定要由服务器返回, 不然你会非常深刻的了解到蛋疼这个词语是啥意思~~</font></strong></p>
-</blockquote>
-
-<pre><code class="language-objectivec">    NSString *urlString = @&quot;http://wxpay.weixin.qq.com/pub_v2/app/app_pay.php?plat=ios&quot;;
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-    
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:queue
-                           completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
-                               
-                               if (data != nil) {
-                                   
-                                   NSError *error;
-                                   NSMutableDictionary *dictionart = NULL;
-                                   
-                                   dictionart = [NSJSONSerialization JSONObjectWithData:data
-                                                                          options:NSJSONReadingMutableLeaves
-                                                                            error:&amp;error];
-                                   
-                                   NSLog(@&quot;URL: %@&quot;, urlString);
-                                   
-                                   if (dictionart != nil) {
-                                       
-                                       NSMutableString *retCode = [dictionart objectForKey:@&quot;retcode&quot;];
-                                       
-                                       if (retCode.integerValue == 0) {
-                                           
-                                           NSMutableString *stamp = [dictionart objectForKey:@&quot;timestamp&quot;];
-                                           
-                                           // 调起微信支付
-                                           PayReq *req   = [[PayReq alloc] init];
-                                           req.partnerId = [dictionart objectForKey:@&quot;partnerid&quot;];
-                                           req.prepayId  = [dictionart objectForKey:@&quot;prepayid&quot;];
-                                           req.nonceStr  = [dictionart objectForKey:@&quot;noncestr&quot;];
-                                           req.timeStamp = stamp.intValue;
-                                           req.package   = [dictionart objectForKey:@&quot;package&quot;];
-                                           req.sign      = [dictionart objectForKey:@&quot;sign&quot;];
-                                           
-                                           [WXApi sendReq:req];
-                                           
-                                           // 日志输出
-                                           NSLog(@&quot;appid = %@&quot;, [dictionart objectForKey:@&quot;appid&quot;]);
-                                           NSLog(@&quot;partnerId = %@&quot;, req.partnerId);
-                                           NSLog(@&quot;prepayId = %@&quot;, req.prepayId);
-                                           NSLog(@&quot;nonceStr = %@&quot;, req.nonceStr);
-                                           NSLog(@&quot;timeStamp = %d&quot;, req.timeStamp);
-                                           NSLog(@&quot;package = %@&quot;, req.package);
-                                           NSLog(@&quot;sign = %@&quot;, req.sign);
-                                           
-                                       } else {
-                                           
-                                           NSLog(@&quot;retmsg: %@&quot;, [dictionart objectForKey:@&quot;retmsg&quot;]);
-                                       }
-                                   } else {
-                                       
-                                       NSLog(@&quot;服务器返回错误, 未获取到JSON对象&quot;);
-                                   }
-                               } else {
-                                   
-                                   NSLog(@&quot;服务器返回错误&quot;);
-                               }
-                           }];
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_12">处理回调结果</h3>
-
-<blockquote>
-<p>实现代码我们都搞定了, 现在我们差的就是要处理微信回调回来的结果, 无论你支付成功或者是支付失败, 还是微信服务器爆炸了, 这个结果我们都要获取到, 还有对应的<strong><code>errCode</code></strong>.<br><br/>
-打开<strong><code>AppDelegate.m</code></strong>, 我们要添加微信的代理协议, 实现一个微信的代理方法, 以及<strong><code>AppDelegate</code></strong>的两个方法</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/11.png" alt="11"/></p>
-
-<blockquote>
-<p>具体实现的代码</p>
-</blockquote>
-
-<pre><code class="language-Objectivec">- (void)onResp:(BaseResp *)resp {
-    
-    if ([resp isKindOfClass:[PayResp class]]) {
-        
-        NSString *stringMessage = @&quot;支付结果&quot;;
-        NSString *stringTitle  = @&quot;支付结果&quot;;
-        
-        switch (resp.errCode) {
-            case WXSuccess:
-                
-                stringMessage = @&quot;支付结果: 成功!&quot;;
-                
-                NSLog(@&quot;支付成功 - PaySuccess, retCode = %d&quot;, resp.errCode);
-                
-                break;
-            default:
-                
-                stringMessage = [NSString stringWithFormat:@&quot;支付结果: 失败!, retcode = %d, retstr = %@&quot;, resp.errCode, resp.errStr];
-                
-                break;
-        }
-        
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:stringTitle
-                                                            message:stringMessage
-                                                           delegate:nil
-                                                  cancelButtonTitle:@&quot;好的&quot;
-                                                  otherButtonTitles:nil, nil];
-        
-        [alertView show];
-    }
-}
-
-- (BOOL)application:(UIApplication *)application
-      handleOpenURL:(NSURL *)url {
-    
-    return [WXApi handleOpenURL:url delegate:self];
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    
-    return [WXApi handleOpenURL:url delegate:self];
-}
-</code></pre>
-
-<hr/>
-
-<h3 id="toc_13">最终效果</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/12.gif" alt="12"/></p>
-
-<hr/>
-
-<h3 id="toc_14">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/PayProject">https://github.com/CainRun/PayProject</a></p>
-
-<hr/>
-
-<h3 id="toc_15">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
