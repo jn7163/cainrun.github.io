@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	玩转iOS开发：iOS 10 新特性《Measurement》 - Cain For iOS
+  	玩转iOS开发：iOS 10 新特性《Siri Kit Intents Extension UI》 - Cain For iOS
   	
 	</title>
 
@@ -122,154 +122,58 @@
 			<div class="mid-col-container"> <div id="content" class="inner">
 
 	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-		<h1 class="title" itemprop="name">玩转iOS开发：iOS 10 新特性《Measurement》</h1>
+		<h1 class="title" itemprop="name">玩转iOS开发：iOS 10 新特性《Siri Kit Intents Extension UI》</h1>
 		<div class="entry-content" itemprop="articleBody">
-			<h3 id="toc_0">单位换算</h3>
+			<h3 id="toc_0">Siri Kit Intents Extension UI</h3>
 
-<p>单位换算其实在iOS开发中, 一直是一个问题, 虽然在大部分<code>App</code>里不一定会遇到换算, 但在一些专业级的App里, 比如导航, 测量, 计算, 汽车辅助类等<code>App</code>就蛋疼了, 因为官方并没有提供这类的<code>API</code>, 基本上都是自己写, 或者是集成第三方库.</p>
+<p>之前我们讲了<code>Siri Kit Intents Extension</code>, 但并没有去讲到<code>UI</code>的方面, 这次我们把最后一丢丢给讲完把.</p>
 
-<p>苹果爸爸为了再一次完善<code>API</code>, 在<code>Foundation</code>库里加了这么一个叫做<code>Measurement</code>的库, 就是为了解决单位换算的问题.</p>
+<p>这里所用的工程还是之前的, 如果不懂得朋友, 可以去看看的那篇<a href="https://cainrun.github.io/14977885999456.html">文章</a>, 里面也有工程的下载地址.</p>
 
-<p>这里的项目是<code>Objective-C</code>版本的, 如果喜欢<code>Swift</code>版本的话, 可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/07%20-%20Measurement">这里</a>去查看.</p>
-
-<span id="more"></span><!-- more -->
+<p>这里的工程是<code>Objective-C</code>版本的, 如果要看<code>Swift</code>版本, 可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/10%20-%20Siri%20Intents%20UI">这里</a>去查看.</p>
 
 <hr/>
 
-<h3 id="toc_1">创建项目</h3>
+<h3 id="toc_1">添加Siri Kit Intents Extension UI</h3>
 
-<p>由于这里要讲的东西很简单, 我就不过多的复杂化直接看代码好了:</p>
+<p>这里就废话少说了, 直接来看看怎么添加:</p>
 
-<pre><code class="language-objectivec">    // 初始化一个秒数的基数
-    NSMeasurement *seconds = [[NSMeasurement alloc] initWithDoubleValue:666
-                                                                       unit:NSUnitDuration.seconds];
-    
-    // 转换为分钟
-    NSMeasurement *minutes = [seconds measurementByConvertingToUnit:NSUnitDuration.minutes];
-    
-    // 转换为小时
-    NSMeasurement *hours   = [seconds measurementByConvertingToUnit:NSUnitDuration.hours];
+<p>[1]()</p>
 
-    NSString *secondsString = [NSString stringWithFormat:@&quot;%.2f 秒&quot;, seconds.doubleValue];
-    NSString *minutesString = [NSString stringWithFormat:@&quot;%.2f 分钟&quot;, minutes.doubleValue];
-    NSString *hoursString   = [NSString stringWithFormat:@&quot;%.2f 小时&quot;, hours.doubleValue];
+<p>[2]()</p>
+
+<p>添加完成之后, 我们就可以看到这堆东西啦:</p>
+
+<p>[3]()</p>
+
+<hr/>
+
+<h3 id="toc_2">定制UI</h3>
+
+<p>我们可以在<code>SiriKitIntentsExtensionUI</code>文件夹里找到<code>MainInterface.storyboard</code>文件, 在这里面定制我们所需要的<code>UI</code>界面就OK了.</p>
+
+<p>[4]()</p>
+
+<hr/>
+
+<h3 id="toc_3">具体实现</h3>
+
+<p>由于我这里并没有什么具体实现的业务, 有需要的朋友可以去参考一下<a href="https://github.com/hanyx1992/SiriKitDemo">事例</a>.</p>
+
+<p>这里就说说一个方法:</p>
+
+<pre><code class="language-objectivec">- (void)configureWithInteraction:(INInteraction *)interaction
+                         context:(INUIHostedViewContext)context
+                      completion:(void (^)(CGSize))completion;
 </code></pre>
 
-<p><code>UI</code>的代码我就不贴上来了, 大伙可以去项目里自己去看看, 整体效果就酱紫:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/7.Measurement/Images/1.png" alt="1"/></p>
-
-<hr/>
-
-<h3 id="toc_2">支持换算单位的类型</h3>
-
-<table>
-<thead>
-<tr>
-<th style="text-align: center">单位类型</th>
-<th style="text-align: center">单位</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td style="text-align: center">NSDimension</td>
-<td style="text-align: center">维度</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitAcceleration</td>
-<td style="text-align: center">每秒/平方米</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitAngle</td>
-<td style="text-align: center">角度</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitArea</td>
-<td style="text-align: center">平方米</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitConcentrationMass</td>
-<td style="text-align: center">每克/升</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitDispersion</td>
-<td style="text-align: center">百万分之</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitDuration</td>
-<td style="text-align: center">秒</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitElectricCharge</td>
-<td style="text-align: center">库仑</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitElectricCurrent</td>
-<td style="text-align: center">安培</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitElectricPotentialDifference</td>
-<td style="text-align: center">伏</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitElectricResistance</td>
-<td style="text-align: center">欧姆</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitEnergy</td>
-<td style="text-align: center">焦耳</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitFrequency</td>
-<td style="text-align: center">赫兹</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitFuelEfficiency</td>
-<td style="text-align: center">升/每100公里</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitLength</td>
-<td style="text-align: center">米</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitIlluminance</td>
-<td style="text-align: center">公斤</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitPower</td>
-<td style="text-align: center">美国瓦茨</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitPressure</td>
-<td style="text-align: center">牛顿/每平方米</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitSpeed</td>
-<td style="text-align: center">秒/米</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitTemperature</td>
-<td style="text-align: center">开尔文</td>
-</tr>
-<tr>
-<td style="text-align: center">NSUnitVolume</td>
-<td style="text-align: center">升</td>
-</tr>
-</tbody>
-</table>
-
-<hr/>
-
-<h3 id="toc_3">总结</h3>
-
-<p>苹果爸爸在这个库里提供了<code>170</code>多种不同的单位换算, 我这里只是用了一丢丢, 更多的方法有待各位去挖掘, 如果想了解更多的话, 可以去看看<a href="https://developer.apple.com/videos/play/wwdc2016/238/">WWDC 2016</a>的视频讲解.</p>
+<p>这个方法就是用来配置我们所定制的UI的内容, 将接收到的<code>INInteraction</code>内容, 然后展示到我们的<code>UI</code>上面即可, 具体实现请参考上面的事例.</p>
 
 <hr/>
 
 <h3 id="toc_4">工程地址</h3>
 
-<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/7.Measurement">https://github.com/CainRun/iOS-10-Characteristic/tree/master/7.Measurement</a></p>
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents">https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents</a></p>
 
 <hr/>
 
@@ -289,7 +193,7 @@
 	  
 
 	  
-	      <div class="ds-thread" data-thread-key="14975320210226.html" data-url="https://cainrun.github.io/14975320210226.html" data-title="玩转iOS开发：iOS 10 新特性《Measurement》"></div>
+	      <div class="ds-thread" data-thread-key="14978567639492.html" data-url="https://cainrun.github.io/14978567639492.html" data-title="玩转iOS开发：iOS 10 新特性《Siri Kit Intents Extension UI》"></div>
 	  
 
 	</div>

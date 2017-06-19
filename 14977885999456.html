@@ -200,7 +200,7 @@
 
 <p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/2.png" alt="2"/></p>
 
-<p>这里注意一下, 我们要把<code>Include UI Extension</code>给勾掉, 为了更好地解释, 这个另外拆除一篇文章来说:</p>
+<p>这里注意一下, 我们要把<code>Include UI Extension</code>也要勾上, 但这个东西会专门开一篇文章去讲解.</p>
 
 <p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/3.png" alt="3"/></p>
 
@@ -237,64 +237,131 @@
 
 <hr/>
 
-<h3 id="toc_4">SiriKit实现</h3>
+<h3 id="toc_4">交互名单</h3>
 
-<p>我们可以来到<code>IntentHandler.m</code>文件看看:</p>
+<p>这里我们首先要创建一个名单, 用来模拟一下发送消息的场景:</p>
 
-<ul>
-<li><code>Resolve</code>的方法有:</li>
-</ul>
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/8.png" alt="8"/></p>
 
-<pre><code class="language-objectivec">- (void)resolveRecipientsForSendMessage:(INSendMessageIntent *)intent
-                         withCompletion:(void (^)(NSArray&lt;INPersonResolutionResult *&gt; *resolutionResults))completion NS_SWIFT_NAME(resolveRecipients(forSendMessage:with:));
+<p>这里还有一个<code>NSString</code>的类别, 用来转换拼音的:</p>
 
-- (void)resolveContentForSendMessage:(INSendMessageIntent *)intent
-                      withCompletion:(void (^)(INStringResolutionResult *resolutionResult))completion NS_SWIFT_NAME(resolveContent(forSendMessage:with:));
-
-- (void)resolveGroupNameForSendMessage:(INSendMessageIntent *)intent
-                        withCompletion:(void (^)(INStringResolutionResult *resolutionResult))completion NS_SWIFT_NAME(resolveGroupName(forSendMessage:with:));
-</code></pre>
-
-<ul>
-<li><code>Confirm</code>方法有:</li>
-</ul>
-
-<pre><code class="language-objectivec">- (void)confirmSendMessage:(INSendMessageIntent *)intent
-                completion:(void (^)(INSendMessageIntentResponse *response))completion NS_SWIFT_NAME(confirm(sendMessage:completion:));
-</code></pre>
-
-<ul>
-<li><code>Hanld</code>方法有:</li>
-</ul>
-
-<pre><code class="language-objectivec">- (void)handleSendMessage:(INSendMessageIntent *)intent completion:(void (^)(INSendMessageIntentResponse *response))completion;
-
-- (void)handleSearchForMessages:(INSearchForMessagesIntent *)intent completion:(void (^)(INSearchForMessagesIntentResponse *response))completion;
-
-- (void)handleSetMessageAttribute:(INSetMessageAttributeIntent *)intent completion:(void (^)(INSetMessageAttributeIntentResponse *response))completion;
-</code></pre>
-
-<p>看完之后, 我们先来运行一个<code>App</code>, 再来运行一下<code>Siri Intents Extension</code>就会看到在我们的应用里<code>Siri</code>被打开了, 接下来就可以慢慢调戏<code>Siri</code>咯.</p>
-
-<p>由于我这里还没想到什么好的业务逻辑, 这里就不去折腾了, 用的上的朋友可以去看看另外的一些<a href="https://github.com/hanyx1992/SiriKitDemo">事例</a>.</p>
-
-<p>效果图这里也不放了, 调戏过<code>Siri</code>的小伙伴都知道是肿么一个情况.</p>
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/9.png" alt="9"/></p>
 
 <hr/>
 
-<h3 id="toc_5">总结</h3>
+<h3 id="toc_5">精确匹配和模糊匹配</h3>
+
+<p>回到我们的<code>IntentHandler.m</code>文件, 这里我们要开始写代码了, 我们需要些一个精确的用户名称匹配和一个模糊的用户名称匹配:</p>
+
+<pre><code class="language-objectivec">    // 遍历待匹配选项
+    for (INPerson *recipient in recipients) {
+        
+        // Implement your contact matching logic here to create an array of matching contacts
+        NSMutableArray&lt;INPerson *&gt; *matchingContacts = [NSMutableArray array];
+        
+        // 待匹配的名称
+        NSString *recipientName = recipient.displayName;
+        NSString *recipientNamePinYin = [recipientName cl_PinYin];
+        
+        // 精确的匹配到列表里的用户
+        UserList *user = [UserList checkUserWithName:recipientName];
+        
+        if (user) {
+            
+            NSLog(@&quot;匹配到精确用户:%@&quot;, user);
+    
+            // 创建一个匹配成功的用户
+            INPersonHandle *personHandle = [[INPersonHandle alloc] initWithValue:user.userAddress
+                                                                            type:INPersonHandleTypeEmailAddress];
+            INImage *iconImage = [INImage imageNamed:user.userIcon];
+            
+            INPerson *person = [[INPerson alloc] initWithPersonHandle:personHandle
+                                                       nameComponents:nil
+                                                          displayName:recipientName
+                                                                image:iconImage
+                                                    contactIdentifier:nil
+                                                     customIdentifier:nil
+                                                              aliases:nil
+                                                       suggestionType:INPersonSuggestionTypeSocialProfile];
+            
+            // 把匹配成功的用户记录下来
+            [matchingContacts addObject:person];
+        }
+        
+        // 如果没有精确匹配到用户, 则用模糊匹配
+        if (matchingContacts.count == 0) {
+            
+            NSLog(@&quot;没有匹配到精确用户:%@&quot;, user);
+
+            for (UserList *user in [UserList userList]) {
+                
+                // 匹配用户的名称
+                NSString *userName = user.userName;
+                NSString *userNamePinYin = [userName cl_PinYin];
+                
+                if ([recipientName containsString:userName] || [recipientNamePinYin containsString:userNamePinYin]) {
+                    
+                    //  创建一个匹配成功的用户
+                    INPersonHandle *personHandle = [[INPersonHandle alloc] initWithValue:user.userAddress
+                                                                                    type:INPersonHandleTypeEmailAddress];
+                    
+                    INImage *iconImage = [INImage imageNamed:user.userIcon];
+                    
+                    INPerson *person = [[INPerson alloc] initWithPersonHandle:personHandle
+                                                               nameComponents:nil
+                                                                  displayName:userName
+                                                                        image:iconImage
+                                                            contactIdentifier:nil
+                                                             customIdentifier:nil
+                                                                      aliases:nil
+                                                               suggestionType:INPersonSuggestionTypeSocialProfile];
+                    
+                    //  记录匹配的用户
+                    [matchingContacts addObject:person];
+                }
+            }
+        }
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/10.png" alt="10"/></p>
+
+<hr/>
+
+<h3 id="toc_6">注意</h3>
+
+<p>注意一下, 虽然我们代码写好了, 但我们还是需要看看工程里有没有添加<code>-ObjC</code></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/11.png" alt="11"/></p>
+
+<p>还有就是<code>Siri Intents Extension</code>和<code>Siri Intents Extension UI</code>里有没有链接好<code>NSString+PinYin.m</code>和<code>UserList.m</code>:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/12.png" alt="12"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/13.png" alt="13"/></p>
+
+<p>不然就会发生<code>&quot;_OBJC_CLASS_$_UserList&quot;, referenced from:</code>错误了.</p>
+
+<p>在运行之前一定要到<code>设置 -&gt; Siri -&gt; 开启Siri</code>才可以使用, 这里我是用模拟器, 所以没法试着发邮件出去:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/14.png" alt="14"/></p>
+
+<p>为啥不用真机呢...那是因为我没有去买开发者账号...所以你懂得....这个测试结果就由各位大神去试啦.</p>
+
+<hr/>
+
+<h3 id="toc_7">总结</h3>
 
 <p>最后我们来看看额外的一篇文章, 就是企鹅公司是肿么给QQ适配<code>SiriKit</code>的一些思路<a href="http://www.cnblogs.com/oc-bowen/p/5949020.html">QQ适配 SiriKit</a>.</p>
 
 <hr/>
 
-<h3 id="toc_6">工程地址</h3>
+<h3 id="toc_8">工程地址</h3>
 
 <p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents">https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents</a></p>
 
 <hr/>
 
-<h3 id="toc_7">最后</h3>
+<h3 id="toc_9">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 

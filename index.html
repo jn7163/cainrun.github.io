@@ -126,6 +126,89 @@
 	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
 		<div class="meta">
 			<div class="date">
+				<time datetime="2017-06-19T15:19:23+08:00" itemprop="datePublished">2017/6/19</time>
+			</div>
+			<div class="tags">posted in 
+			
+			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
+			 
+			</div>
+		</div>
+		<h1 class="title" itemprop="name"><a href="14978567639492.html" itemprop="url">
+		玩转iOS开发：iOS 10 新特性《Siri Kit Intents Extension UI》</a></h1>
+		<div class="entry-content" itemprop="articleBody">
+			
+			<h3 id="toc_0">Siri Kit Intents Extension UI</h3>
+
+<p>之前我们讲了<code>Siri Kit Intents Extension</code>, 但并没有去讲到<code>UI</code>的方面, 这次我们把最后一丢丢给讲完把.</p>
+
+<p>这里所用的工程还是之前的, 如果不懂得朋友, 可以去看看的那篇<a href="https://cainrun.github.io/14977885999456.html">文章</a>, 里面也有工程的下载地址.</p>
+
+<p>这里的工程是<code>Objective-C</code>版本的, 如果要看<code>Swift</code>版本, 可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/10%20-%20Siri%20Intents%20UI">这里</a>去查看.</p>
+
+<hr/>
+
+<h3 id="toc_1">添加Siri Kit Intents Extension UI</h3>
+
+<p>这里就废话少说了, 直接来看看怎么添加:</p>
+
+<p>[1]()</p>
+
+<p>[2]()</p>
+
+<p>添加完成之后, 我们就可以看到这堆东西啦:</p>
+
+<p>[3]()</p>
+
+<hr/>
+
+<h3 id="toc_2">定制UI</h3>
+
+<p>我们可以在<code>SiriKitIntentsExtensionUI</code>文件夹里找到<code>MainInterface.storyboard</code>文件, 在这里面定制我们所需要的<code>UI</code>界面就OK了.</p>
+
+<p>[4]()</p>
+
+<hr/>
+
+<h3 id="toc_3">具体实现</h3>
+
+<p>由于我这里并没有什么具体实现的业务, 有需要的朋友可以去参考一下<a href="https://github.com/hanyx1992/SiriKitDemo">事例</a>.</p>
+
+<p>这里就说说一个方法:</p>
+
+<pre><code class="language-objectivec">- (void)configureWithInteraction:(INInteraction *)interaction
+                         context:(INUIHostedViewContext)context
+                      completion:(void (^)(CGSize))completion;
+</code></pre>
+
+<p>这个方法就是用来配置我们所定制的UI的内容, 将接收到的<code>INInteraction</code>内容, 然后展示到我们的<code>UI</code>上面即可, 具体实现请参考上面的事例.</p>
+
+<hr/>
+
+<h3 id="toc_4">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents">https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents</a></p>
+
+<hr/>
+
+<h3 id="toc_5">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+
+			
+			
+		</div>
+
+	</article>
+ 
+	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+		<div class="meta">
+			<div class="date">
 				<time datetime="2017-06-18T20:23:19+08:00" itemprop="datePublished">2017/6/18</time>
 			</div>
 			<div class="tags">posted in 
@@ -360,37 +443,6 @@
 
 			 
 			<a href="14972357977664.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-11T20:11:04+08:00" itemprop="datePublished">2017/6/11</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14971830645415.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《Thread Sanitizer》</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">Thread Sanitizer(TSan)</h3>
-
-<blockquote>
-<p><code>Thread Sanitizer</code>这个怎么翻译呢...其实我想了很久, <code>线程洗手液</code>? <code>线程清扫车</code>? 感觉都不太对....于是乎还是不翻译了, 我们只要知道这个东西是用来解决线程问题的就哦了, 我这个是<code>Objective-c</code>版本的, 如果你们喜欢<code>Swift</code>版本的话, 可以去找找<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/02%20-%20Thread%20Sanitizer">Swift版本</a></p>
-</blockquote>
-
-
-
-			 
-			<a href="14971830645415.html#more" class="more-link">Read on &rarr;</a>
     		
 			
 		</div>
