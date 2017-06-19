@@ -1,0 +1,344 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	玩转iOS开发：iOS 10 新特性《Siri Kit》 - Cain For iOS
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Cain For iOS" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+				 
+				 	<div class="profilepic">
+						<img src="asset/icon.png" style="width:160px;">
+					</div>
+            	
+					
+					<h1><a href="index.html">Cain For iOS</a></h1>
+					<p class="subtitle">指弹吉他演奏爱好者, 摄影爱好者, iOS 开发工程师, 如果您有更好的建议或者其他不明白的地方, 可以联系我QQ: 350116542</p>
+					<nav id="main-nav">
+						<ul class="main">
+						
+						  <li id=""><a target="self" href="index.html">Home</a></li>
+						
+						  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+						
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+
+
+
+<a target="_blank" class="linkedin" href="www.linkedin.com/in/cainluo" title="LinkedIn">LinkedIn</a>
+
+
+
+<a target="_blank" class="weibo" href="http://weibo.com/1826190094" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/CainRun" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:zhebushimengfei@qq.com" title="Email">Email</a>
+
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：iOS 10 新特性《Siri Kit》</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">Siri</h3>
+
+<p>众所周知<code>Siri</code>是苹果爸爸内置在<code>iOS</code>系统的一个语音助手, 自从在2011年的<code>iPhone 4s</code>问世之后, <code>Siri</code>就一直受关注.</p>
+
+<p>但好景不长, 随着<code>Siri</code>的功能和权限太弱了, 慢慢就被人遗忘, 起码我身边用<code>iPhone</code>的小伙伴都会把<code>Siri</code>给关掉, 按照他们的说法就是可以省电...我也是醉了.</p>
+
+<p>几年过去后, <code>Siri</code>终于迎接来了春天, 随着<code>iOS 10</code>的推出, 终于给开发者们开放了<code>Siri Kit</code>, 也开放了<code>Siri Intents Extension</code>, 国内用的最快的<code>App</code>依然还是<code>BAT</code>巨头的产品, 比如<code>QQ</code>.</p>
+
+<p>这里的工程是<code>Objective-C</code>版本, 想看<code>Swift</code>版本的, 可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/09%20-%20Siri%20Intents">这里</a>去查看.</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">Siri的服务类型</h3>
+
+<p>这里我简单的举一下<code>Siri</code>目前支持的一些种类, 更加详细的文档请看<a href="https://developer.apple.com/documentation/sirikit?language=objc">官方文档</a>.</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">Siri服务类型</th>
+<th style="text-align: left">Intent种类</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">VoIP语音 - VoIP calling</td>
+<td style="text-align: left">INStartVideoCallIntent、INStartAudioCallIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">消息 - Messaging</td>
+<td style="text-align: left">INSendMessageIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">支付 - Payments</td>
+<td style="text-align: left">INSendPaymentIntent、INRequestPaymentIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">图片 - Photos</td>
+<td style="text-align: left">INSearchForPhotosIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">健身 - Workouts</td>
+<td style="text-align: left">INEndWorkoutIntent、INPauseWorkoutIntent 、INStartWorkoutIntent 、 INResumeWorkoutIntent 、INCancelWorkoutIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">骑行预约 - Ride booking</td>
+<td style="text-align: left">INRequestRideIntent、INGetRideStatusIntent、 INListRideOptionsIntent、 INGetRideStatusIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">汽车状态 - Car commands</td>
+<td style="text-align: left">INSetCarLockStatusIntent、INGetCarPowerLevelStatusIntent、INActivateCarSignalIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">车载系统 - CarPlay</td>
+<td style="text-align: left">INSetAudioSourceInCarIntent、INSetClimateSettingsInCarIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">预定餐厅 - Restaurant reservations</td>
+<td style="text-align: left">INBookRestaurantReservationIntent</td>
+</tr>
+</tbody>
+</table>
+
+<hr/>
+
+<h3 id="toc_2">New Project</h3>
+
+<p>创建新工程的项目这里我就忽略了, 直接来看添加<code>Siri Intents Extension</code>:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/2.png" alt="2"/></p>
+
+<p>这里注意一下, 我们要把<code>Include UI Extension</code>给勾掉, 为了更好地解释, 这个另外拆除一篇文章来说:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/3.png" alt="3"/></p>
+
+<p>创建好之后, 我们可以看到<code>Siri Intents Extension</code>和之前我们遇到的<code>Extension</code>不太一样:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/4.png" alt="4"/></p>
+
+<p>还有就是, 我们打开<code>Siri Intents Extension</code>的<code>Info.plist</code>文件看到<code>IntentsSupported</code>和<code>IntentsRestrictedWhileLocked</code>, 那有什么用呢?</p>
+
+<ul>
+<li><p>IntentsSupported: 我们项目需要支持的<code>Siri Intents</code>就放到这里, 比如我们在工程里看到的<code>INSendMessageIntent</code>, <code>INSearchForMessagesIntent</code>, <code>INSetMessageAttributeIntent</code>.</p></li>
+<li><p>IntentsRestrictedWhileLocked: 在锁屏状态下需要锁定的<code>Siri Intents</code>就放到这里, 比如我们在工程里看到的<code>INSendMessageIntent</code>.</p></li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/5.png" alt="5"/></p>
+
+<hr/>
+
+<h3 id="toc_3">SiriKit的流程</h3>
+
+<p>关于<code>SiriKit</code>的流程这里我就拷贝一下官方的说法:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/6.png" alt="6"/></p>
+
+<p><code>Siri</code>和<code>Maps</code>通过<code>Intents extension</code>的扩展方式和我们的应用进行交互，其中，类型为<code>INExtension</code>的对象扮演着<code>Intents extension</code>扩展中直接协同<code>Siri</code>对象共同响应用户请求的关键角色。当我们实现了<code>Intents extension</code>扩展并产生了一个<code>Siri</code>请求事件时，一个典型的<code>Intent</code>事件的处理过程中总共有这三个步骤<code>Resolve</code>、<code>Confirm</code>和<code>Handle</code>：</p>
+
+<ul>
+<li><code>Resolve</code>阶段。在<code>Siri</code>获取到用户的语音输入之后，生成一个<code>INIntent</code>对象，将语音中的关键信息提取出来并且填充对应的属性。这个对象在稍后会传递给我们设置好的<code>INExtension</code>子类对象进行处理，根据子类遵循的不同服务<code>protocol</code>来选择不同的解决方案。</li>
+<li><code>Confirm</code>阶段。在上一个阶段通过<code>handler(for intent:)</code>返回了处理<code>intent</code>的对象，此阶段会依次调用<code>confirm</code>打头的实例方法来判断<code>Siri</code>填充的信息是否完成。匹配的判断结果包括<code>Exactly one match</code>、<code>Two or more matches</code>以及<code>No match</code>三种情况。这个过程中可以让<code>Siri</code>向用户征求更具体的参数信息。</li>
+<li>在<code>confirm</code>方法执行完成之后，<code>Siri</code>进行最后的处理阶段，生成答复对象，并且向此<code>intent</code>对象确认处理结果然后执显示结果给用户看。</li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/7.png" alt="7"/></p>
+
+<hr/>
+
+<h3 id="toc_4">SiriKit实现</h3>
+
+<p>我们可以来到<code>IntentHandler.m</code>文件看看:</p>
+
+<ul>
+<li><code>Resolve</code>的方法有:</li>
+</ul>
+
+<pre><code class="language-objectivec">- (void)resolveRecipientsForSendMessage:(INSendMessageIntent *)intent
+                         withCompletion:(void (^)(NSArray&lt;INPersonResolutionResult *&gt; *resolutionResults))completion NS_SWIFT_NAME(resolveRecipients(forSendMessage:with:));
+
+- (void)resolveContentForSendMessage:(INSendMessageIntent *)intent
+                      withCompletion:(void (^)(INStringResolutionResult *resolutionResult))completion NS_SWIFT_NAME(resolveContent(forSendMessage:with:));
+
+- (void)resolveGroupNameForSendMessage:(INSendMessageIntent *)intent
+                        withCompletion:(void (^)(INStringResolutionResult *resolutionResult))completion NS_SWIFT_NAME(resolveGroupName(forSendMessage:with:));
+</code></pre>
+
+<ul>
+<li><code>Confirm</code>方法有:</li>
+</ul>
+
+<pre><code class="language-objectivec">- (void)confirmSendMessage:(INSendMessageIntent *)intent
+                completion:(void (^)(INSendMessageIntentResponse *response))completion NS_SWIFT_NAME(confirm(sendMessage:completion:));
+</code></pre>
+
+<ul>
+<li><code>Hanld</code>方法有:</li>
+</ul>
+
+<pre><code class="language-objectivec">- (void)handleSendMessage:(INSendMessageIntent *)intent completion:(void (^)(INSendMessageIntentResponse *response))completion;
+
+- (void)handleSearchForMessages:(INSearchForMessagesIntent *)intent completion:(void (^)(INSearchForMessagesIntentResponse *response))completion;
+
+- (void)handleSetMessageAttribute:(INSetMessageAttributeIntent *)intent completion:(void (^)(INSetMessageAttributeIntentResponse *response))completion;
+</code></pre>
+
+<p>看完之后, 我们先来运行一个<code>App</code>, 再来运行一下<code>Siri Intents Extension</code>就会看到在我们的应用里<code>Siri</code>被打开了, 接下来就可以慢慢调戏<code>Siri</code>咯.</p>
+
+<p>由于我这里还没想到什么好的业务逻辑, 这里就不去折腾了, 用的上的朋友可以去看看另外的一些<a href="https://github.com/hanyx1992/SiriKitDemo">事例</a>.</p>
+
+<p>效果图这里也不放了, 调戏过<code>Siri</code>的小伙伴都知道是肿么一个情况.</p>
+
+<hr/>
+
+<h3 id="toc_5">总结</h3>
+
+<p>最后我们来看看额外的一篇文章, 就是企鹅公司是肿么给QQ适配<code>SiriKit</code>的一些思路<a href="http://www.cnblogs.com/oc-bowen/p/5949020.html">QQ适配 SiriKit</a>.</p>
+
+<hr/>
+
+<h3 id="toc_6">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents">https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents</a></p>
+
+<hr/>
+
+<h3 id="toc_7">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	 
+
+	  
+
+	  
+	      <div class="ds-thread" data-thread-key="14977885999456.html" data-url="https://cainrun.github.io/14977885999456.html" data-title="玩转iOS开发：iOS 10 新特性《Siri Kit》"></div>
+	  
+
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+  
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:'cainluo'};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+    
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+</body>
+</html>

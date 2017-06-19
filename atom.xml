@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-16T12:23:33+08:00</updated>
+  <updated>2017-06-19T11:26:23+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,193 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Siri Kit》]]></title>
+    <link href="https://cainrun.github.io/14977885999456.html"/>
+    <updated>2017-06-18T20:23:19+08:00</updated>
+    <id>https://cainrun.github.io/14977885999456.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">Siri</h3>
+
+<p>众所周知<code>Siri</code>是苹果爸爸内置在<code>iOS</code>系统的一个语音助手, 自从在2011年的<code>iPhone 4s</code>问世之后, <code>Siri</code>就一直受关注.</p>
+
+<p>但好景不长, 随着<code>Siri</code>的功能和权限太弱了, 慢慢就被人遗忘, 起码我身边用<code>iPhone</code>的小伙伴都会把<code>Siri</code>给关掉, 按照他们的说法就是可以省电...我也是醉了.</p>
+
+<p>几年过去后, <code>Siri</code>终于迎接来了春天, 随着<code>iOS 10</code>的推出, 终于给开发者们开放了<code>Siri Kit</code>, 也开放了<code>Siri Intents Extension</code>, 国内用的最快的<code>App</code>依然还是<code>BAT</code>巨头的产品, 比如<code>QQ</code>.</p>
+
+<p>这里的工程是<code>Objective-C</code>版本, 想看<code>Swift</code>版本的, 可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/09%20-%20Siri%20Intents">这里</a>去查看.</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">Siri的服务类型</h3>
+
+<p>这里我简单的举一下<code>Siri</code>目前支持的一些种类, 更加详细的文档请看<a href="https://developer.apple.com/documentation/sirikit?language=objc">官方文档</a>.</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">Siri服务类型</th>
+<th style="text-align: left">Intent种类</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">VoIP语音 - VoIP calling</td>
+<td style="text-align: left">INStartVideoCallIntent、INStartAudioCallIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">消息 - Messaging</td>
+<td style="text-align: left">INSendMessageIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">支付 - Payments</td>
+<td style="text-align: left">INSendPaymentIntent、INRequestPaymentIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">图片 - Photos</td>
+<td style="text-align: left">INSearchForPhotosIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">健身 - Workouts</td>
+<td style="text-align: left">INEndWorkoutIntent、INPauseWorkoutIntent 、INStartWorkoutIntent 、 INResumeWorkoutIntent 、INCancelWorkoutIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">骑行预约 - Ride booking</td>
+<td style="text-align: left">INRequestRideIntent、INGetRideStatusIntent、 INListRideOptionsIntent、 INGetRideStatusIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">汽车状态 - Car commands</td>
+<td style="text-align: left">INSetCarLockStatusIntent、INGetCarPowerLevelStatusIntent、INActivateCarSignalIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">车载系统 - CarPlay</td>
+<td style="text-align: left">INSetAudioSourceInCarIntent、INSetClimateSettingsInCarIntent</td>
+</tr>
+<tr>
+<td style="text-align: center">预定餐厅 - Restaurant reservations</td>
+<td style="text-align: left">INBookRestaurantReservationIntent</td>
+</tr>
+</tbody>
+</table>
+
+<hr/>
+
+<h3 id="toc_2">New Project</h3>
+
+<p>创建新工程的项目这里我就忽略了, 直接来看添加<code>Siri Intents Extension</code>:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/1.png" alt="1"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/2.png" alt="2"/></p>
+
+<p>这里注意一下, 我们要把<code>Include UI Extension</code>给勾掉, 为了更好地解释, 这个另外拆除一篇文章来说:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/3.png" alt="3"/></p>
+
+<p>创建好之后, 我们可以看到<code>Siri Intents Extension</code>和之前我们遇到的<code>Extension</code>不太一样:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/4.png" alt="4"/></p>
+
+<p>还有就是, 我们打开<code>Siri Intents Extension</code>的<code>Info.plist</code>文件看到<code>IntentsSupported</code>和<code>IntentsRestrictedWhileLocked</code>, 那有什么用呢?</p>
+
+<ul>
+<li><p>IntentsSupported: 我们项目需要支持的<code>Siri Intents</code>就放到这里, 比如我们在工程里看到的<code>INSendMessageIntent</code>, <code>INSearchForMessagesIntent</code>, <code>INSetMessageAttributeIntent</code>.</p></li>
+<li><p>IntentsRestrictedWhileLocked: 在锁屏状态下需要锁定的<code>Siri Intents</code>就放到这里, 比如我们在工程里看到的<code>INSendMessageIntent</code>.</p></li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/5.png" alt="5"/></p>
+
+<hr/>
+
+<h3 id="toc_3">SiriKit的流程</h3>
+
+<p>关于<code>SiriKit</code>的流程这里我就拷贝一下官方的说法:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/6.png" alt="6"/></p>
+
+<p><code>Siri</code>和<code>Maps</code>通过<code>Intents extension</code>的扩展方式和我们的应用进行交互，其中，类型为<code>INExtension</code>的对象扮演着<code>Intents extension</code>扩展中直接协同<code>Siri</code>对象共同响应用户请求的关键角色。当我们实现了<code>Intents extension</code>扩展并产生了一个<code>Siri</code>请求事件时，一个典型的<code>Intent</code>事件的处理过程中总共有这三个步骤<code>Resolve</code>、<code>Confirm</code>和<code>Handle</code>：</p>
+
+<ul>
+<li><code>Resolve</code>阶段。在<code>Siri</code>获取到用户的语音输入之后，生成一个<code>INIntent</code>对象，将语音中的关键信息提取出来并且填充对应的属性。这个对象在稍后会传递给我们设置好的<code>INExtension</code>子类对象进行处理，根据子类遵循的不同服务<code>protocol</code>来选择不同的解决方案。</li>
+<li><code>Confirm</code>阶段。在上一个阶段通过<code>handler(for intent:)</code>返回了处理<code>intent</code>的对象，此阶段会依次调用<code>confirm</code>打头的实例方法来判断<code>Siri</code>填充的信息是否完成。匹配的判断结果包括<code>Exactly one match</code>、<code>Two or more matches</code>以及<code>No match</code>三种情况。这个过程中可以让<code>Siri</code>向用户征求更具体的参数信息。</li>
+<li>在<code>confirm</code>方法执行完成之后，<code>Siri</code>进行最后的处理阶段，生成答复对象，并且向此<code>intent</code>对象确认处理结果然后执显示结果给用户看。</li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/7.png" alt="7"/></p>
+
+<hr/>
+
+<h3 id="toc_4">SiriKit实现</h3>
+
+<p>我们可以来到<code>IntentHandler.m</code>文件看看:</p>
+
+<ul>
+<li><code>Resolve</code>的方法有:</li>
+</ul>
+
+<pre><code class="language-objectivec">- (void)resolveRecipientsForSendMessage:(INSendMessageIntent *)intent
+                         withCompletion:(void (^)(NSArray&lt;INPersonResolutionResult *&gt; *resolutionResults))completion NS_SWIFT_NAME(resolveRecipients(forSendMessage:with:));
+
+- (void)resolveContentForSendMessage:(INSendMessageIntent *)intent
+                      withCompletion:(void (^)(INStringResolutionResult *resolutionResult))completion NS_SWIFT_NAME(resolveContent(forSendMessage:with:));
+
+- (void)resolveGroupNameForSendMessage:(INSendMessageIntent *)intent
+                        withCompletion:(void (^)(INStringResolutionResult *resolutionResult))completion NS_SWIFT_NAME(resolveGroupName(forSendMessage:with:));
+</code></pre>
+
+<ul>
+<li><code>Confirm</code>方法有:</li>
+</ul>
+
+<pre><code class="language-objectivec">- (void)confirmSendMessage:(INSendMessageIntent *)intent
+                completion:(void (^)(INSendMessageIntentResponse *response))completion NS_SWIFT_NAME(confirm(sendMessage:completion:));
+</code></pre>
+
+<ul>
+<li><code>Hanld</code>方法有:</li>
+</ul>
+
+<pre><code class="language-objectivec">- (void)handleSendMessage:(INSendMessageIntent *)intent completion:(void (^)(INSendMessageIntentResponse *response))completion;
+
+- (void)handleSearchForMessages:(INSearchForMessagesIntent *)intent completion:(void (^)(INSearchForMessagesIntentResponse *response))completion;
+
+- (void)handleSetMessageAttribute:(INSetMessageAttributeIntent *)intent completion:(void (^)(INSetMessageAttributeIntentResponse *response))completion;
+</code></pre>
+
+<p>看完之后, 我们先来运行一个<code>App</code>, 再来运行一下<code>Siri Intents Extension</code>就会看到在我们的应用里<code>Siri</code>被打开了, 接下来就可以慢慢调戏<code>Siri</code>咯.</p>
+
+<p>由于我这里还没想到什么好的业务逻辑, 这里就不去折腾了, 用的上的朋友可以去看看另外的一些<a href="https://github.com/hanyx1992/SiriKitDemo">事例</a>.</p>
+
+<p>效果图这里也不放了, 调戏过<code>Siri</code>的小伙伴都知道是肿么一个情况.</p>
+
+<hr/>
+
+<h3 id="toc_5">总结</h3>
+
+<p>最后我们来看看额外的一篇文章, 就是企鹅公司是肿么给QQ适配<code>SiriKit</code>的一些思路<a href="http://www.cnblogs.com/oc-bowen/p/5949020.html">QQ适配 SiriKit</a>.</p>
+
+<hr/>
+
+<h3 id="toc_6">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents">https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents</a></p>
+
+<hr/>
+
+<h3 id="toc_7">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Speech》]]></title>
@@ -537,7 +724,7 @@
 <p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/3.png" alt="3"/></p>
 
 <p>效果:<br/>
-<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/4.png" alt="4"/></p>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/4.gif" alt="4"/></p>
 
 <p>看完之后估计很多人都会说, 这个有什么的, 之前的那个<code>API</code>也可以搞定, 那我们就继续往下看看吧.</p>
 
@@ -560,7 +747,7 @@
 </code></pre>
 
 <p>效果:<br/>
-<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/5.png" alt="5"/></p>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/5.gif" alt="5"/></p>
 
 <p>除了这个, 如果要添加动画完成后的处理, 甚至是在动画进行中的一些操作也是可以的:</p>
 
@@ -632,7 +819,7 @@
 </code></pre>
 
 <p>效果图:<br/>
-<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/6.png" alt="6"/></p>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/6.gif" alt="6"/></p>
 
 <hr/>
 
@@ -676,7 +863,7 @@
 </code></pre>
 
 <p>效果:<br/>
-<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/7.png" alt="7"/></p>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/7.gif" alt="7"/></p>
 
 <hr/>
 
@@ -704,7 +891,7 @@
 </code></pre>
 
 <p>效果:<br/>
-<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/8.png" alt="8"/></p>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/8.gif" alt="8"/></p>
 
 <hr/>
 
@@ -736,7 +923,7 @@
 </code></pre>
 
 <p>效果:<br/>
-<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/9.png" alt="9"/></p>
+<img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/4.UIViewPropertyAnimator/Images/9.gif" alt="9"/></p>
 
 <p>大概就介绍到这里吧, 更复杂的玩法就有待各位大神去慢慢挖掘了~~</p>
 
@@ -5441,229 +5628,6 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)<
 <hr/>
 
 <h3 id="toc_11">最后</h3>
-
-<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：集成 AliPay - 支付宝]]></title>
-    <link href="https://cainrun.github.io/14739456388212.html"/>
-    <updated>2016-09-15T21:20:38+08:00</updated>
-    <id>https://cainrun.github.io/14739456388212.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>前面我已经写了一篇关于<strong><code>WeChat SDK</code></strong>的支付篇, 那我们继续研究接下来的支付<strong><code>SDK</code></strong>, 这次就是国民支付软件<strong><code>支付宝</code></strong>, 下面就让我们来看看怎么集成<strong><code>AliPay SDK</code></strong>.<br/>
-<dr/><br/>
-<strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>AliPay SDK</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<blockquote>
-<p>支付宝SDK, 只要做过支付类App的, 都百分百接触过, 至于为什么那么多人喜欢用支付宝, 这个我就不在这里做解释了, 大家都懂的, 但是呢, 由于在阿里巴巴的发展下, 支付宝慢慢与蚂蚁金服整合, 甚至连开放平台名字都改成<strong><code>蚂蚁金服开放平台</code></strong>, 但无论怎么样, 支付宝都是行业内安全性最高的,</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">准备工作</h3>
-
-<blockquote>
-<p>其实集成<strong><code>AliPay SDK</code></strong>和<strong><code>WeChat SDK</code></strong>有些类似, 就连<strong><code>商家ID</code></strong>的申请, <strong><code>App ID</code></strong>的申请, 流程都差不多, 详细这里我就不在这里讲解了, 大家可以去<strong><a href="https://b.alipay.com/">支付宝商家商户服务平台</a></strong>了解了解.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_3">下载SDK包</h3>
-
-<blockquote>
-<p>由于蚂蚁金服和支付宝的整合, 就连SDK的资源都改了, 大家可以去<strong><a href="https://doc.open.alipay.com/">开放平台-文档中心</a></strong>找到资源下载.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/1.png" alt="1"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/2.png" alt="2"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/3.png" alt="3"/></p>
-
-<hr/>
-
-<h3 id="toc_4">继续来段废话</h3>
-
-<blockquote>
-<p>SDK包下载好了之后, 我们去到之前的那个支付工程建立我们的新工程, 命名为<strong><code>AliPay-Objective-C</code></strong>, 接下来我们就可以继续集成<strong><code>AliPay SDK</code></strong>了.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/4.png" alt="4"/></p>
-
-<hr/>
-
-<h3 id="toc_5">配置文件</h3>
-
-<blockquote>
-<p>现在我们建立好了工程, 然后我们和集成<strong><code>WeChat SDK</code></strong>一样, 需要配置一下工程, 这样子我们才能让<strong><code>AliPay SDK</code></strong>正常工作.<br/>
-<dr/><br/>
-现在让我们来打开工程的<strong><code>Info.plist</code></strong>文件, 添加一些配置.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/5.png" alt="5"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/6.png" alt="6"/></p>
-
-<hr/>
-
-<h3 id="toc_6">添加依赖包</h3>
-
-<blockquote>
-<p>和<strong><code>WeChat SDK</code></strong>一样, <strong><code>AliPay SDK</code></strong>一样是需要导入依赖包的, 但是这个依赖包要比<strong><code>WeChat SDK</code></strong>要多一些, 这个比较蛋疼.</p>
-
-<ul>
-<li><strong>UIKit.framework</strong></li>
-<li><strong>CoreMotion.framework</strong></li>
-<li><strong>CFNetWork.framework</strong></li>
-<li><strong>Foundation.framework</strong></li>
-<li><strong>CoreGraphics.framework</strong></li>
-<li><strong>CoreText.framework</strong></li>
-<li><strong>QuartzCore.framework</strong></li>
-<li><strong>CoreTelephony.framework</strong></li>
-<li><strong>SystemConfiguration.framework</strong></li>
-<li><strong>libz.tbd</strong></li>
-<li><strong>libc++.tbd</strong></li>
-</ul>
-
-<p><dr/><br/>
-这些都是所需的依赖库, 真的是非常的蛋疼.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/7.png" alt="7"/></p>
-
-<hr/>
-
-<h3 id="toc_7">注册App ID</h3>
-
-<blockquote>
-<p>由于<strong><code>AliPay SDK</code></strong>是不需要在<strong><code>AppDelegate.m</code></strong>文件里注册的, 所以注册<strong><code>App ID</code></strong>这个步骤我们就忽略了.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_8">布局UI界面</h3>
-
-<blockquote>
-<p>这里的UI布局界面就和<strong><code>WeChat SDK</code></strong>那样, 直接拖一个<strong><code>UIButton</code></strong>, 以及加一个<strong><code>Action</code></strong>事件就好了.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/8.png" alt="8"/></p>
-
-<hr/>
-
-<h3 id="toc_9">注意!!!</h3>
-
-<blockquote>
-<p>由于<strong><code>AliPay</code></strong>改版了, 如果是老版本的SDK需要更新到最新的话, 一定要去好好的读一下接口文档, 因为这里需要添加多两个额外库以及一些依赖的签名文件, 这两个库在<strong><code>AliPay</code></strong>的资源包里可以找到.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/9.png" alt="9"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/10.png" alt="10"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/11.png" alt="11"/></p>
-
-<blockquote>
-<p>把这些依赖文件都拖入我们的工程里, 这样子我们就能正常的完成开发了~~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/12.png" alt="12"/></p>
-
-<hr/>
-
-<h3 id="toc_10">集成SDK</h3>
-
-<blockquote>
-<p>之前的所有准备工作都已经做好了, 现在重点来了, 就让我们看看怎么实现支付宝支付!</p>
-</blockquote>
-
-<p><dr/></p>
-
-<blockquote>
-<p>首先我们需要一个订单对象, 这里我们命名为<strong><code>AliPayOther</code></strong>, 还有一个<strong><code>AliPayBizContent</code></strong>, 然后声明一些属性, 并且在内部实现一些方法, 由于这里的代码比较多, 这里就不列举了, 各位童鞋们还是自行去翻翻工程吧~~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/13.png" alt="13"/></p>
-
-<blockquote>
-<p>然后呢, 我们就要把两个重量级的文件拖入到工程, 一个就是<strong><code>AlipaySDK.bundle</code></strong>, 一个是<strong><code>AlipaySDK.framework</code></strong>, 这两个文件也是在<strong><code>AliPay</code></strong>的资源包里可以找到.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/14.png" alt="14"/></p>
-
-<blockquote>
-<p>导入之后编译一下, Xcode居然提示出错了!!!</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/15.png" alt="15"/></p>
-
-<blockquote>
-<p>看了一下错误信息, 提示<strong><code>NSObject</code></strong>, 我想应该是<strong><code>&lt;Foundation/Foundation.h&gt;</code></strong>没有导入到对应的文件里去吧, 试试看先</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/16.png" alt="16"/></p>
-
-<blockquote>
-<p>我屮艸芔茻, 一些问题解决了, 另一些问题又出来了, 仔细一看, 我勒个去, 原来是忘了导入刚刚所说的<strong><code>libcrypto.a</code></strong>以及<strong><code>libssl.a</code></strong>库了...我说怎么好像少了两个东西, 赶紧导入进去~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/17.png" alt="17"/></p>
-
-<blockquote>
-<p>导入完之后, 还有一个错误, 我也是醉醉哒....尼玛, 这是玩我呢....以前导入SDK那有那么麻烦啊...翻了一下文档, 发现要添加一个<strong><code>Header</code></strong>的链接....我也是醉了, 这个链接的写法是<strong><code>$(SRCROOT)/(工程名)</code></strong>, 我这里所写的是<strong><code>$(SRCROOT)/AliPay-Objective-C</code></strong></p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/18.png" alt="18"/></p>
-
-<hr/>
-
-<h3 id="toc_11">实现支付宝支付</h3>
-
-<blockquote>
-<p>好了, 我们把遇到的坑填完之后, 现在就来实现支付宝支付, 这里我们就直接把<strong><code>AliPayDemo</code></strong>里的代码直接拷贝过来, </p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/19.png" alt="19"/></p>
-
-<blockquote>
-<p>添加完之后, 别忘了处理<strong><code>AliPay</code></strong>回调回来的信息, 顺便说说, 这里的代理方法会有两个, 一个是<strong><code>iOS 9</code></strong>之后才有的新方法, 大家可以动动小脑袋, 看看怎么样封装才会比较好一些~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/20.png" alt="20"/></p>
-
-<blockquote>
-<p>到这里我们就已经集成完毕了, 由于支付宝的Demo里没有提供<strong><code>App ID</code></strong>和<strong><code>私钥</code></strong>, 所以我们这里显示的效果只能是酱紫了...需要测试的童鞋们只能自己去申请<strong><code>App ID</code></strong>和<strong><code>私钥</code></strong>了</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/AliPay-Objective-C/images/21.png" alt="21"/></p>
-
-<hr/>
-
-<h3 id="toc_12">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/PayProject">https://github.com/CainRun/PayProject</a></p>
-
-<hr/>
-
-<h3 id="toc_13">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
