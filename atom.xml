@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-19T13:14:56+08:00</updated>
+  <updated>2017-06-20T00:48:23+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -26,6 +26,8 @@
 <p>这里所用的工程还是之前的, 如果不懂得朋友, 可以去看看的那篇<a href="https://cainrun.github.io/14977885999456.html">文章</a>, 里面也有工程的下载地址.</p>
 
 <p>这里的工程是<code>Objective-C</code>版本的, 如果要看<code>Swift</code>版本, 可以到<a href="https://github.com/shinobicontrols/iOS10-day-by-day/tree/master/10%20-%20Siri%20Intents%20UI">这里</a>去查看.</p>
+
+<span id="more"></span><!-- more -->
 
 <hr/>
 
@@ -310,7 +312,13 @@
 
 <p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/14.png" alt="14"/></p>
 
-<p>为啥不用真机呢...那是因为我没有去买开发者账号...所以你懂得....这个测试结果就由各位大神去试啦.</p>
+<p>但是发消息还是<code>ok</code>得, 效果:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/15.png" alt="15"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/16.png" alt="16"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/9.Siri%20Intents/Images/17.png" alt="17"/></p>
 
 <hr/>
 
