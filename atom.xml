@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-20T00:48:23+08:00</updated>
+  <updated>2017-06-20T11:59:04+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -31,50 +31,85 @@
 
 <hr/>
 
-<h3 id="toc_1">添加Siri Kit Intents Extension UI</h3>
+<h3 id="toc_1">定制UI</h3>
 
-<p>这里就废话少说了, 直接来看看怎么添加:</p>
+<p>这里就不扯那么多废话了, 我们可以在<code>SiriKitIntentsExtensionUI</code>文件夹里找到<code>MainInterface.storyboard</code>文件, 在这里布置我们想要的<code>UI</code>:</p>
 
-<p>[1]()</p>
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/10.Siri%20Intents%20UI/Images/1.png" alt="1"/></p>
 
-<p>[2]()</p>
+<p>然后和<code>Controller</code>关联起来:</p>
 
-<p>添加完成之后, 我们就可以看到这堆东西啦:</p>
-
-<p>[3]()</p>
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/10.Siri%20Intents%20UI/Images/2.png" alt="2"/></p>
 
 <hr/>
 
-<h3 id="toc_2">定制UI</h3>
+<h3 id="toc_2">具体实现</h3>
 
-<p>我们可以在<code>SiriKitIntentsExtensionUI</code>文件夹里找到<code>MainInterface.storyboard</code>文件, 在这里面定制我们所需要的<code>UI</code>界面就OK了.</p>
+<p>回到我们的<code>IntentViewController.m</code>文件, 在<code>- (void)configureWithInteraction:(INInteraction *)interaction<br/>
+                         context:(INUIHostedViewContext)context<br/>
+                      completion:(void (^)(CGSize))completion;</code>方法里开始写我们的代码: </p>
 
-<p>[4]()</p>
+<pre><code class="language-objectivec">    // 截取发送消息的Intent
+    INSendMessageIntent *intent = (INSendMessageIntent *)(interaction.intent);
+    
+    // 获取用户信息
+    NSString *name = [[intent.recipients lastObject] displayName];
+    NSString *content = intent.content;
+    NSString *icon = [UserList checkUserWithName:name].userIcon;
 
-<hr/>
-
-<h3 id="toc_3">具体实现</h3>
-
-<p>由于我这里并没有什么具体实现的业务, 有需要的朋友可以去参考一下<a href="https://github.com/hanyx1992/SiriKitDemo">事例</a>.</p>
-
-<p>这里就说说一个方法:</p>
-
-<pre><code class="language-objectivec">- (void)configureWithInteraction:(INInteraction *)interaction
-                         context:(INUIHostedViewContext)context
-                      completion:(void (^)(CGSize))completion;
+    // 展示自己与接收人的头像
+    self.userImageIcon.image = [UIImage imageNamed:@&quot;icon3&quot;];
+    self.toUserImageIcon.image = [UIImage imageNamed:icon];
+    
+    // 改变标题
+    self.sectionTitleLabel.text = [NSString stringWithFormat:@&quot;与\&quot;%@\&quot;对话&quot;, name];
+    
+    // 发送的消息内容
+    self.messageContentLabel.text = content;
+    
+    // 隐藏或显示控件
+    self.sectionTitleLabel.hidden      = !name.length;
+    self.messageContentLabel.hidden    = !content.length;
+    self.messageBackgroundImage.hidden = !content.length;
+    self.toUserImageIcon.hidden        = !self.toUserImageIcon.image;
+    
+    if (completion) {
+            completion(CGSizeMake([self desiredSize].width, 150));
+    }
 </code></pre>
 
-<p>这个方法就是用来配置我们所定制的UI的内容, 将接收到的<code>INInteraction</code>内容, 然后展示到我们的<code>UI</code>上面即可, 具体实现请参考上面的事例.</p>
+<p>效果: </p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/10.Siri%20Intents%20UI/Images/3.png" alt="3"/></p>
+
+<p>虽然<code>UI</code>已经展示了, 但特么好像有些多啊, 这里我们需要添加多一个协议, 并且是写一个协议的方法:</p>
+
+<pre><code class="language-objectivec">@interface IntentViewController () &lt;INUIHostedViewSiriProviding&gt;
+
+@end
+
+- (BOOL)displaysMessage {
+    return YES;
+}
+</code></pre>
+
+<p>效果:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/10.Siri%20Intents%20UI/Images/4.png" alt="4"/></p>
+
+<p>这里我们需要注意一点, 打开工程的配置, 看到<code>SiriKitIntentsExtension</code>和<code>SiriKitIntentsExtensionUI</code>的<code>Copy Bundle Resources</code>有没有链接<code>Assets.xcassets</code>, 如果没有链接上的话, 那就会造成本地图片没法展示:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-10-Characteristic/master/10.Siri%20Intents%20UI/Images/5.png" alt="5"/></p>
 
 <hr/>
 
-<h3 id="toc_4">工程地址</h3>
+<h3 id="toc_3">工程地址</h3>
 
-<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents">https://github.com/CainRun/iOS-10-Characteristic/tree/master/9.Siri%20Intents</a></p>
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/10.Siri%20Intents%20UI">https://github.com/CainRun/iOS-10-Characteristic/tree/master/10.Siri%20Intents%20UI</a></p>
 
 <hr/>
 
-<h3 id="toc_5">最后</h3>
+<h3 id="toc_4">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
