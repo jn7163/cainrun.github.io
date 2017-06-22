@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-22T13:12:46+08:00</updated>
+  <updated>2017-06-22T17:13:15+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -22,6 +22,8 @@
 <h3 id="toc_0">继续观看知识</h3>
 
 <p>接着上一篇文章继续, 如果没看过的朋友可以去看看<a href="https://cainrun.github.io/14980521480137.html">玩转iOS开发：NSURLSession讲解(一)</a>, 不然的话会不知头不知尾, 那么接来下继续讲.</p>
+
+<span id="more"></span><!-- more -->
 
 <hr/>
 
