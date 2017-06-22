@@ -126,6 +126,385 @@
 	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
 		<div class="meta">
 			<div class="date">
+				<time datetime="2017-06-22T13:26:07+08:00" itemprop="datePublished">2017/6/22</time>
+			</div>
+			<div class="tags">posted in 
+			
+			    <a class='category' href='iOS%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86.html'>iOS网络知识</a>&nbsp;
+			 
+			</div>
+		</div>
+		<h1 class="title" itemprop="name"><a href="14981091675323.html" itemprop="url">
+		玩转iOS开发：NSURLSession讲解(二)</a></h1>
+		<div class="entry-content" itemprop="articleBody">
+			
+			<h3 id="toc_0">继续观看知识</h3>
+
+<p>接着上一篇文章继续, 如果没看过的朋友可以去看看<a href="https://cainrun.github.io/14980521480137.html">玩转iOS开发：NSURLSession讲解(一)</a>, 不然的话会不知头不知尾, 那么接来下继续讲.</p>
+
+<hr/>
+
+<h3 id="toc_1">开始网络请求</h3>
+
+<p>之前也说过了, <code>NSURLSession</code>本身是不会进行网络请求的, 那如果我们要用<code>GET</code>或者是<code>POST</code>请求咋搞呢? 直接来看代码吧:</p>
+
+<p><code>GET</code>请求:</p>
+
+<pre><code class="language-objectivec">    // 获取共享的单例Session对象
+    NSURLSession *urlSession = [NSURLSession sharedSession];
+    
+    // 请求的URL地址, 我这里拿百度图片的, 而且这里我并没有兼容HTTP, 要兼容HTTP请求的, 可以到工程项目里配置
+    NSURL *url = [NSURL URLWithString:@&quot;https://image.baidu.com/search/index?tn=baiduimage&amp;ps=1&amp;ct=201326592&amp;lm=-1&amp;cl=2&amp;nc=1&amp;ie=utf-8&amp;word=%E5%9B%BE%E7%89%87&quot;];
+    
+    // 通过上面的URL地址来创建NSURLSessionDataTask对象, 并且在completionHandler:打印一下所获取到的Data数据
+    NSURLSessionDataTask *dataTask = [urlSession dataTaskWithURL:url
+                                               completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                   
+                                                   NSLog(@&quot;请求的数据为: %@&quot;, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                                               }];
+    
+    // 开始执行任务
+    [dataTask resume];
+</code></pre>
+
+<p><code>POST</code>请求:</p>
+
+<pre><code class="language-objectivec">    // 获取共享的单例Session对象
+    NSURLSession *urlSession = [NSURLSession sharedSession];
+    
+    // 创建一个NSURL对象
+    NSURL *url = [NSURL URLWithString:@&quot;https://image.baidu.com/search/index?&quot;];
+    
+    // 创建一个NSMutableURLRequest对象, 并设置HTTPMethod的请求方式和HTTPBody的请求内容.
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+    
+    urlRequest.HTTPMethod = @&quot;POST&quot;;
+    urlRequest.HTTPBody   = [@&quot;tn=baiduimage&amp;ps=1&amp;ct=201326592&amp;lm=-1&amp;cl=2&amp;nc=1&amp;ie=utf-8&amp;word=%E5%9B%BE%E7%89%87&quot; dataUsingEncoding:NSUTF8StringEncoding];
+    
+    // 通过NSURLRequest对象创建一个NSURLSessionDataTask, 并在completionHandler:回调方法里NSLog一下我们所请求到的数据.
+    NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:urlRequest
+                                                   completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+                                                       NSLog(@&quot;请求的数据为: %@&quot;, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                                                   }];
+    
+    // 开始执行任务
+    [dataTask resume];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_2">上传文件</h3>
+
+<p>刚刚我们简单的讲了一下<code>GET</code>和<code>POST</code>这两种常用的请求方式, 现在我们来看看上传文件的方法, 上传也有几种方法, 我们一个个来看看:</p>
+
+<p>根据指定的本地文件地址来上传:</p>
+
+<pre><code class="language-objectivec">    // 创建一个NSURLRequest对象, 注意, 这里要有一个明确的上传地址, 不然你要往哪里上传咧?
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;上传地址&quot;]];
+   
+    // 本地文件的NSURL
+    NSURL *fileURL = [NSURL URLWithString:@&quot;本地文件地址&quot;];
+    
+    // 通过NSURLRequest对象来创建一个NSURLSessionUploadTask, 配置好File的URL, 还可以在completionHandler: 回调里看看我们是否成功上传.
+    NSURLSessionUploadTask *uploadTask = [[NSURLSession sharedSession] uploadTaskWithRequest:urlRequest
+                                                                                    fromFile:fileURL
+                                                                           completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                                               
+                                                                               NSLog(@&quot;上传信息: %@&quot;, [NSJSONSerialization JSONObjectWithData:data
+                                                                                                                                  options:kNilOptions
+                                                                                                                                    error:nil]);
+                                               }];
+    
+    // 开始执行任务
+    [uploadTask resume];
+</code></pre>
+
+<p>根据指定的NSData对象来上传:</p>
+
+<pre><code class="language-objectivec">    // 创建一个NSURLRequest对象
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;上传地址&quot;]];
+    
+    // 创建一个NSData对象, 这里我就不详细写了, 因为我没有可以上传的服务器
+    NSData *fileData = [NSData data];
+    
+    // 通过NSURLRequest对象来创建一个NSURLSessionUploadTask, 配置好NSData对象, 还可以在completionHandler: 回调里看看我们是否成功上传.
+    NSURLSessionUploadTask *uploadTask = [[NSURLSession sharedSession] uploadTaskWithRequest:urlRequest
+                                                                                    fromData:fileData
+                                                                           completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                                               
+                                                                               NSLog(@&quot;上传信息: %@&quot;, [NSJSONSerialization JSONObjectWithData:data
+                                                                                                                                  options:kNilOptions
+                                                                                                                                    error:nil]);
+                                                                    }];
+                                                                    
+    // 执行任务
+    [uploadTask resume];
+</code></pre>
+
+<p>以数据流的方式去上传, 老司机们都说这种方式挺不错的, 因为好处就是大小不限制.</p>
+
+<pre><code class="language-objectivec">    // 初始化一个上传地址
+    NSString *urlString = @&quot;上传地址&quot;;
+    
+    // 如果在上传的的URL地址出现特殊字符的话, 我们这里就要做一下特殊处理
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    // 创建一个NSMutableURLRequest对象
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+    
+    // 网络请求方式设置为POST
+    urlRequest.HTTPMethod = @&quot;POST&quot;;
+    
+    // 创建一个NSData对象, 并且设置好上传文件的地址
+    NSData *fileData = [NSData dataWithContentsOfFile:@&quot;文件的路径&quot;];
+    
+    // 通过指定的URLRequest和FildData来创建NSURLSessionUploadTask, 并且可以在completionHandler:方法里获取是否上传成功
+    NSURLSessionUploadTask *uploadTask = [[NSURLSession sharedSession] uploadTaskWithRequest:urlRequest
+                                                                                    fromData:fileData
+                                                                           completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+                                                                               if (error) {
+                                                                                   
+                                                                                   NSLog(@&quot;上传发生了错误: %@&quot;, error);
+                                                                                   
+                                                                                   return;
+                                                                               }
+                                                                               
+                                                                               NSLog(@&quot;上传你成功：%@&quot;,[[NSString alloc] initWithData:data
+                                                                                                                       encoding:NSUTF8StringEncoding]);
+                                                                           }];
+    
+    // 执行任务
+    [uploadTask resume];
+</code></pre>
+
+<p>使用表单方式来进行上传, 这里我们需要先自定义两个方法:</p>
+
+<pre><code class="language-objectivec">// 传入文件的路径, 文件名, 上传的需要更改的文件名
+- (NSData *)getHTTPBodyWithFilePath:(NSString *)filePath
+                           fileName:(NSString *)fileName
+                           restName:(NSString *)restName {
+    
+    NSMutableData *data = [NSMutableData data];
+    
+    NSURLResponse *response = [self getLocalFileResponse:filePath];
+    
+    // 文件类型：MIMEType  文件的大小：expectedContentLength  文件名字：suggestedFilename
+    NSString *fileType = response.MIMEType;
+    
+    // 如果没有传入上传后文件名称,采用本地文件名!
+    if (restName == nil) {
+        restName = response.suggestedFilename;
+    }
+    
+    // 表单拼接
+    NSMutableString *headerString =[NSMutableString string];
+    
+    [headerString appendFormat:@&quot;--%@\r\n&quot;,@&quot;boundary&quot;];
+    
+    // name：表单控件名称  filename：上传文件名
+    [headerString appendFormat:@&quot;Content-Disposition: form-data; name=%@; filename=%@\r\n&quot;, fileName, restName];
+    [headerString appendFormat:@&quot;Content-Type: %@\r\n\r\n&quot;,fileType];
+    
+    [data appendData:[headerString dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // 文件内容
+    NSData *fileData = [NSData dataWithContentsOfFile:filePath];
+    
+    [data appendData:fileData];
+    
+    NSMutableString *footerStrM = [NSMutableString stringWithFormat:@&quot;\r\n--%@--\r\n&quot;,@&quot;boundary&quot;];
+    
+    [data appendData:[footerStrM  dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    NSLog(@&quot;dataStr=%@&quot;,[[NSString alloc] initWithData:data
+                                              encoding:NSUTF8StringEncoding]);
+    
+    return data;
+}
+
+/// 获取响应，主要是文件类型和文件名
+- (NSURLResponse *)getLocalFileResponse:(NSString *)urlString {
+    
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+    
+    // 本地文件请求
+    NSURL *url = [NSURL fileURLWithPath:urlString];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    __block NSURLResponse *localResponse = nil;
+    
+    // 使用信号量实现NSURLSession同步请求
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request
+                                     completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                         
+                                         localResponse = response;
+                                         
+                                         dispatch_semaphore_signal(semaphore);
+                                         
+                                     }] resume];
+    
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    
+    return  localResponse;
+}
+</code></pre>
+
+<p>现在我们就来开始拼接表单, 并且上传文件:</p>
+
+<pre><code class="language-objectivec">    // 初始化一个上传地址
+    NSString *urlString = @&quot;上传地址&quot;;
+    
+    // 如果在上传的的URL地址出现特殊字符的话, 我们这里就要做一下特殊处理
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    // 创建一个NSMutableURLRequest对象
+    NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
+    
+    // 网络请求方式设置为POST
+    urlRequest.HTTPMethod = @&quot;POST&quot;;
+    
+    NSString *contentType = [NSString stringWithFormat:@&quot;multipart/form-data; boundary=%@&quot;, @&quot;boundary&quot;];
+    
+    [urlRequest setValue:contentType
+      forHTTPHeaderField:@&quot;Content-Type&quot;];
+    
+    // 创建一个NSData对象, 并且设置好上传文件的地址
+    NSData *fileData = [self getHTTPBodyWithFilePath:@&quot;/Users/lifengfeng/Desktop/test.jpg&quot;
+                                            fileName:@&quot;file&quot;
+                                            restName:@&quot;newName.png&quot;];
+    
+    urlRequest.HTTPBody = fileData;
+    
+    [urlRequest setValue:[NSString stringWithFormat:@&quot;%lu&quot;, fileData.length]
+      forHTTPHeaderField:@&quot;Content-Length&quot;];
+    
+    // 通过指定的URLRequest来创建NSURLSessionUploadTask, 并且可以在completionHandler:方法里获取是否上传成功, 由于我们在URLRequest已经添加了Data数据, 所以这里的FileData可以忽略不理
+    NSURLSessionUploadTask *uploadTask = [[NSURLSession sharedSession] uploadTaskWithRequest:urlRequest
+                                                                                    fromData:nil
+                                                                           completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+                                                                               if (error) {
+                                                                                   
+                                                                                   NSLog(@&quot;上传发生了错误: %@&quot;, error);
+                                                                                   
+                                                                                   return;
+                                                                               }
+                                                                               
+                                                                               NSLog(@&quot;上传你成功：%@&quot;,[[NSString alloc] initWithData:data
+                                                                                                                       encoding:NSUTF8StringEncoding]);
+                                                                           }];
+    
+    // 执行任务
+    [uploadTask resume];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_3">下载文件</h3>
+
+<p><code>NSURLSessionDownloadTask</code>也是我们常用到的<code>Task</code>, 这里就说说怎么用来下载文件吧:</p>
+
+<pre><code class="language-objectivec">    // 创建一个文件下载的地址
+    NSString *urlString = @&quot;文件下载地址&quot;;
+    
+    // 处理特殊的字符
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+    
+    NSURLSession *urlSession = [NSURLSession sharedSession];
+    
+    NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithRequest:urlRequest
+                                                               completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                                   
+                                                                   if(error) {
+                                                                       
+                                                                       NSLog(@&quot;download error:%@&quot;,error);
+                                                                       
+                                                                       return;
+                                                                   }
+                                                                   
+                                                                   //location:下载任务完成之后,文件存储的位置，这个路径默认是在tmp文件夹下!
+                                                                   //只会临时保存，因此需要将其另存
+                                                                   
+                                                                   NSLog(@&quot;location:%@&quot;, location.path);
+                                                                   
+                                                                   //如果你是用模拟器测试，为了方便可以将保存路径设置为Mac桌面
+                                                                   // NSString *filePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
+                                                                   
+                                                                   NSString *filePath = @&quot;文件的保存地址&quot;;
+                                                                   
+                                                                   NSError *fileError;
+                                                                   
+                                                                   [[NSFileManager defaultManager] copyItemAtPath:location.path
+                                                                                                           toPath:filePath
+                                                                                                            error:&amp;fileError];
+                                                                   
+                                                                   if(fileError){
+                                                                       
+                                                                       NSLog(@&quot;file save error: %@&quot;,fileError);
+                                                                   } else {
+                                                                       
+                                                                       NSLog(@&quot;file save success&quot;);
+                                                                   }
+                                                               }];
+
+    // 开始下载
+    [downloadTask resume];
+</code></pre>
+
+<p><code>NSURLSessionStreamTask</code>这里就不说了, 因为我也有没有怎么去用</p>
+
+<hr/>
+
+<h3 id="toc_4">APP的传输安全(ATS)</h3>
+
+<p>从<code>iOS 9</code>和<code>Mac OS 10.11</code>开始, 苹果爸爸就想把所有网络请求都全部改为<code>HTTPS</code>(<a href="https://tools.ietf.org/html/rfc2818">RFC 2818</a>), 但由于一下子转变肯定是不太可能的, 所以就有一个名为<code>ATS</code>的安全特性.</p>
+
+<p>在新建项目里面, 我们会发没法正常的发送<code>HTTP</code>请求, 这就是<code>ATS</code>搞的鬼, 我们需要在工程里面设置一下, 详细怎么设置去找度娘吧.</p>
+
+<p>如果你想了解更多的资料, 那就去苹果爸爸的官方文档看看<a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009247">Information Property List Key Reference</a>中的<a href="https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/CocoaKeys.html#//apple_ref/doc/uid/TP40009251-SW33">NSAppTransportSecurity</a>.</p>
+
+<hr/>
+
+<h3 id="toc_5">总结</h3>
+
+<p>顺便说多一句, 这里的<code>NSURLSessionStreamTask</code>就不讲解了, 用到的机会也不多, 以后有机会再另外开一章节来说说吧.</p>
+
+<p>同样这次依然是没有项目, 大家自己去拷贝代码吧.</p>
+
+<hr/>
+
+<h3 id="toc_6">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+
+			
+			
+		</div>
+
+	</article>
+ 
+	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+		<div class="meta">
+			<div class="date">
 				<time datetime="2017-06-21T21:35:48+08:00" itemprop="datePublished">2017/6/21</time>
 			</div>
 			<div class="tags">posted in 
