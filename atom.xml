@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-20T11:59:04+08:00</updated>
+  <updated>2017-06-22T13:11:04+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,305 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：NSURLSession讲解(一)]]></title>
+    <link href="https://cainrun.github.io/14980521480137.html"/>
+    <updated>2017-06-21T21:35:48+08:00</updated>
+    <id>https://cainrun.github.io/14980521480137.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">NSURLSession</h3>
+
+<p>在2013年的时候, 苹果推出了<code>iOS 7</code>, 这个版本的<code>iOS</code>被称为革命性的<code>iOS</code>, 而我们以前所用到的<code>NSURLConnection</code>这个网络库也被苹果爸爸给重构, 并且重新命名为<code>NSURLSession</code>.</p>
+
+<p>现在在<code>GitHub</code>里用的最多的两个库<a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a>, <a href="https://github.com/rs/SDWebImage">SDWebImage</a>都是用了<code>NSURLSession</code>.</p>
+
+<p>这里就不废话了, 直接来知识点吧.</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">网络通信</h3>
+
+<p>关于<code>Session</code>的意思, 我这里找到一段比较古方的解释:</p>
+
+<blockquote>
+<p><code>Session</code>翻译为中文意思是会话，我们知道，在七层网络协议中有<code>物理层-&gt;数据链路层-&gt;网络层-&gt;传输层-&gt;会话层-&gt;表示层-&gt;应用层</code>，那我们可以将<code>NSURLSession</code>类理解为会话层，用于管理网络接口的创建、维护、删除等等工作，我们要做的工作也只是会话层之后的层即可，底层的工作<code>NSURLSession</code>已经帮我们封装好了.</p>
+</blockquote>
+
+<p>看到这我们就很激动, 因为底层的东西不需要我们去管理, 这就轻松多了.</p>
+
+<hr/>
+
+<h3 id="toc_2">NSURLSession的分支</h3>
+
+<p>我们都知道苹果爸爸用<code>NSURLSession</code>代替了<code>NSURLConnection</code>, 那么<code>NSURLSession</code>里面到底有什么呢?</p>
+
+<p><code>NSURLSession</code>父类:</p>
+
+<ul>
+<li>NSURLSession</li>
+<li>NSURLSessionConfiguration</li>
+</ul>
+
+<p><code>NSURLSessionTask</code>子类:</p>
+
+<ul>
+<li>NSURLSessionDataTask</li>
+<li>NSURLSessionUploadTask</li>
+<li>NSURLSessionDownloadTask</li>
+<li>NSURLSessionStreamTask (iOS 9后才支持)</li>
+</ul>
+
+<p>他们的主要关系: </p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%80)/Images/1.png" alt="1"/></p>
+
+<p><code>NSURLSessionTask</code>子类的继承关系:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%80)/Images/2.png" alt="2"/></p>
+
+<p><code>NSURLSessionDataTask</code>: 主要使用在请求一些比较简单的数据, 比如我们常用的<code>JSON</code>数据.</p>
+
+<p><code>NSURLSessionDownloadTask</code>: 这个主要使用在进行一些文件的下载, 它可以针对一些大文件的网络请求做更多的处理, 比如获取下载进度, 文件的断点续传等等牛逼事情.</p>
+
+<p><code>NSURLSessionUploadTask</code>: 这个和上面那个<code>task</code>对应, 主要是给服务器发送文件数据所使用的.</p>
+
+<p><code>NSURLSessionStreamTask</code>: 提供<code>TCP/IP</code>的一个链接入口, 方便进行传输.</p>
+
+<hr/>
+
+<h3 id="toc_3">使用NSURLSession</h3>
+
+<p>不要以为看完了上面就可以直接拿来和服务器交互了啦, 因为<code>NSURLSession</code>本身是不会进行请求, 需要通过创建对应的<code>task</code>, 然后配置完之后, 再去调用<code>resume()</code>方法才能够进行tongxin.</p>
+
+<p>这里有一个好消息就是同意个<code>NSURLSession</code>是可以创建多个<code>task</code>, 并且这些<code>task</code>的<code>cache</code>和<code>cookie</code>都是共享的.</p>
+
+<p>使用<code>NSURLSession</code>的步骤:</p>
+
+<ol>
+<li>创建<code>NSURLSession</code>对象</li>
+<li>使用<code>NSURLSession</code>创建对应的<code>task</code></li>
+<li>最后一步就是调用<code>resume()</code>方法, 开始请求.</li>
+</ol>
+
+<p>创建<code>NSURLSession</code>对象有三种方法, 这里就不创建工程里, 直接贴代码吧:</p>
+
+<p>第一种:</p>
+
+<pre><code class="language-objectivec">// 获取一个共享的单例会话对象
+    NSURLSession *urlSession = [NSURLSession sharedSession];
+</code></pre>
+
+<p>第二种:</p>
+
+<pre><code class="language-objectivec">// 用NSURLSessionConfiguration获取一个特定的NSURLSession
+NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:&lt;#(nonnull NSURLSessionConfiguration *)#&gt;];
+</code></pre>
+
+<p>第三种:</p>
+
+<pre><code class="language-objectivec">// 用NSURLSessionConfiguration获取一个特定的NSURLSession, 并且设置好代理对象, 和代理的队列
+    NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:&lt;#(nonnull NSURLSessionConfiguration *)#&gt;
+                                                             delegate:&lt;#(nullable id&lt;NSURLSessionDelegate&gt;)#&gt;
+                                                        delegateQueue:&lt;#(nullable NSOperationQueue *)#&gt;]
+
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_4">配置NSURLSession</h3>
+
+<p>刚刚我们也提到, <code>NSURLSession</code>是没法直接进行请求的, 所以我们需要去配置一下, 这里也有三种配置的方法.</p>
+
+<p>第一种:</p>
+
+<pre><code class="language-objectivec">// NSURLSessionConfiguration的默认配置, 这种配置会把缓存数据存储到磁盘上
+@property (class, readonly, strong) NSURLSessionConfiguration *defaultSessionConfiguration;
+
+NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+</code></pre>
+
+<p>第二种:</p>
+
+<pre><code class="language-objectivec">// NSURLSessionConfiguration的第二种配置, 这种配置不会把数据持久化, 也就是说不会存储到磁盘上
+@property (class, readonly, strong) NSURLSessionConfiguration *ephemeralSessionConfiguration;
+
+NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration ephemeralSessionConfiguration]];
+</code></pre>
+
+<p>第三种:</p>
+
+<pre><code class="language-objectivec">// 这个配置可以允许程序在后台进行上传和下载的操作, 给定一个Identifier可以在系统关闭应用之后重启, 根据给定的`Identifier`终止正在下载或者上传操作, 但如果是用户手动关闭了应用, 系统就会取消所有后台传输的会话, 官方建议, 如果要时候后台操作的话, 把discretionary属性设置成为YES, 可以获得更好地性能.
++ (NSURLSessionConfiguration *)backgroundSessionConfigurationWithIdentifier:(NSString *)identifier NS_AVAILABLE(10_10, 8_0);
+
+NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@&quot;backgroundSessionConfiguration&quot;]];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_5">使用NSURLSession创建Task</h3>
+
+<p>刚刚我们也说了, <code>NSURLSession</code>是有三个子类的<code>Task</code>, 所以这里我们也要分开来说说.</p>
+
+<p><code>NSURLSessionDataTask</code>:</p>
+
+<pre><code class="language-objectivec">// 通过指定的NSURL来创建一个NSURLSessionDataTask
+NSURLSessionDataTask *dataTask = [urlSession dataTaskWithURL:[NSURL URLWithString:@&quot;&quot;]];
+
+// 通过指定的NSURL对象来创建, 并同时执行完对应的任务后通过completionHandler:返回NSURLSessionDataTask
+NSURLSessionDataTask *dataTask = [urlSession dataTaskWithURL:[NSURL URLWithString:@&quot;&quot;]
+                                           completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                           }];
+
+// 通过指定的NSURLRequest对象来创建一个NSURLSessionDataTask
+NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]];
+
+// 通过指定的NSURLRequest对象来创建, 并同时执行完对应的任务后通过completionHandler:返回NSURLSessionDataTask
+NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                               completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                   }];
+</code></pre>
+
+<h2 id="toc_6"></h2>
+
+<p><code>NSURLSessionUploadTask</code>:</p>
+
+<pre><code class="language-objectivec">// 通过指定的NSURLRequest对象来创建一个NSURLSessionUploadTask
+NSURLSessionUploadTask *uploadTask = [urlSession uploadTaskWithStreamedRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]];
+
+// 通过指定的NSURLRequest对象来创建一个NSURLSessionUploadTask, 并且指定上传时所需的数据源
+NSURLSessionUploadTask *uploadTask = [urlSession uploadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                                              fromData:[NSData data]];
+
+// 通过指定的NSURLRequest对象来创建一个NSURLSessionUploadTask, 并且指定上传时所需的文件源
+NSURLSessionUploadTask *uploadTask = [urlSession uploadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                                              fromFile:[NSURL URLWithString:@&quot;&quot;]];
+
+// 通过指定的NSURLRequest对象来创建, 指定上传时所需的文件源, 并且同时执行完对应的任务后通过completionHandler:来返回NSURLSessionUploadTask
+NSURLSessionUploadTask *uploadTask = [urlSession uploadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                                              fromFile:[NSURL URLWithString:@&quot;&quot;]
+                                                     completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                     }];
+
+// 通过指定的NSURLRequest对象来创建, 指定上传时所需的数据源, 并且同时执行完对应的任务后通过completionHandler:来返回NSURLSessionUploadTask
+NSURLSessionUploadTask *uploadTask = [urlSession uploadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                                              fromData:[NSData data]
+                                                     completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                     }];
+</code></pre>
+
+<h2 id="toc_7"></h2>
+
+<p><code>NSURLSessionDownloadTask</code>:</p>
+
+<pre><code class="language-objectivec">// 通过指定的NSURL对象来创建一个NSURLSessionDownloadTask
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithURL:[NSURL URLWithString:@&quot;&quot;]];
+
+// 通过指定的NSURL对象来创建一个NSURLSessionDownloadTask, 并同时执行完对应的任务后通过completionHandler:返回NSURLSessionDownloadTask
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithURL:[NSURL URLWithString:@&quot;&quot;]
+                                                       completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {    
+                                                       }];
+
+// 通过指定的NSURLRequest对象来创建一个NSURLSessionDownloadTask
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]];
+
+// 通过指定的NSURLRequest对象来创建一个NSURLSessionDownloadTask, 并同时执行完对应的任务后通过completionHandler:返回NSURLSessionDownloadTask
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                                           completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {                                                             
+                                                           }];
+
+// 通过指定的NSData对象来创建一个NSURLSessionDownloadTask, 这个NSData对象是之前下载失败或者是停止下载了的数据, 这就是我们常说的断点续传
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithResumeData:[NSData data]];
+
+// 通过指定的NSData对象来创建一个NSURLSessionDownloadTask, , 并同时执行完对应的任务后通过completionHandler:返回NSURLSessionDownloadTask, 同时也是支持断点续传
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithResumeData:[NSData data]
+                                                              completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                              }];
+</code></pre>
+
+<p><code>NSURLSessionStreamTask</code>:</p>
+
+<pre><code class="language-objectivec">// 通过一个指定的NSNetService对象来创建NSURLSessionStreamTask
+NSURLSessionStreamTask *streamTask = [urlSession streamTaskWithNetService:[[NSNetService alloc] init]];
+
+// 通过一个指定的IP地址, 端口号来创建一个NSURLSessionStreamTask
+NSURLSessionStreamTask *streamTask = [urlSession streamTaskWithHostName:@&quot;192.168.1.1&quot;
+                                                                   port:8888];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_8">NSURLSessionDelegate</h3>
+
+<p>刚刚讲完了三种<code>Task</code>, 这里补充一下, 就是说我们无论会用哪一种<code>Task</code>, 我们都可以指定对应的代理, 这里有一张<code>NSURLSession</code>代理关系图:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%80)/Images/3.png" alt="3"/></p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">代理类</th>
+<th style="text-align: center">作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">NSURLSessionDelegate</td>
+<td style="text-align: center">作为其他代理的最基类, 定义了最基础的网络请求代理方法</td>
+</tr>
+<tr>
+<td style="text-align: center">NSURLSessionTaskDelegate</td>
+<td style="text-align: center">定义了网络请求任务的代理方法</td>
+</tr>
+<tr>
+<td style="text-align: center">NSURLSessionDownloadDelegate</td>
+<td style="text-align: center">定义了下载任务的代理方法, 比如获取下载进度</td>
+</tr>
+<tr>
+<td style="text-align: center">NSURLSessionDataDelegate</td>
+<td style="text-align: center">定义了上传任务或普通数据任务的代理方法</td>
+</tr>
+<tr>
+<td style="text-align: center">NSURLSessionStreamDelegate</td>
+<td style="text-align: center">这个代理方法是继承于<code>NSURLSessionTaskDelegate</code>, 提供一个TCP/IP的链接代理方法.</td>
+</tr>
+</tbody>
+</table>
+
+<p>详细大家都会用代理方法, 这里就不介绍了.</p>
+
+<hr/>
+
+<h3 id="toc_9">执行任务</h3>
+
+<p>刚刚说完了那么多东西, 最后就差执行任务了:</p>
+
+<pre><code class="language-objectivec">[task resume];
+</code></pre>
+
+<p>酱紫就完事啦, 如果还想了解更多的话, 可以去看看苹果爸爸的<a href="https://developer.apple.com/documentation/foundation/nsurlsession?language=objc">官方文档</a>.</p>
+
+<hr/>
+
+<h3 id="toc_10">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/10.Siri%20Intents%20UI">https://github.com/CainRun/iOS-10-Characteristic/tree/master/10.Siri%20Intents%20UI</a></p>
+
+<hr/>
+
+<h3 id="toc_11">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS 10 新特性《Siri Kit Intents Extension UI》]]></title>
@@ -5399,172 +5698,6 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <hr/>
 
 <h3 id="toc_6">最后</h3>
-
-<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：集成 Apple Pay]]></title>
-    <link href="https://cainrun.github.io/14747805717408.html"/>
-    <updated>2016-09-25T13:16:11+08:00</updated>
-    <id>https://cainrun.github.io/14747805717408.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>在中秋过后终于把国内的三大支付平台<strong><code>SDK</code></strong>集成都搞定了, 现在我们终于可以来研究<strong><code>Apple</code></strong>自家的支付<strong><code>Apple Pay</code></strong><br/>
-<dr/><br/>
-<strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Apple Pay</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<blockquote>
-<p><strong><code>Apple Pay</code></strong>呢, 是<strong><code>Apple</code></strong>在2014年的时候发布的功能, 是基于NFC上开发的, 所以在<strong><code>2014</code></strong>年之前的机型都是不支持的, 比如<strong><code>iPhone 5</code></strong>和<strong><code>iPhone 5s</code></strong>, 但可以通过另外的方法, 比如连接<strong><code>Apple Watch</code></strong>就可以用了, 在2016年的2月18号, 中国地区才正式上线<strong><code>Apple Pay</code></strong>, 既然已经来到了, 我们就要去看看怎么去使用<strong><code>Apple Pay</code></strong>啦.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">准备工作</h3>
-
-<blockquote>
-<p>既然是<strong><code>Apple</code></strong>自家的功能, 那我们肯定要去先查看一下<strong><a href="https://developer.apple.com/apple-pay/Getting-Started-with-Apple-Pay.pdf">Apple Pay文档</a></strong>, 了解了一下文档的内容, 它是需要去开发者中心申请一个<strong><code>Merchant ID证书</code></strong>, 那事不宜迟, 我们赶紧去申请一个.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_3">申请商务证书</h3>
-
-<blockquote>
-<p>其实申请商务证书和申请<strong><code>App ID</code></strong>证书的步骤没啥区别, 最大的区别就是在于一些小细节, 首先我们要去打开<strong><a href="https://developer.apple.com">开发者中心</a></strong>, 登录之后, 我们找到<strong><code>Merchant ID证书</code></strong>申请的地方, 申请一下<strong><code>Merchant ID证书</code></strong>.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/1.png" alt="1"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/2.png" alt="2"/></p>
-
-<blockquote>
-<p>找到之后, 我们输入一些信息, 比如<strong><code>Merchant ID Description</code></strong>, 然后就是<strong><code>Identifier</code></strong>.</p>
-
-<p>PS: <strong><code>Identifier</code></strong>是唯一的, 如果别人使用你所输入的<strong><code>Identifier</code></strong>, <strong><code>Apple</code></strong>就会叫你更换成另一个</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/3.png" alt="3"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/4.png" alt="4"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/5.png" alt="5"/></p>
-
-<blockquote>
-<p>现在我们已经搞定了第一步, 已经有了<strong><code>Merchant ID</code></strong>, 接下来我们需要去创建<strong><code>Merchant ID证书</code></strong>.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/6.png" alt="6"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/7.png" alt="7"/></p>
-
-<blockquote>
-<p>这里会问一个问题, 是否要设置成中国地区特有的<strong><code>Apple Pay</code></strong>, <strong><code>App</code></strong>只是面对国内的话, 那这个选择<strong><code>YES</code></strong>就好了, 如果是全球性的<strong><code>App</code></strong>, 那就选择<strong><code>NO</code></strong>, 当然这个也不是强制性, 自己看着办吧~~我这里就选择<strong><code>NO</code></strong>.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/8.png" alt="8"/></p>
-
-<blockquote>
-<p>接下来就是重头戏了, 我们这里需要仔细看一下Apple给我们的提示, 我们要生成的证书类型是<strong><code>ECC</code></strong>, 并且是<strong><code>256bits</code></strong>.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/9.png" alt="9"/></p>
-
-<blockquote>
-<p>打开系统的钥匙串, 创建我们所需的类型证书.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/10.png" alt="10"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/11.png" alt="11"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/12.png" alt="12"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/13.png" alt="13"/></p>
-
-<blockquote>
-<p>创建完成之后就可以关闭了, 然后在开发者中心点击<strong><code>Continue</code></strong>, 由于我创建的时候, 是把证书放在桌面上的, 所以开发者中心里选择的证书也是选择桌面上的这个证书, 然后再点击<strong><code>Continue</code></strong>就搞定了.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/14.png" alt="14"/></p>
-
-<blockquote>
-<p>但是别忘了我们还要下载这个证书哦, 下载完成后要双击添加到我们的钥匙串里去~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/15.png" alt="15"/></p>
-
-<blockquote>
-<p>剩下怎么去弄<strong><code>配置文件</code></strong>以及<strong><code>App ID证书</code></strong>, 我这里就不做多介绍了, 第一次尝试的童鞋可以自行到<a href="http://www.jianshu.com/p/61d1b4c33f5f">iOS APP上架流程详解</a>, <a href="http://www.jianshu.com/p/2813abee7187">完整的iOS上架App流程</a>查看哈~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_4">关联Merchant ID</h3>
-
-<blockquote>
-<p>刚刚我们已经申请好了<strong><code>Merchant ID证书</code></strong>, 在申请完成<strong><code>App ID</code></strong>之后, 我们要就要去找到刚刚创建好的<strong><code>App ID</code></strong>, 然后关联上我们的<strong><code>Merchant ID</code></strong>.</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/16.png" alt="16"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/17.png" alt="17"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/18.png" alt="18"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/19.png" alt="19"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/20.png" alt="20"/></p>
-
-<blockquote>
-<p>酱紫, 我们就关联完成了, 下面来就是在之前的支付工程里添加一个新的工程, 命名为<strong><code>ApplePay-Objective-C</code></strong></p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_5">开启Apple Pay</h3>
-
-<blockquote>
-<p>打开我们新建的工程, 然后添加我们的<strong><code>Merchant ID</code></strong>, 勾上<strong><code>Apple Pay</code></strong>的选项, 然后我们就来写实现代码啦~~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/21.png" alt="21"/></p>
-
-<hr/>
-
-<h3 id="toc_6">实现Apple Pay</h3>
-
-<blockquote>
-<p>实现<strong><code>Apple Pay</code></strong>的代码其实很简单, 遵循<strong><code>PKPaymentAuthorizationViewControllerDelegate</code></strong>代理, 实现两个必须实现的代理方法, 这是第一步, 第二步就是创建一个<strong><code>PKPaymentRequest</code></strong>请求, 然后再创建<strong><code>PKPaymentAuthorizationViewController</code></strong>, 最终就可以实现<strong><code>Apple Pay</code></strong>支付啦~下面是代码截图, 由于代码过多, 这里就不贴出来了, 大家需要的话, 就去看看Demo吧~~~</p>
-</blockquote>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/22.png" alt="22"/><br/>
-<img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/23.png" alt="23"/></p>
-
-<blockquote>
-<p>顺便说一声, <strong><code>Apple Pay</code></strong>的国际化不需要我们去实现, 内部就已经实现了</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_7">最终效果</h3>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/ApplePay-Objective-C/images/24.gif" alt="24"/></p>
-
-<hr/>
-
-<h3 id="toc_8">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/PayProject">https://github.com/CainRun/PayProject</a></p>
-
-<hr/>
-
-<h3 id="toc_9">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 

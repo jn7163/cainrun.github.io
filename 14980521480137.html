@@ -1,0 +1,456 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	玩转iOS开发：NSURLSession讲解(一) - Cain For iOS
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Cain For iOS" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+				 
+				 	<div class="profilepic">
+						<img src="asset/icon.png" style="width:160px;">
+					</div>
+            	
+					
+					<h1><a href="index.html">Cain For iOS</a></h1>
+					<p class="subtitle">指弹吉他演奏爱好者, 摄影爱好者, iOS 开发工程师, 如果您有更好的建议或者其他不明白的地方, 可以联系我QQ: 350116542</p>
+					<nav id="main-nav">
+						<ul class="main">
+						
+						  <li id=""><a target="self" href="index.html">Home</a></li>
+						
+						  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+						
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+
+
+
+<a target="_blank" class="linkedin" href="www.linkedin.com/in/cainluo" title="LinkedIn">LinkedIn</a>
+
+
+
+<a target="_blank" class="weibo" href="http://weibo.com/1826190094" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/CainRun" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:zhebushimengfei@qq.com" title="Email">Email</a>
+
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：NSURLSession讲解(一)</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">NSURLSession</h3>
+
+<p>在2013年的时候, 苹果推出了<code>iOS 7</code>, 这个版本的<code>iOS</code>被称为革命性的<code>iOS</code>, 而我们以前所用到的<code>NSURLConnection</code>这个网络库也被苹果爸爸给重构, 并且重新命名为<code>NSURLSession</code>.</p>
+
+<p>现在在<code>GitHub</code>里用的最多的两个库<a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a>, <a href="https://github.com/rs/SDWebImage">SDWebImage</a>都是用了<code>NSURLSession</code>.</p>
+
+<p>这里就不废话了, 直接来知识点吧.</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">网络通信</h3>
+
+<p>关于<code>Session</code>的意思, 我这里找到一段比较古方的解释:</p>
+
+<blockquote>
+<p><code>Session</code>翻译为中文意思是会话，我们知道，在七层网络协议中有<code>物理层-&gt;数据链路层-&gt;网络层-&gt;传输层-&gt;会话层-&gt;表示层-&gt;应用层</code>，那我们可以将<code>NSURLSession</code>类理解为会话层，用于管理网络接口的创建、维护、删除等等工作，我们要做的工作也只是会话层之后的层即可，底层的工作<code>NSURLSession</code>已经帮我们封装好了.</p>
+</blockquote>
+
+<p>看到这我们就很激动, 因为底层的东西不需要我们去管理, 这就轻松多了.</p>
+
+<hr/>
+
+<h3 id="toc_2">NSURLSession的分支</h3>
+
+<p>我们都知道苹果爸爸用<code>NSURLSession</code>代替了<code>NSURLConnection</code>, 那么<code>NSURLSession</code>里面到底有什么呢?</p>
+
+<p><code>NSURLSession</code>父类:</p>
+
+<ul>
+<li>NSURLSession</li>
+<li>NSURLSessionConfiguration</li>
+</ul>
+
+<p><code>NSURLSessionTask</code>子类:</p>
+
+<ul>
+<li>NSURLSessionDataTask</li>
+<li>NSURLSessionUploadTask</li>
+<li>NSURLSessionDownloadTask</li>
+<li>NSURLSessionStreamTask (iOS 9后才支持)</li>
+</ul>
+
+<p>他们的主要关系: </p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%80)/Images/1.png" alt="1"/></p>
+
+<p><code>NSURLSessionTask</code>子类的继承关系:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%80)/Images/2.png" alt="2"/></p>
+
+<p><code>NSURLSessionDataTask</code>: 主要使用在请求一些比较简单的数据, 比如我们常用的<code>JSON</code>数据.</p>
+
+<p><code>NSURLSessionDownloadTask</code>: 这个主要使用在进行一些文件的下载, 它可以针对一些大文件的网络请求做更多的处理, 比如获取下载进度, 文件的断点续传等等牛逼事情.</p>
+
+<p><code>NSURLSessionUploadTask</code>: 这个和上面那个<code>task</code>对应, 主要是给服务器发送文件数据所使用的.</p>
+
+<p><code>NSURLSessionStreamTask</code>: 提供<code>TCP/IP</code>的一个链接入口, 方便进行传输.</p>
+
+<hr/>
+
+<h3 id="toc_3">使用NSURLSession</h3>
+
+<p>不要以为看完了上面就可以直接拿来和服务器交互了啦, 因为<code>NSURLSession</code>本身是不会进行请求, 需要通过创建对应的<code>task</code>, 然后配置完之后, 再去调用<code>resume()</code>方法才能够进行tongxin.</p>
+
+<p>这里有一个好消息就是同意个<code>NSURLSession</code>是可以创建多个<code>task</code>, 并且这些<code>task</code>的<code>cache</code>和<code>cookie</code>都是共享的.</p>
+
+<p>使用<code>NSURLSession</code>的步骤:</p>
+
+<ol>
+<li>创建<code>NSURLSession</code>对象</li>
+<li>使用<code>NSURLSession</code>创建对应的<code>task</code></li>
+<li>最后一步就是调用<code>resume()</code>方法, 开始请求.</li>
+</ol>
+
+<p>创建<code>NSURLSession</code>对象有三种方法, 这里就不创建工程里, 直接贴代码吧:</p>
+
+<p>第一种:</p>
+
+<pre><code class="language-objectivec">// 获取一个共享的单例会话对象
+    NSURLSession *urlSession = [NSURLSession sharedSession];
+</code></pre>
+
+<p>第二种:</p>
+
+<pre><code class="language-objectivec">// 用NSURLSessionConfiguration获取一个特定的NSURLSession
+NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:&lt;#(nonnull NSURLSessionConfiguration *)#&gt;];
+</code></pre>
+
+<p>第三种:</p>
+
+<pre><code class="language-objectivec">// 用NSURLSessionConfiguration获取一个特定的NSURLSession, 并且设置好代理对象, 和代理的队列
+    NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:&lt;#(nonnull NSURLSessionConfiguration *)#&gt;
+                                                             delegate:&lt;#(nullable id&lt;NSURLSessionDelegate&gt;)#&gt;
+                                                        delegateQueue:&lt;#(nullable NSOperationQueue *)#&gt;]
+
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_4">配置NSURLSession</h3>
+
+<p>刚刚我们也提到, <code>NSURLSession</code>是没法直接进行请求的, 所以我们需要去配置一下, 这里也有三种配置的方法.</p>
+
+<p>第一种:</p>
+
+<pre><code class="language-objectivec">// NSURLSessionConfiguration的默认配置, 这种配置会把缓存数据存储到磁盘上
+@property (class, readonly, strong) NSURLSessionConfiguration *defaultSessionConfiguration;
+
+NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+</code></pre>
+
+<p>第二种:</p>
+
+<pre><code class="language-objectivec">// NSURLSessionConfiguration的第二种配置, 这种配置不会把数据持久化, 也就是说不会存储到磁盘上
+@property (class, readonly, strong) NSURLSessionConfiguration *ephemeralSessionConfiguration;
+
+NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration ephemeralSessionConfiguration]];
+</code></pre>
+
+<p>第三种:</p>
+
+<pre><code class="language-objectivec">// 这个配置可以允许程序在后台进行上传和下载的操作, 给定一个Identifier可以在系统关闭应用之后重启, 根据给定的`Identifier`终止正在下载或者上传操作, 但如果是用户手动关闭了应用, 系统就会取消所有后台传输的会话, 官方建议, 如果要时候后台操作的话, 把discretionary属性设置成为YES, 可以获得更好地性能.
++ (NSURLSessionConfiguration *)backgroundSessionConfigurationWithIdentifier:(NSString *)identifier NS_AVAILABLE(10_10, 8_0);
+
+NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:@&quot;backgroundSessionConfiguration&quot;]];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_5">使用NSURLSession创建Task</h3>
+
+<p>刚刚我们也说了, <code>NSURLSession</code>是有三个子类的<code>Task</code>, 所以这里我们也要分开来说说.</p>
+
+<p><code>NSURLSessionDataTask</code>:</p>
+
+<pre><code class="language-objectivec">// 通过指定的NSURL来创建一个NSURLSessionDataTask
+NSURLSessionDataTask *dataTask = [urlSession dataTaskWithURL:[NSURL URLWithString:@&quot;&quot;]];
+
+// 通过指定的NSURL对象来创建, 并同时执行完对应的任务后通过completionHandler:返回NSURLSessionDataTask
+NSURLSessionDataTask *dataTask = [urlSession dataTaskWithURL:[NSURL URLWithString:@&quot;&quot;]
+                                           completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                           }];
+
+// 通过指定的NSURLRequest对象来创建一个NSURLSessionDataTask
+NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]];
+
+// 通过指定的NSURLRequest对象来创建, 并同时执行完对应的任务后通过completionHandler:返回NSURLSessionDataTask
+NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                               completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                   }];
+</code></pre>
+
+<h2 id="toc_6"></h2>
+
+<p><code>NSURLSessionUploadTask</code>:</p>
+
+<pre><code class="language-objectivec">// 通过指定的NSURLRequest对象来创建一个NSURLSessionUploadTask
+NSURLSessionUploadTask *uploadTask = [urlSession uploadTaskWithStreamedRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]];
+
+// 通过指定的NSURLRequest对象来创建一个NSURLSessionUploadTask, 并且指定上传时所需的数据源
+NSURLSessionUploadTask *uploadTask = [urlSession uploadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                                              fromData:[NSData data]];
+
+// 通过指定的NSURLRequest对象来创建一个NSURLSessionUploadTask, 并且指定上传时所需的文件源
+NSURLSessionUploadTask *uploadTask = [urlSession uploadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                                              fromFile:[NSURL URLWithString:@&quot;&quot;]];
+
+// 通过指定的NSURLRequest对象来创建, 指定上传时所需的文件源, 并且同时执行完对应的任务后通过completionHandler:来返回NSURLSessionUploadTask
+NSURLSessionUploadTask *uploadTask = [urlSession uploadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                                              fromFile:[NSURL URLWithString:@&quot;&quot;]
+                                                     completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                     }];
+
+// 通过指定的NSURLRequest对象来创建, 指定上传时所需的数据源, 并且同时执行完对应的任务后通过completionHandler:来返回NSURLSessionUploadTask
+NSURLSessionUploadTask *uploadTask = [urlSession uploadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                                              fromData:[NSData data]
+                                                     completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                     }];
+</code></pre>
+
+<h2 id="toc_7"></h2>
+
+<p><code>NSURLSessionDownloadTask</code>:</p>
+
+<pre><code class="language-objectivec">// 通过指定的NSURL对象来创建一个NSURLSessionDownloadTask
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithURL:[NSURL URLWithString:@&quot;&quot;]];
+
+// 通过指定的NSURL对象来创建一个NSURLSessionDownloadTask, 并同时执行完对应的任务后通过completionHandler:返回NSURLSessionDownloadTask
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithURL:[NSURL URLWithString:@&quot;&quot;]
+                                                       completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {    
+                                                       }];
+
+// 通过指定的NSURLRequest对象来创建一个NSURLSessionDownloadTask
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]];
+
+// 通过指定的NSURLRequest对象来创建一个NSURLSessionDownloadTask, 并同时执行完对应的任务后通过completionHandler:返回NSURLSessionDownloadTask
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@&quot;&quot;]]
+                                                           completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {                                                             
+                                                           }];
+
+// 通过指定的NSData对象来创建一个NSURLSessionDownloadTask, 这个NSData对象是之前下载失败或者是停止下载了的数据, 这就是我们常说的断点续传
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithResumeData:[NSData data]];
+
+// 通过指定的NSData对象来创建一个NSURLSessionDownloadTask, , 并同时执行完对应的任务后通过completionHandler:返回NSURLSessionDownloadTask, 同时也是支持断点续传
+NSURLSessionDownloadTask *downloadTask = [urlSession downloadTaskWithResumeData:[NSData data]
+                                                              completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                              }];
+</code></pre>
+
+<p><code>NSURLSessionStreamTask</code>:</p>
+
+<pre><code class="language-objectivec">// 通过一个指定的NSNetService对象来创建NSURLSessionStreamTask
+NSURLSessionStreamTask *streamTask = [urlSession streamTaskWithNetService:[[NSNetService alloc] init]];
+
+// 通过一个指定的IP地址, 端口号来创建一个NSURLSessionStreamTask
+NSURLSessionStreamTask *streamTask = [urlSession streamTaskWithHostName:@&quot;192.168.1.1&quot;
+                                                                   port:8888];
+</code></pre>
+
+<hr/>
+
+<h3 id="toc_8">NSURLSessionDelegate</h3>
+
+<p>刚刚讲完了三种<code>Task</code>, 这里补充一下, 就是说我们无论会用哪一种<code>Task</code>, 我们都可以指定对应的代理, 这里有一张<code>NSURLSession</code>代理关系图:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%80)/Images/3.png" alt="3"/></p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: center">代理类</th>
+<th style="text-align: center">作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td style="text-align: center">NSURLSessionDelegate</td>
+<td style="text-align: center">作为其他代理的最基类, 定义了最基础的网络请求代理方法</td>
+</tr>
+<tr>
+<td style="text-align: center">NSURLSessionTaskDelegate</td>
+<td style="text-align: center">定义了网络请求任务的代理方法</td>
+</tr>
+<tr>
+<td style="text-align: center">NSURLSessionDownloadDelegate</td>
+<td style="text-align: center">定义了下载任务的代理方法, 比如获取下载进度</td>
+</tr>
+<tr>
+<td style="text-align: center">NSURLSessionDataDelegate</td>
+<td style="text-align: center">定义了上传任务或普通数据任务的代理方法</td>
+</tr>
+<tr>
+<td style="text-align: center">NSURLSessionStreamDelegate</td>
+<td style="text-align: center">这个代理方法是继承于<code>NSURLSessionTaskDelegate</code>, 提供一个TCP/IP的链接代理方法.</td>
+</tr>
+</tbody>
+</table>
+
+<p>详细大家都会用代理方法, 这里就不介绍了.</p>
+
+<hr/>
+
+<h3 id="toc_9">执行任务</h3>
+
+<p>刚刚说完了那么多东西, 最后就差执行任务了:</p>
+
+<pre><code class="language-objectivec">[task resume];
+</code></pre>
+
+<p>酱紫就完事啦, 如果还想了解更多的话, 可以去看看苹果爸爸的<a href="https://developer.apple.com/documentation/foundation/nsurlsession?language=objc">官方文档</a>.</p>
+
+<hr/>
+
+<h3 id="toc_10">工程地址</h3>
+
+<p>项目地址: <a href="https://github.com/CainRun/iOS-10-Characteristic/tree/master/10.Siri%20Intents%20UI">https://github.com/CainRun/iOS-10-Characteristic/tree/master/10.Siri%20Intents%20UI</a></p>
+
+<hr/>
+
+<h3 id="toc_11">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	 
+
+	  
+
+	  
+	      <div class="ds-thread" data-thread-key="14980521480137.html" data-url="https://cainrun.github.io/14980521480137.html" data-title="玩转iOS开发：NSURLSession讲解(一)"></div>
+	  
+
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2014
+Powered by <a target="_blank" href="http://www.mweb.im">MWeb</a> &nbsp;&nbsp; 
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+  
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:'cainluo'};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+    
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+</body>
+</html>
