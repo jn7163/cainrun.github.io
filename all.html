@@ -146,91 +146,11 @@
 
 <p><strong>注意: 本工程是在<code>Xcode 9 beta 2</code>, <code>iOS 11</code>的环境下运行的.</strong></p>
 
-<hr/>
-
-<h3 id="toc_1">搭建界面</h3>
-
-<p>这里我要说明一下, 原文里的界面是使用<code>Storyboard</code>来搭建的, 我这里是使用代码和<a href="https://github.com/SnapKit/Masonry">Masonry</a>, 这里再次和大神表示感谢.</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%89)/Images/1.png" alt="1"/></p>
-
-<p>搭建好的界面也很简单, 就一个<code>UITableView</code>, <code>UITableViewCell</code>和<code>UISearchBar</code>, 就完事了, 布局的代码都在项目里, 由于个人没有什么艺术细胞, 所以界面略丑, 大家凑合着看吧.</p>
-
-<hr/>
-
-<h3 id="toc_2">项目架构</h3>
-
-<p>为了让大家阅读起来比较方便和清晰, 我这里用了我一向习惯的<code>MVVM</code>架构模式, 虽然文件多了点, 但每个文件的代码都保证在了<code>200</code>行之内, 个人感觉看起来还是比较舒服的.</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%89)/Images/2.png" alt="2"/></p>
-
-<hr/>
-
-<h3 id="toc_3">实现下载</h3>
-
-<p>在项目里面有一个<code>QueryService</code>和一个<code>DownloadService</code>, 都是负责管理下载和一些网络请求, 由于代码太多了, 这里我就讲讲思路好了.</p>
-
-<p><code>QueryService</code>: 负责实现用<code>UISearchBar</code>的搜索网络请求, 当<code>UISearchBar</code>输入关键字的时候, 通过指定的<code>URL</code>和<code>Query</code>拼接成一条有效的搜索链接, 并且通过<code>NSURLSessionDataTask</code>进行网络请求, 成功后会进行数据的解析, 并且通过<code>SearchModel</code>进行组装, 然后添加到一个<code>NSMutableArray</code>对象里, 最后<code>UITableView</code>会通过这个<code>NSMutableArray</code>作为数据源来刷新整个<code>UITableView</code>.</p>
-
-<p><code>DownloadService</code>: 负责实现<code>UITableViewCell</code>通过<code>DownloadModel</code>点击开始下载, 暂停, 恢复下载, 取消下载等等操作.</p>
-
-<p>当然这里我们还需要实现一个叫做<code>NSURLSessionDownloadDelegate</code>和 <code>NSURLSessionDelegate</code>两个协议, 分别实现:</p>
-
-<pre><code class="language-objectivec">// 下载完成后的操作方法
-- (void)URLSession:(NSURLSession *)session
-      downloadTask:(NSURLSessionDownloadTask *)downloadTask
-didFinishDownloadingToURL:(NSURL *)location;
-
-// 正在下载时的操作方法
-- (void)URLSession:(NSURLSession *)session
-      downloadTask:(NSURLSessionDownloadTask *)downloadTask
-      didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten
-totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite;
-
-// 后台下载完成后的方法
-- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session;
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%89)/Images/3.png" alt="3"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%89)/Images/4.png" alt="4"/></p>
-
-<p>这里面的实现可以去<code>SearchSessionDelegate</code>里面看看, 这里就不详细多说了.</p>
-
-<p>整个项目的核心内容就在这里了, 更详细的细节, 大家可以去项目里自己看看哈, 这里就不浪费大家的时间了.</p>
-
-<p>最终的效果:</p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%89)/Images/5.gif" alt="5"/></p>
-
-<hr/>
-
-<h3 id="toc_4">总结</h3>
-
-<p>最后唠叨两句, 由于我这个只是<code>Demo</code>, 里面存在的<code>Bug</code>, 还有不完善的封装请大家多多见谅, 这里顺便推两个优秀的开源下载管理器<a href="https://github.com/Heikowi/HWIFileDownload">HWIFileDownload</a>, <a href="https://github.com/thibaultCha/TCBlobDownload">TCBlobDownload</a>.</p>
-
-<p>如果有童鞋想自己封装一个的话, 也可以去看看这几篇文章<a href="http://www.cnblogs.com/machao/p/5864251.html">MCDownloadManager ios文件下载管理器</a>, <a href="http://www.cocoachina.com/ios/20160530/16496.html">手把手教你封装下载管理器</a>, 还有这个经验贴<a href="http://mobilev5.github.io/2016/03/13/meeting-common-urldownloader/">iOS通用下载管理器-HJMURLDownloader</a>.</p>
-
-<p>祝大家学习愉快.</p>
-
-<hr/>
-
-<h3 id="toc_5">工程地址:</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/iOS-NetWork/tree/master/NSURLSession%E8%AE%B2%E8%A7%A3(%E4%B8%89)">https://github.com/CainRun/iOS-NetWork/tree/master/NSURLSession讲解(三)</a></p>
-
-<hr/>
-
-<h3 id="toc_6">最后</h3>
-
-<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
 
 
-			
+			 
+			<a href="14986211698053.html#more" class="more-link">Read on &rarr;</a>
+    		
 			
 		</div>
 

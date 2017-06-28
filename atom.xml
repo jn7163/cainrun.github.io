@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-22T17:18:55+08:00</updated>
+  <updated>2017-06-28T12:40:37+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -26,6 +26,8 @@
 <p>这里的工程是仿照<a href="https://www.raywenderlich.com">RayWenderlich</a><code>(需要翻墙)</code>的一篇文章<a href="https://www.raywenderlich.com/158106/urlsession-tutorial-getting-started">URLSession Tutorial: Getting Started</a>, 喜欢看原文或者是<code>Swift</code>的朋友也可以去看看, 我这个是<code>Objective-C</code>版本的.</p>
 
 <p><strong>注意: 本工程是在<code>Xcode 9 beta 2</code>, <code>iOS 11</code>的环境下运行的.</strong></p>
+
+<span id="more"></span><!-- more -->
 
 <hr/>
 
