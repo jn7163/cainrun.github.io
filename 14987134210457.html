@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>  
+	  
+  	玩转iOS开发：iOS中的Socket编程(二) - Cain For iOS
+  	
+	</title>
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="atom.xml" rel="alternate" title="Cain For iOS" type="application/atom+xml">
+
+	<link href="asset/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="asset/stylesheets/font-awesome.min.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<script src="asset/javascripts/jquery.min.js"></script>
+	<script src="asset/highlightjs/highlight.pack.js"></script>
+	<link href="asset/highlightjs/styles/solarized_dark.css" media="screen, projection" rel="stylesheet" type="text/css">
+<script>hljs.initHighlightingOnLoad();</script>
+
+	<!--[if lt IE 9]><script src="asset/javascripts/html5.js"></script><![endif]-->
+	<!-- <link href='http://fonts.googleapis.com/css?family=Nunito:400,300,700' rel='stylesheet' type='text/css'> -->
+	<style type="text/css">
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Nunito-Light'), url(asset/font/1TiHc9yag0wq3lDO9cw0voX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Nunito-Regular'), url(asset/font/6TbRXKWJjpj6V2v_WyRbMX-_kf6ByYO6CLYdB4HQE-Y.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+/* latin */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Nunito-Bold'), url(asset/font/TttUCfJ272GBgSKaOaD7KoX0hVgzZQUfRDuZrPvH3D8.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+	</style>
+	
+	<style type="text/css">
+	.container .left-col{ opacity: 1;}
+	#pagenavi a{ font-size: 1.3em;}
+	#pagenavi .next:before{ top: 3px;}
+	#pagenavi .prev:before{ top: 3px;}
+	.container .mid-col .mid-col-container #content .archives .title{ font-size: 1.5em;}
+	.container .mid-col .mid-col-container #content article{ padding: 15px 0px;}
+	#header .subtitle {
+		line-height: 1.2em;
+		padding-top: 8px;
+	}
+	article pre{ background: none; border: none; padding: 0;}
+	article .entry-content{text-align: left;}
+	.share-comment{ padding: 25px 0px; clear: both;}
+	hr{ margin: 20px 0px;border: 0; border-top:solid 1px #ddd;}
+	</style>
+  
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner">
+				 
+				 	<div class="profilepic">
+						<img src="asset/icon.png" style="width:160px;">
+					</div>
+            	
+					
+					<h1><a href="index.html">Cain For iOS</a></h1>
+					<p class="subtitle">指弹吉他演奏爱好者, 摄影爱好者, iOS 开发工程师, 如果您有更好的建议或者其他不明白的地方, 可以在对应的文章留言</p>
+					<nav id="main-nav">
+						<ul class="main">
+						
+						  <li id=""><a target="self" href="index.html">Home</a></li>
+						
+						  <li id=""><a target="_self" href="archives.html">Archives</a></li>
+						
+						</ul>
+					</nav>
+
+					<nav id="sub-nav">
+						<div class="social">
+
+
+
+
+<a target="_blank" class="linkedin" href="www.linkedin.com/in/cainluo" title="LinkedIn">LinkedIn</a>
+
+
+
+<a target="_blank" class="weibo" href="http://weibo.com/1826190094" title="weibo">Weibo</a>
+
+<a target="_blank" class="github" target="_blank" href="https://github.com/CainRun" title="GitHub">GitHub</a>
+<a target="_blank" class="email" href="mailto:zhebushimengfei@qq.com" title="Email">Email</a>
+
+								
+
+								<a class="rss" href="atom.xml" title="RSS">RSS</a>
+							
+						</div>
+					</nav>
+				</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			<div class="mid-col-container"> <div id="content" class="inner">
+
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：iOS中的Socket编程(二)</h1>
+		<div class="entry-content" itemprop="articleBody">
+			<h3 id="toc_0">接着讲</h3>
+
+<p>在之前的那篇文章, 我们了解了一些关于<code>Socket</code>的基础知识, 如果没有去看的朋友, 可以去看看<a href="https://cainrun.github.io/14986613643920.html">玩转iOS开发：iOS中的Socket编程(一)</a>.</p>
+
+<p>那么现在我们继续来讲讲剩下的一丢丢知识, 然后就开始来写我们的代码~</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">建立TCP连接</h3>
+
+<p>上一讲也说了, <code>Socket</code>是基于<code>TCP/IP</code>上的封装, 如果要了解<code>Socket</code>的连接, 就要从<code>TPC/IP</code>的连接入手.</p>
+
+<p>我们日夜不分离的手机之所以能联网, 也是因为手机的底层实现了<code>TCP/IP</code>协议, 可以让手机通过<code>WiFi</code>, <code>4G</code>等无线网络进行通信.</p>
+
+<p>建立起一个<code>TCP</code>连接, 需要通过三次的验证, 我们这里称为<code>三次握手</code>:</p>
+
+<ul>
+<li>第一次握手: 由客户端发送一个叫做<code>SYN(SYN=J)</code>包到服务器, 并且进入<code>SYN_SEND</code>状态, 然后就翘着二郎腿等服务器回应.</li>
+<li>第二次握手: 服务器接收到了<code>SYN</code>包, 必须确认客户端的<code>SYN(ACK=J+1)</code>, 同时也会发送一个<code>SYN(SYN=K)</code>包, 也就是<code>SYN+ACK</code>, 此时轮到服务器跷二郎腿, 并且进入<code>SYN_RECV</code>状态.</li>
+<li>第三次握手: 接收到了服务器发来的<code>SYN+ACK</code>包, 并向服务器发送确认包<code>ACK(ACK=K+1)</code>, 发完之后, 客户端和服务器就会收起二郎腿并且进入<code>ESTABLISHED</code>状态, 完成了三次握手</li>
+</ul>
+
+<p>大概的情况就是酱紫:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/Socket%E7%BC%96%E7%A8%8B(%E4%BA%8C)/1.png" alt="1"/></p>
+
+<p>这里注意一下, 在进行握手的时候, 所传送的包并不包含数据.</p>
+
+<p>只有在完成三次握手之后, 客户端和服务器才会正式开始传输数据, 一般在<code>TCP</code>连接建立成功后, 除非有一方主动关闭连接之前, <code>TCP</code>连接是会一直保持下去的, 比如我们的<code>微信</code>, <code>QQ</code>这些即时聊天<code>App</code>.</p>
+
+<hr/>
+
+<h3 id="toc_2">关闭TCP连接</h3>
+
+<p>刚刚说完了如何建立起<code>TCP</code>的连接, 现在我们来看看怎么关闭.</p>
+
+<p>客户端和服务器都可以发起关闭<code>TCP</code>连接的请求, 但是需要通过四次验证, 我们这里称为<code>四次挥手</code>, 这里我们演示由客户端发起关闭<code>TCP</code>连接: </p>
+
+<ul>
+<li>第一次挥手: 客户端会发送一个<code>FIN</code>的报文给服务器之后就会进入等待服务器的响应.</li>
+<li>第二次挥手: 服务器接收到了<code>FIN</code>之后, 并确认是由客户端发起的, 同时也会发送一条<code>ACK=X+1</code>的报文.</li>
+<li>第三次挥手: 等到客户端接受到<code>ACK</code>报文之后, 服务器关闭了与客户端的连接, 会发送一条<code>FIN</code>的报文给客户端.</li>
+<li>第四次挥手: 客户端接收到了由服务器发送过来的<code>FIN</code>报文, 就会关闭与服务端的连接, 并且发送<code>ACK</code>给服务器.</li>
+</ul>
+
+<p>关系图:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/Socket%E7%BC%96%E7%A8%8B(%E4%BA%8C)/2.png" alt="2"/></p>
+
+<p>有人或许有疑问说为啥<code>TCP</code>建立连接的时候是三次握手, 而断开连接的时候却是四次挥手呢?</p>
+
+<p>因为连接时服务端收到了客户端的<code>SYN</code>连接请求的报文后, 可以直接发送<code>SYN+ACK</code>报文, 其中的<code>ACK</code>报文是用来响应, <code>SYN</code>报文是用来同步的.</p>
+
+<p>而当关闭连接时, 服务端收到<code>FIN</code>报文后, 很可能并不会马上就关闭<code>Socket</code>连接, 所以只能先回复一个<code>ACK</code>报文, 告诉客户端, 你发的<code>FIN</code>报文我收到了, 只有等到服务器的所有报文发送完了, 服务端才会发送<code>FIN</code>报文, 所以才需要四次挥手.</p>
+
+<hr/>
+
+<h3 id="toc_3">HTTP连接</h3>
+
+<p>本来并不打算把<code>HTTP/HTTPS</code>也讲了, 但既然都说到这, 还是补上吧.</p>
+
+<p><code>HTTP</code>是一个超文本传输协议, 全名叫做<code>Hyper Text Transfer Protocol</code>, 是<code>Web</code>互联网的基础, 也是我们手机联网常用的协议之一, 顺便说说, <code>HTTP</code>协议是建立在<code>TCP</code>协议之上的一种应用.</p>
+
+<p>用过<code>HTTP</code>请求的都知道, <code>HTTP</code>最显著的一个特点就是客户端每次发送的网络请求都需要服务端的响应, 在请求结束后, 会主动的关闭连接.</p>
+
+<p>由于建立连接到关闭连接是<code>一次性连接</code>, 所以<code>HTTP/HTTPS</code>会被称为<code>短连接</code>, 如果要保持长期在线的话, 需要不停的像服务器发送请求, 如果服务器长时间没有接收到客户端的请求, 就会认为客户端<code>下线</code>了, 反过来, 如果客户端长时间没有接收到服务器的响应, 则认为<code>网络断开</code>.</p>
+
+<p>在<code>HTTP 1.0</code>中, 客户端的每次请求都要求建立一次单独的连接, 在处理完本次请求后, 就自动释放连接. 而<code>HTTP 1.1</code>中则可以在一次连接中处理多个请求，并且多个请求可以重叠进行, 不需要等待一个请求结束后再发送下一个请求, 现在最新的<code>HTTP 2.0</code>是兼容<code>HTTP 1.1</code>的, 虽然说是新版, 但我个人感觉好像是优化版本, 只是提高了<code>Web</code>的性能.</p>
+
+<hr/>
+
+<h3 id="toc_4">HTTPS连接</h3>
+
+<p><code>HTTPS</code>全名叫做<code>Hyper Text Transfer Protocol over Secure Socket Layer</code>, 是<code>HTTP</code>的安全版本, 主要是在<code>HTTP</code>加了一层<code>SSL</code>, 所以加密的时候就要用到<code>SSL</code>加密.</p>
+
+<p><code>HTTPS</code>存在于<code>HTTP</code>与<code>TCP</code>之间, <code>HTTP</code>是以明文发送的, 不提供任何方式的数据加密, 所以非常容易受到攻击, 因为<code>HTTP</code>协议不方便用来传输敏感信息, 但<code>HTTPS</code>比较麻烦, 因为需要去申请一个<code>CA</code>证书. </p>
+
+<p><code>HTTP</code>和<code>HTTPS</code>的区别:</p>
+
+<ul>
+<li><code>HTTP</code>是超文本传输协议, 信息是明文传输, <code>HTTPS</code>则是具有安全性的<code>SSL</code>加密传输协议.</li>
+<li><code>HTTP</code>和<code>HTTPS</code>使用的是完全不同的连接方式, 用的端口也不一样, 前者是80, 后者是443.</li>
+<li><code>HTTP</code>的连接很简单, 是无状态的, <code>HTTPS</code>协议是由<code>HTTP + SSL</code>协议构建的可进行加密传输、身份认证的网络协议.</li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/Socket%E7%BC%96%E7%A8%8B(%E4%BA%8C)/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_5">Socket与HTTP的区别</h3>
+
+<p>虽然说<code>Socket</code>和<code>HTTP</code>都是基于<code>TCP</code>, 但通常情况下<code>Socket</code>连接就是<code>TCP</code>连接, 一旦建立了<code>Socket</code>连接, 双方就可以相互发送数据, 直到双方连接断开为止.</p>
+
+<p>但在实际应用中，客户端到服务器之间的通信防火墙默认会关闭长时间处于非活跃状态的连接, 从而而导致<code>Socket</code>连接断连，因此需要通过轮询告诉网络，该<code>Socket</code>连接处于活跃状态。</p>
+
+<p>而<code>HTTP</code>刚刚也说了, 它的连接方式是<code>请求 -&gt; 响应</code>, 不仅要在请求的时候需要先建立好连接, 而且需要客户端向服务器发送请求后, 服务器才能回复数据.</p>
+
+<hr/>
+
+<h3 id="toc_6">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+		</div>
+	</article>
+	<div class="share-comment">
+	 <!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137618"></script>
+<!-- UY END -->
+
+	  
+
+	  
+	      <div class="ds-thread" data-thread-key="14987134210457.html" data-url="https://cainrun.github.io/14987134210457.html" data-title="玩转iOS开发：iOS中的Socket编程(二)"></div>
+	  
+
+	</div>
+</div>        </div>
+			<footer id="footer" class="inner">Copyright &copy; 2017
+Powered by <a target="_blank" href="https://cainrun.github.io">Code For iOS</a> &nbsp;&nbsp;
+Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>
+      </footer>
+		</div>
+	</div>
+
+  
+
+
+<script type="text/javascript">
+var duoshuoQuery = {short_name:'cainluo'};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+    
+<script src="asset/chart/all-min.js"></script><script type="text/javascript">$(function(){    var mwebii=0;    var mwebChartEleId = 'mweb-chart-ele-';    $('pre>code').each(function(){        mwebii++;        var eleiid = mwebChartEleId+mwebii;        if($(this).hasClass('language-sequence')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = Diagram.parse($(this).text());            diagram.drawSVG(eleiid,{theme: 'simple'});        }else if($(this).hasClass('language-flow')){            var ele = $(this).addClass('nohighlight').parent();            $('<div id="'+eleiid+'"></div>').insertAfter(ele);            ele.hide();            var diagram = flowchart.parse($(this).text());            diagram.drawSVG(eleiid);        }    });});</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }});</script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Cain For iOS]]></title>
   <link href="https://cainrun.github.io/atom.xml" rel="self"/>
   <link href="https://cainrun.github.io/"/>
-  <updated>2017-06-28T19:18:11+08:00</updated>
+  <updated>2017-06-29T12:51:29+08:00</updated>
   <id>https://cainrun.github.io/</id>
   <author>
     <name><![CDATA[]]></name>
@@ -12,6 +12,124 @@
   </author>
   <generator uri="http://www.coderforart.com/">CoderForArt</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[玩转iOS开发：iOS中的Socket编程(二)]]></title>
+    <link href="https://cainrun.github.io/14987134210457.html"/>
+    <updated>2017-06-29T13:17:01+08:00</updated>
+    <id>https://cainrun.github.io/14987134210457.html</id>
+    <content type="html"><![CDATA[
+<h3 id="toc_0">接着讲</h3>
+
+<p>在之前的那篇文章, 我们了解了一些关于<code>Socket</code>的基础知识, 如果没有去看的朋友, 可以去看看<a href="https://cainrun.github.io/14986613643920.html">玩转iOS开发：iOS中的Socket编程(一)</a>.</p>
+
+<p>那么现在我们继续来讲讲剩下的一丢丢知识, 然后就开始来写我们的代码~</p>
+
+<span id="more"></span><!-- more -->
+
+<hr/>
+
+<h3 id="toc_1">建立TCP连接</h3>
+
+<p>上一讲也说了, <code>Socket</code>是基于<code>TCP/IP</code>上的封装, 如果要了解<code>Socket</code>的连接, 就要从<code>TPC/IP</code>的连接入手.</p>
+
+<p>我们日夜不分离的手机之所以能联网, 也是因为手机的底层实现了<code>TCP/IP</code>协议, 可以让手机通过<code>WiFi</code>, <code>4G</code>等无线网络进行通信.</p>
+
+<p>建立起一个<code>TCP</code>连接, 需要通过三次的验证, 我们这里称为<code>三次握手</code>:</p>
+
+<ul>
+<li>第一次握手: 由客户端发送一个叫做<code>SYN(SYN=J)</code>包到服务器, 并且进入<code>SYN_SEND</code>状态, 然后就翘着二郎腿等服务器回应.</li>
+<li>第二次握手: 服务器接收到了<code>SYN</code>包, 必须确认客户端的<code>SYN(ACK=J+1)</code>, 同时也会发送一个<code>SYN(SYN=K)</code>包, 也就是<code>SYN+ACK</code>, 此时轮到服务器跷二郎腿, 并且进入<code>SYN_RECV</code>状态.</li>
+<li>第三次握手: 接收到了服务器发来的<code>SYN+ACK</code>包, 并向服务器发送确认包<code>ACK(ACK=K+1)</code>, 发完之后, 客户端和服务器就会收起二郎腿并且进入<code>ESTABLISHED</code>状态, 完成了三次握手</li>
+</ul>
+
+<p>大概的情况就是酱紫:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/Socket%E7%BC%96%E7%A8%8B(%E4%BA%8C)/1.png" alt="1"/></p>
+
+<p>这里注意一下, 在进行握手的时候, 所传送的包并不包含数据.</p>
+
+<p>只有在完成三次握手之后, 客户端和服务器才会正式开始传输数据, 一般在<code>TCP</code>连接建立成功后, 除非有一方主动关闭连接之前, <code>TCP</code>连接是会一直保持下去的, 比如我们的<code>微信</code>, <code>QQ</code>这些即时聊天<code>App</code>.</p>
+
+<hr/>
+
+<h3 id="toc_2">关闭TCP连接</h3>
+
+<p>刚刚说完了如何建立起<code>TCP</code>的连接, 现在我们来看看怎么关闭.</p>
+
+<p>客户端和服务器都可以发起关闭<code>TCP</code>连接的请求, 但是需要通过四次验证, 我们这里称为<code>四次挥手</code>, 这里我们演示由客户端发起关闭<code>TCP</code>连接: </p>
+
+<ul>
+<li>第一次挥手: 客户端会发送一个<code>FIN</code>的报文给服务器之后就会进入等待服务器的响应.</li>
+<li>第二次挥手: 服务器接收到了<code>FIN</code>之后, 并确认是由客户端发起的, 同时也会发送一条<code>ACK=X+1</code>的报文.</li>
+<li>第三次挥手: 等到客户端接受到<code>ACK</code>报文之后, 服务器关闭了与客户端的连接, 会发送一条<code>FIN</code>的报文给客户端.</li>
+<li>第四次挥手: 客户端接收到了由服务器发送过来的<code>FIN</code>报文, 就会关闭与服务端的连接, 并且发送<code>ACK</code>给服务器.</li>
+</ul>
+
+<p>关系图:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/Socket%E7%BC%96%E7%A8%8B(%E4%BA%8C)/2.png" alt="2"/></p>
+
+<p>有人或许有疑问说为啥<code>TCP</code>建立连接的时候是三次握手, 而断开连接的时候却是四次挥手呢?</p>
+
+<p>因为连接时服务端收到了客户端的<code>SYN</code>连接请求的报文后, 可以直接发送<code>SYN+ACK</code>报文, 其中的<code>ACK</code>报文是用来响应, <code>SYN</code>报文是用来同步的.</p>
+
+<p>而当关闭连接时, 服务端收到<code>FIN</code>报文后, 很可能并不会马上就关闭<code>Socket</code>连接, 所以只能先回复一个<code>ACK</code>报文, 告诉客户端, 你发的<code>FIN</code>报文我收到了, 只有等到服务器的所有报文发送完了, 服务端才会发送<code>FIN</code>报文, 所以才需要四次挥手.</p>
+
+<hr/>
+
+<h3 id="toc_3">HTTP连接</h3>
+
+<p>本来并不打算把<code>HTTP/HTTPS</code>也讲了, 但既然都说到这, 还是补上吧.</p>
+
+<p><code>HTTP</code>是一个超文本传输协议, 全名叫做<code>Hyper Text Transfer Protocol</code>, 是<code>Web</code>互联网的基础, 也是我们手机联网常用的协议之一, 顺便说说, <code>HTTP</code>协议是建立在<code>TCP</code>协议之上的一种应用.</p>
+
+<p>用过<code>HTTP</code>请求的都知道, <code>HTTP</code>最显著的一个特点就是客户端每次发送的网络请求都需要服务端的响应, 在请求结束后, 会主动的关闭连接.</p>
+
+<p>由于建立连接到关闭连接是<code>一次性连接</code>, 所以<code>HTTP/HTTPS</code>会被称为<code>短连接</code>, 如果要保持长期在线的话, 需要不停的像服务器发送请求, 如果服务器长时间没有接收到客户端的请求, 就会认为客户端<code>下线</code>了, 反过来, 如果客户端长时间没有接收到服务器的响应, 则认为<code>网络断开</code>.</p>
+
+<p>在<code>HTTP 1.0</code>中, 客户端的每次请求都要求建立一次单独的连接, 在处理完本次请求后, 就自动释放连接. 而<code>HTTP 1.1</code>中则可以在一次连接中处理多个请求，并且多个请求可以重叠进行, 不需要等待一个请求结束后再发送下一个请求, 现在最新的<code>HTTP 2.0</code>是兼容<code>HTTP 1.1</code>的, 虽然说是新版, 但我个人感觉好像是优化版本, 只是提高了<code>Web</code>的性能.</p>
+
+<hr/>
+
+<h3 id="toc_4">HTTPS连接</h3>
+
+<p><code>HTTPS</code>全名叫做<code>Hyper Text Transfer Protocol over Secure Socket Layer</code>, 是<code>HTTP</code>的安全版本, 主要是在<code>HTTP</code>加了一层<code>SSL</code>, 所以加密的时候就要用到<code>SSL</code>加密.</p>
+
+<p><code>HTTPS</code>存在于<code>HTTP</code>与<code>TCP</code>之间, <code>HTTP</code>是以明文发送的, 不提供任何方式的数据加密, 所以非常容易受到攻击, 因为<code>HTTP</code>协议不方便用来传输敏感信息, 但<code>HTTPS</code>比较麻烦, 因为需要去申请一个<code>CA</code>证书. </p>
+
+<p><code>HTTP</code>和<code>HTTPS</code>的区别:</p>
+
+<ul>
+<li><code>HTTP</code>是超文本传输协议, 信息是明文传输, <code>HTTPS</code>则是具有安全性的<code>SSL</code>加密传输协议.</li>
+<li><code>HTTP</code>和<code>HTTPS</code>使用的是完全不同的连接方式, 用的端口也不一样, 前者是80, 后者是443.</li>
+<li><code>HTTP</code>的连接很简单, 是无状态的, <code>HTTPS</code>协议是由<code>HTTP + SSL</code>协议构建的可进行加密传输、身份认证的网络协议.</li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/Socket%E7%BC%96%E7%A8%8B(%E4%BA%8C)/3.png" alt="3"/></p>
+
+<hr/>
+
+<h3 id="toc_5">Socket与HTTP的区别</h3>
+
+<p>虽然说<code>Socket</code>和<code>HTTP</code>都是基于<code>TCP</code>, 但通常情况下<code>Socket</code>连接就是<code>TCP</code>连接, 一旦建立了<code>Socket</code>连接, 双方就可以相互发送数据, 直到双方连接断开为止.</p>
+
+<p>但在实际应用中，客户端到服务器之间的通信防火墙默认会关闭长时间处于非活跃状态的连接, 从而而导致<code>Socket</code>连接断连，因此需要通过轮询告诉网络，该<code>Socket</code>连接处于活跃状态。</p>
+
+<p>而<code>HTTP</code>刚刚也说了, 它的连接方式是<code>请求 -&gt; 响应</code>, 不仅要在请求的时候需要先建立好连接, 而且需要客户端向服务器发送请求后, 服务器才能回复数据.</p>
+
+<hr/>
+
+<h3 id="toc_6">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[玩转iOS开发：iOS中的Socket编程(一)]]></title>
@@ -5181,371 +5299,6 @@ CATransform3DMakeTranslation(Gloat tx, CGFloat ty, CGFloat tz);
 <hr/>
 
 <h3 id="toc_12">最后</h3>
-
-<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[玩转iOS开发：3.《Core Animation》CALayer的几何图层]]></title>
-    <link href="https://cainrun.github.io/14773198375857.html"/>
-    <updated>2016-10-24T22:37:17+08:00</updated>
-    <id>https://cainrun.github.io/14773198375857.html</id>
-    <content type="html"><![CDATA[
-<h3 id="toc_0">作者感言</h3>
-
-<blockquote>
-<p>前一章我们了解真正了<strong>CALayer</strong>是干嘛的, <a href="https://cainrun.github.io/14771496782021.html">《Core Animation》初识CALayer</a>今天我们就来讲讲<strong>CALayer Geometry</strong>.<br/>
-<dr/><br/>
-<strong><font color=purple>最后:</font></strong><br/>
-<strong><font color=purple>如果你有更好的建议或者对这篇文章有不满的地方, 请联系我, 我会参考你们的意见再进行修改, 联系我时, 请备注</strong><code>Core Animation</code><strong>如果觉得好的话, 希望大家也可以打赏一下~嘻嘻~祝大家学习愉快~谢谢~</font></strong></p>
-</blockquote>
-
-<span id="more"></span><!-- more -->
-
-<hr/>
-
-<h3 id="toc_1">简介</h3>
-
-<blockquote>
-<p><strong>CALayer Geometry</strong>讲得是图层的几何, 主要内容分别有<strong>Layout</strong>, <strong>anchorPoint</strong>, <strong>Coordinate Systems</strong>, <strong>Hit Testing</strong>, <strong>Automatic Layout</strong>, 待我们一一去了解和学习~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_2">Layout</h3>
-
-<blockquote>
-<p><strong>Layout</strong>顾名思义就是布局的意思, 这一段讲的是视图和图层简单的布局, 比如<strong>UIView</strong>里面有<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>, <strong>CALayer</strong>里面有<strong>frame</strong>, <strong>bounds</strong>, <strong>position</strong>.<br/>
-<dr/><br/>
-这里对布局属性进行一下解释: <br/>
-<dr/></p>
-
-<ul>
-<li><strong>frame</strong>: 代表了的是图层外部的一个坐标轴, 也是相对于父视图.</li>
-<li><strong>bounds</strong>: 代表了的是内部坐标轴, 它的原点永远都是<strong>{0, 0}</strong>, 是相对于本视图的位置和大小.</li>
-<li><strong>center</strong>以及<strong>position</strong>: 代表的是现对于父视图所在的位置, 也就是我们经常所说的中心点, 但是呢, 其实这个说法不太对, 其实是应该相对于父视图<strong>anchorPoint</strong>属性所在的位置才对,<strong>anchorPoint</strong>属性我们后面再解释, 现在让它打一下酱油先.</li>
-</ul>
-
-<p>我们来看看Demo中的实例:</p>
-</blockquote>
-
-<pre><code class="language-objectivec">
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [self logViewAndLayer];
-}
-
-- (void)logViewAndLayer {
-
-    NSLog(@&quot;View X: %f&quot;, self.view.center.x);
-    NSLog(@&quot;View Y: %f&quot;, self.view.center.y);
-    NSLog(@&quot;View Frame Width: %f&quot;, self.view.frame.size.width);
-    NSLog(@&quot;View Frame Height: %f&quot;, self.view.frame.size.height);
-    NSLog(@&quot;View Bounds Width: %f&quot;, self.view.bounds.size.width);
-    NSLog(@&quot;View Bounds Height: %f&quot;, self.view.bounds.size.height);
-    NSLog(@&quot;\n&quot;);
-    NSLog(@&quot;Layer X: %f&quot;, self.view.layer.position.x);
-    NSLog(@&quot;Layer Y: %f&quot;, self.view.layer.position.y);
-    NSLog(@&quot;Layer Frame Width: %f&quot;, self.view.layer.frame.size.width);
-    NSLog(@&quot;Layer Frame Height: %f&quot;, self.view.layer.frame.size.height);
-    NSLog(@&quot;Layer Bounds Width: %f&quot;, self.view.layer.bounds.size.width);
-    NSLog(@&quot;Layer Bounds Height: %f&quot;, self.view.layer.bounds.size.height);
-}
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/1.png" alt="1"/></p>
-
-<blockquote>
-<p>在这里, 我们看到<strong>layer</strong>的<strong>frame</strong>, <strong>bounds</strong>, <strong>position</strong>和<strong>UIView</strong>的<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>都是一致的.<br/>
-<dr/><br/>
-但是在<strong>UIView</strong>里, <strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>这三个属性只是存取方法罢了, 当<strong>UIView</strong>对<strong>frame</strong>属性进行操作时, 其实是对<strong>CALayer</strong>的<strong>frame</strong>进行操作, 是不能够脱离了<strong>CALayer</strong>的去改变视图的<strong>frame</strong>.<br/>
-<dr/><br/>
-<strong>frame</strong>这个属性对于<strong>UIView</strong>和<strong>CALayer</strong>来说, 它是一个比较玄的属性, 它的值是根据<strong>UIView</strong>或者是<strong>CALayer</strong>的<strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>计算所得到的一个值, 一旦你去改变了<strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>其中一个值, <strong>frame</strong>也会随之而改变, 当然啦, 你去改变<strong>frame</strong>, <strong>bounds</strong>, <strong>center</strong>/<strong>position</strong>, <strong>transform</strong>这三个值也会跟着改变的.<br/>
-<dr/><br/>
-<strong><font color=red>PS: 这里还需要提一点, 如果你对</strong>CALayer<strong>进行了</strong>transform<strong>的旋转或者是缩放时,</strong> frame<strong>所显示的宽高与</strong>bounds<strong>的宽高就不会再一样了.</font></strong></p>
-
-<p>直接来看Demo吧:</p>
-</blockquote>
-
-<pre><code class="language-objectivec">- (void)layerTransform {
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 20, 100, 100)];
-    
-    view.backgroundColor = [UIColor redColor];
-    
-    [self.view addSubview:view];
-    
-    view.layer.transform = CATransform3DMakeRotation(M_PI_4, 1, 1, 0.5);
-    
-    NSLog(@&quot;View X: %f&quot;, view.center.x);
-    NSLog(@&quot;View Y: %f&quot;, view.center.y);
-    NSLog(@&quot;View Frame Width: %f&quot;, view.frame.size.width);
-    NSLog(@&quot;View Frame Height: %f&quot;, view.frame.size.height);
-    NSLog(@&quot;View Bounds Width: %f&quot;, view.bounds.size.width);
-    NSLog(@&quot;View Bounds Height: %f&quot;, view.bounds.size.height);
-    NSLog(@&quot;\n&quot;);
-    NSLog(@&quot;Layer X: %f&quot;, view.layer.position.x);
-    NSLog(@&quot;Layer Y: %f&quot;, view.layer.position.y);
-    NSLog(@&quot;Layer Frame Width: %f&quot;, view.layer.frame.size.width);
-    NSLog(@&quot;Layer Frame Height: %f&quot;, view.layer.frame.size.height);
-    NSLog(@&quot;Layer Bounds Width: %f&quot;, view.layer.bounds.size.width);
-    NSLog(@&quot;Layer Bounds Height: %f&quot;, view.layer.bounds.size.height);
-}
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/2.png" alt="2"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/3.png" alt="3"/></p>
-
-<hr/>
-
-<h3 id="toc_3">AnchorPoint</h3>
-
-<blockquote>
-<p><strong>anchorPoint</strong>这个属性名, 也叫作<strong>锚点</strong>, 指的一个<strong>UIView</strong>和<strong>CALayer</strong>相对于父视图的位置参考点, 左上角为<strong>{0, 0}</strong>, 居中为<strong>{0.5, 0.5}</strong>, 右下角为<strong>{1, 1}</strong>, 默认都是位于父视图层的中点, 也就是<strong>{0.5, 0.5}</strong>.<br/>
-<dr/><br/>
-在<strong>UIView</strong>当中, <strong>anchorPoint</strong>属性并没有公开出来, 你只能操作<strong>center</strong>这个值, 间接性的给<strong>anchorPoint</strong>赋值, <strong>CALayer</strong>也可以通过改变<strong>position</strong>来给<strong>anchorPoint</strong>进行赋值, 从而改变<strong>CALayer</strong>的<strong>frame</strong>.<br/>
-<dr/><br/>
-这里还需要提及一点, 如果你改变了<strong>CALayer</strong>的<strong>anchorPoint</strong>, 那么<strong>CALayer</strong>的<strong>frame</strong>也会被改变, 那么<strong>anchorPoint</strong>属性所显示的值再也不是该<strong>CALayer</strong>的中心点, 但<strong>bounds</strong>,<strong>position</strong>这些值并不会被改变.</p>
-
-<p>我们直接来看看Demo吧~</p>
-</blockquote>
-
-<pre><code class="language-objectivec">- (void)viewAnchorPoint {
-    
-    UIView *viewOne = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
-
-    viewOne.backgroundColor = [UIColor grayColor];
-
-    NSLog(@&quot;before X: %f&quot;, viewOne.layer.frame.origin.x);
-    NSLog(@&quot;before Y: %f&quot;, viewOne.layer.frame.origin.y);
-    
-    // change anchorPoint
-    viewOne.layer.anchorPoint = CGPointMake(0.1f, 0.1f);
-
-    NSLog(@&quot;After X: %f&quot;, viewOne.layer.frame.origin.x);
-    NSLog(@&quot;After Y:%f&quot;, viewOne.layer.frame.origin.y);
-    
-    UIView *viewTwo = [[UIView alloc] init];
-    
-    viewTwo.backgroundColor = [UIColor redColor];
-    viewTwo.bounds = CGRectMake(0, 0, 100, 100);
-    viewTwo.center = viewOne.center;
-
-    [self.view addSubview:viewOne];
-    [self.view addSubview:viewTwo];
-}
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/4.png" alt="4"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/5.png" alt="5"/></p>
-
-<blockquote>
-<p>一般来讲, 能够用到<strong>anchorPoint</strong>属性的场景, 大多数都是在与图层叠加方面, 不然基本布局就已经够用了, 当然, 这只是在简单页面的基础上来讲而已, 还是看个人需求吧.</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_4">Coordinate Systems</h3>
-
-<blockquote>
-<p><strong>Coordinate Systems</strong>也叫作坐标系, 和<strong>UIView</strong>一样,<strong>CALayer</strong>也是相对于父图层并且按照层级关系来摆放, 如果父图层的位置发生了变化, 那么子图层也会随之而改变.<br/>
-<dr/><br/>
-但某些情况下, 你想要知道这个图层的绝对位置, 或者是相对于另一个图层的位置时, 你就可以使用CALayer所提供的几个API进行处理了:</p>
-</blockquote>
-
-<pre><code class="language-objectivec">    - (CGPoint)convertPoint:(CGPoint)point toView:(nullable UIView *)view;
-    - (CGPoint)convertPoint:(CGPoint)point fromView:(nullable UIView *)view;
-    - (CGRect)convertRect:(CGRect)rect toView:(nullable UIView *)view;
-    - (CGRect)convertRect:(CGRect)rect fromView:(nullable UIView *)view;
-</code></pre>
-
-<blockquote>
-<p>这些方法，可以采取任何一层的坐标系中所定义的点或矩形，并将其转换到另一个坐标系。</p>
-</blockquote>
-
-<h4 id="toc_5">翻转CALayer的几何图层</h4>
-
-<blockquote>
-<p>这里再普及一个概念, 我们都知道在<strong>iOS</strong>当中<strong>CALayer</strong>的<strong>position</strong>是在父图层的左上角, 但在<strong>Mac OS</strong>当中, 一般来说是在左下角, 而<strong>Core Animation</strong>为了解决这个问题, 提供了一个<strong>BOOL</strong>属性<strong>geometryFlipped</strong>来适配这两种情况, 它决定了一个图层的坐标是否相对于父图层且垂直翻转, 如果在<strong>iOS</strong>上把<strong>geometryFlipped</strong>设置为<strong>YES</strong>的话, 那么图层的排版就会沿着底部来排版, 而不是我们通常所看到的那样, 包括它的子图层也是如此, 除非你再把子图层里的<strong>geometryFlipped</strong>属性设置为<strong>YES</strong>.</p>
-
-<p>直接看Demo吧:</p>
-</blockquote>
-
-<pre><code class="language-objectivec">- (void)layerGeometryFlipped {
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
-    
-    view.backgroundColor = [UIColor blueColor];
-    view.layer.geometryFlipped = YES;
-    
-    CALayer *layer = [CALayer layer];
-    
-    layer.frame = CGRectMake(0, 0, 25, 25);
-    layer.backgroundColor = [UIColor redColor].CGColor;
-    
-    [view.layer addSublayer:layer];
-    
-    [self.view addSubview:view];
-}
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/6.png" alt="6"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/7.png" alt="7"/></p>
-
-<h4 id="toc_6">Z坐标轴</h4>
-
-<blockquote>
-<p>其实<strong>CALayer</strong>除了有<strong>UIView</strong>常规的二维坐标轴之外, 还有一个<strong>Z坐标轴</strong>, 也就是说<strong>CALayer</strong>存在于三维空间当中.<br/>
-<dr/><br/>
-除了我们之前接触过的<strong>position</strong>和<strong>anchorPoint</strong>之外, 还有两个<strong>Z坐标轴</strong>的属性, 叫做<strong>zPosition</strong>和<strong>anchorPointZ</strong>, 且都是<strong>CGFloat</strong>类型.<br/>
-<dr/><br/>
-<strong>zPosition</strong>这个属性在通常情况下并不常用, 在后面我们涉及到一些3D转换的内容时才会去使用这个<strong>zPosition</strong>属性, <strong>zPosition</strong>属性除了用来做3D转换之外, 更多是用来改变<strong>CALayer</strong>的显示顺序了.</p>
-
-<p>来看看Demo吧</p>
-</blockquote>
-
-<pre><code class="language-objectivec">- (void)viewsZPosition {
-    
-    UIView *greenView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
-    
-    greenView.backgroundColor = [UIColor greenColor];
-    greenView.layer.zPosition = 1.0f;
-    
-    UIView *redView = [[UIView alloc] initWithFrame:CGRectMake(150, 150, 100, 100)];
-    
-    redView.backgroundColor = [UIColor redColor];
-    
-    [self.view addSubview:greenView];
-    [self.view addSubview:redView];
-}
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/8.png" alt="8"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/9.png" alt="9"/></p>
-
-<hr/>
-
-<h3 id="toc_7">Hit Testing</h3>
-
-<blockquote>
-<p>在之前的文章里, 我们知道CALayer并不能处理任何响应链的事件, 所以不能直接去处理触摸事件或者手势, 但是呢, CALayer提供了一些方法可以让你知道你知道你点击了这个CALayer.</p>
-</blockquote>
-
-<pre><code class="language-objectivec">- (void)containsPoint;
-- (void)hitTest;
-</code></pre>
-
-<blockquote>
-<p>我们直接来看看代码吧:</p>
-</blockquote>
-
-<pre><code class="language-objectivec">- (void)hitTestingLayer {
-    
-    _backgroundView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
-    
-    _backgroundView.backgroundColor = [UIColor grayColor];
-    
-    _blueLayer = [CALayer layer];
-    
-    _blueLayer.backgroundColor = [UIColor blueColor].CGColor;
-    _blueLayer.frame = CGRectMake(25, 25, 50, 50);
-    
-    [_backgroundView.layer addSublayer:_blueLayer];
-    
-    [self.view addSubview:_backgroundView];
-}
-
-- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event {
-    
-    CGPoint point = [[touches anyObject] locationInView:self.view];
-    
-    CALayer *layer = [self.backgroundView.layer hitTest:point];
-    
-    UIAlertView *alerView = [[UIAlertView alloc] initWithTitle:@&quot;你点击了屏幕&quot;
-                                                       message:@&quot;&quot;
-                                                      delegate:nil
-                                             cancelButtonTitle:@&quot;确定&quot;
-                                             otherButtonTitles:nil, nil];
-
-    if (layer == self.blueLayer) {
-        
-        alerView.message = @&quot;你点中了蓝色的Layer&quot;;
-        
-    } else if (layer == self.backgroundView.layer){
-        
-        alerView.message = @&quot;你点中了灰色的Layer&quot;;
-        
-    } else {
-        alerView.message = @&quot;你点中了其他的Layer&quot;;
-    }
-    
-    [alerView show];
-}
-</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/10.png" alt="10"/></p>
-
-<p><img src="https://raw.githubusercontent.com/CainRun/CoreAnimation/master/3.LayerGeometry/images/11.png" alt="11"/></p>
-
-<hr/>
-
-<h3 id="toc_8">Automatic Layout</h3>
-
-<blockquote>
-<p>所谓的<strong>Automatic Layout</strong>就是我们经常所说的自动布局, 自动布局是苹果在<strong>iOS 6</strong>的时候引入进来的一套布局机制, 但当时好像<strong>Xcode</strong>不够给力, 最终并没有得到很好的运用.<br/>
-<dr/><br/>
-在<strong>Mac OS</strong>当中<strong>CALayer</strong>有一个叫做<strong>layoutManager</strong>的属性, 它可以通过<strong>CALayoutManager</strong>协议和<strong>CAConstraintLayoutManger</strong>类来实现自动布局, 但这个东东在<strong>iOS</strong>上并不能使用, 详细我也不太了解.<br/>
-<dr/><br/>
-再补充多一点, 在我们对<strong>UIView</strong>使用自动布局的时候, 你可以直接使用<strong>UIView</strong>提供的<strong>UIViewAutoresizingMask</strong>和<strong>NSLayoutConstraint</strong>两个API进行布局, 但如果你要对一个<strong>CALayer</strong>进行布局的话, 那么最简单的方式就是使用<strong>CALayerDelegate</strong>提供的<strong>API</strong>:</p>
-</blockquote>
-
-<pre><code class="language-objectivec"> - (void)layoutSublayersOfLayer:(CALayer *)layer;
-</code></pre>
-
-<blockquote>
-<p>当<strong>CALayer</strong>的<strong>bounds</strong>发生了改变或者<strong>- (void)setNeedsLayout;</strong>方法被调用的时候, 上面所提及的<strong>API</strong>就会被调用, 这样子你就可以在上面所提及的<strong>API</strong>里手动去调整<strong>CALayer</strong>的布局.<br/>
-<dr/><br/>
-但这样子会有一个致命的问题, 由于<strong>CALayer</strong>并没有<strong>autoresizingMask</strong>以及<strong>constraints</strong>属性, 所以不能像<strong>UIView</strong>那样自适应屏幕旋转, 这也是为什么绝大多数人选择使用<strong>UIView</strong>进行布局的原因之一.<br/>
-<dr/><br/>
-这里我就不多说了, 自动布局的知识点在谷歌搜一大堆, 有神马<strong>xib</strong>的, <strong>storyboard</strong>的, 还有纯代码的, 但是呢, 纯代码的自动布局我只服<strong><a href="https://github.com/SnapKit/Masonry">Masonry</a></strong>, 也有<strong><a href="https://github.com/SnapKit/SnapKit">Swift</a></strong>版本的, 大家可以自行去了解一下, 使用教程神马的, 在谷歌搜搜也是有一堆的, 这里就不做介绍了~</p>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_9">总结</h3>
-
-<blockquote>
-<p>说了那么多, 常规的总结一下, 这次我们更深入的了解了<strong>CALayer</strong>几何图层, 其中包括: </p>
-
-<ul>
-<li><strong>Layout</strong>:<strong>CALayer</strong>的常规布局</li>
-<li><strong>AnchorPoint</strong>: <strong>CALayer</strong>的锚点</li>
-<li><strong>Coordinate Systems</strong>: <strong>CALayer</strong>的坐标轴, 其中包括如何翻转<strong>CALayer</strong>的几何图层, 还有就是<strong>Z坐标轴</strong>.</li>
-<li><strong>Hit Testing</strong>: <strong>CALayer</strong>如何知道用户是否点击该图层</li>
-<li><strong>Automatic Layout</strong>: 有关于<strong>CALayer</strong>以及<strong>UIView</strong>的自动布局, 以及一个第三方的布局框架</li>
-</ul>
-</blockquote>
-
-<hr/>
-
-<h3 id="toc_10">工程地址</h3>
-
-<p>项目地址: <a href="https://github.com/CainRun/CoreAnimation">https://github.com/CainRun/CoreAnimation</a></p>
-
-<hr/>
-
-<h3 id="toc_11">最后</h3>
 
 <p><center>码字很费脑, 看官赏点饭钱可好</center></p>
 
