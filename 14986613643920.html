@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>  
 	  
-  	iOS网络知识 - Cain For iOS
+  	玩转iOS开发：iOS中的Socket编程(一) - Cain For iOS
   	
 	</title>
 
@@ -120,24 +120,10 @@
 		</div>	
 		<div class="mid-col">
 			<div class="mid-col-container"> <div id="content" class="inner">
-<div itemscope itemtype="http://schema.org/Blog">
 
-
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-28T22:49:24+08:00" itemprop="datePublished">2017/6/28</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86.html'>iOS网络知识</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14986613643920.html" itemprop="url">
-		玩转iOS开发：iOS中的Socket编程(一)</a></h1>
+	<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+		<h1 class="title" itemprop="name">玩转iOS开发：iOS中的Socket编程(一)</h1>
 		<div class="entry-content" itemprop="articleBody">
-			
 			<h3 id="toc_0">Socket的解释</h3>
 
 <p><code>Socket</code>翻译过来中文称为<code>套接字</code>, 这里我找到了一段比较官方的解释<code>Socket</code>是什么东西: </p>
@@ -150,125 +136,149 @@
 
 <p>酱紫应用层可以和传输层通过这个<code>Socket API</code>, 区分来自不同的应用程序进程或者是网络通信, 使得数据可以并发传输.</p>
 
+<span id="more"></span><!-- more -->
 
+<hr/>
 
-			 
-			<a href="14986613643920.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
+<h3 id="toc_1">Socket的C/S端</h3>
+
+<p><code>Socket</code>的使用其实也没有我们想象中那么难, 只是这里需要有一个前提条件, 因为建立<code>Socket</code>通信是至少需要一对<code>套接字</code>, 其中一个是运行在我们的客户端上, 称为<code>Client Socket</code>, 还有一个是运行在服务器上, 称为<code>Service Socket</code>.</p>
+
+<p><code>Socket</code>之间的连接过程分为三个过程: </p>
+
+<ul>
+<li>服务器监听</li>
+<li>客户端请求</li>
+<li>连接确认</li>
+</ul>
+
+<p><code>Socket</code>同时支持<code>TCP</code>和<code>UDP</code>两种传输协议, 啥意思呢?</p>
+
+<p>当<code>Socket</code>使用<code>TCP</code>协议通信的时候, <code>Socket</code>就是一个<code>TCP</code>的连接, 那么如果<code>Socket</code>使用的是<code>UDP</code>协议通信, 那么这时候的<code>Socket</code>就是<code>UDP</code>连接.</p>
+
+<p>如果要有图的话, 大概就这样了:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/Socket%E7%BC%96%E7%A8%8B(%E4%B8%80)/1.png" alt="1"/></p>
+
+<hr/>
+
+<h3 id="toc_2">网络的协议</h3>
+
+<p>既然降到<code>Socket</code>, 那么就要说说网络里面的协议, 这里就要普及一下网络里面的到底都有啥, 首先我们要知道, 在网络里面一共有<code>七层协议</code>.</p>
+
+<p>从上往下分的话:</p>
+
+<ul>
+<li>应用层</li>
+<li>表达层</li>
+<li>会话层</li>
+<li>传输层</li>
+<li>网络层</li>
+<li>数据链路层</li>
+<li>物理层</li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/Socket%E7%BC%96%E7%A8%8B(%E4%B8%80)/2.png" alt="2"/></p>
+
+<p>但我们通常会把底下三层(<code>网络层</code>, <code>数据链路层</code>, <code>物理层</code>)统称为<code>媒体层</code>, 一般都是专门搞网络的网络工程师大神们研究的对象.</p>
+
+<p>而上面四层(<code>传输层</code>, <code>会话层</code>, <code>表示层</code>, <code>应用层</code>)被称为<code>主机层</code>, 也是广大用户所面向和关心的内容.</p>
+
+<p>说到协议, 我们就不得不提一下<code>HTTP</code>:</p>
+
+<ul>
+<li><code>HTTP</code>协议: 它是对应着<code>应用层</code>.</li>
+<li><code>TCP</code>协议: 它是对应着<code>传输层</code>.</li>
+<li><code>IP</code>协议: 则对应着<code>网络层</code>.</li>
+</ul>
+
+<p>而<code>HTTP</code>协议是基于<code>TCP</code>连接的, 所以三者根本就没啥可比性.</p>
+
+<ul>
+<li><code>TCP/IP</code>协议: 属于传输层协议, 主要解决数据如何在网络中传输.</li>
+<li><code>HTTP</code>协议: 属于应用层, 主要解决如何包装数据.</li>
+</ul>
+
+<p>而<code>Socket</code>是<code>应用层</code>与<code>TCP/IP</code>协议族通信中间的软件抽象层, 是它的一组接口.</p>
+
+<hr/>
+
+<h3 id="toc_3">TCP/IP五层模型</h3>
+
+<p>既然都提到了<code>TCP/IP</code>这个协议, 那么就来讲讲, <code>TCP/IP</code>里的五层模型.</p>
+
+<p>这里面的五层模型分别为:</p>
+
+<ul>
+<li>应用层</li>
+<li>传输层</li>
+<li>网络层</li>
+<li>数据链路层</li>
+<li>物理层</li>
+</ul>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/Socket%E7%BC%96%E7%A8%8B(%E4%B8%80)/3.png" alt="3"/></p>
+
+<p>那么我们日常生活中所接触到的网络器材有哪些? 分别处于哪个模型?</p>
+
+<ul>
+<li>物理层: 中继器, 集线器, 双绞线</li>
+<li>数据链路层: 以太网交换机(Modem), 网卡(网卡有一半是工作在物理层)</li>
+<li>网络层: 路由器, 三层交换机</li>
+<li>传输层: 四层交换机, 路由器(也有一些特殊的路由器在传输层中工作)</li>
+</ul>
+
+<p>其中<code>TCP/IP</code>的<code>应用层</code>比较特殊, 它是包含了<code>会话层</code>, <code>表达层</code>, <code>应用层</code>等功能, 这里要说一点, <code>TCP/IP</code>协议并不能在传输层总是保证可靠的传输数据包, 但七层模型可以做到.</p>
+
+<p><code>TCP/IP</code>还提供了另一种传输模式, 叫做<code>UDP(用户数据报协议)</code>, 但这种协议不能保证可靠的数据包传输.</p>
+
+<p>这里再解释一下:</p>
+
+<ul>
+<li><code>TCP</code>: 面向连接, 提供可靠的数据传输, 用于传输大量数据, 使用数据流模式, 速度慢, 建立连接时开销较大</li>
+<li><code>UDP</code>: 非面向连接, 传输不可靠, 用于传输少量的数据, 速度快</li>
+</ul>
+
+<p>总的来说<code>TCP</code>是一个数据流的模式协议, 而<code>UDP</code>是一种数据报模式的协议.</p>
+
+<p>刚刚说了<code>Socket</code>是基于<code>TCP/IP</code>协议上的抽象, 也就是说<code>Socket</code>只是对<code>TCP/IP</code>的封装, 本身是没有协议的, 只有通过<code>Socket API</code>, 我们才能够使用<code>TCP/IP</code>协议.</p>
+
+<p>大概的关系图就是酱紫吧:</p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/iOS-NetWork/master/Socket%E7%BC%96%E7%A8%8B(%E4%B8%80)/4.png" alt="4"/></p>
+
+<hr/>
+
+<h3 id="toc_4">总结</h3>
+
+<p>这篇文章虽然不涉及任何的代码, 但都是一些必备的基础知识, 如果想更详细的了解或者是找更官方的文档, 可以去看看苹果爸爸提供的<a href="https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/NetworkingOverview/Introduction/Introduction.html">Networking Overview</a>这篇文章.</p>
+
+<hr/>
+
+<h3 id="toc_5">最后</h3>
+
+<p><center>码字很费脑, 看官赏点饭钱可好</center></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E5%BE%AE%E4%BF%A1QRC.jpg" alt="微信"/></p>
+
+<p><img src="https://raw.githubusercontent.com/CainRun/PayProject/master/WeChatPay-Objective-C/Images/%E6%94%AF%E4%BB%98%E5%AE%9DQRC.jpg" alt="支付宝"/></p>
+
 		</div>
-
 	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-28T11:39:29+08:00" itemprop="datePublished">2017/6/28</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86.html'>iOS网络知识</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14986211698053.html" itemprop="url">
-		玩转iOS开发：NSURLSession讲解(三)</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">前言</h3>
+	<div class="share-comment">
+	 <!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2137618"></script>
+<!-- UY END -->
 
-<p>虽然前面两讲都是说了<code>NSURLSession</code>的一些理论上的知识, 但我们现在起码对<code>NSURLSession</code>有个大概的了解, 并不会像一开始的那样, 一脸懵逼的看着, 这个请求是什么鬼, 那个方法是什么鬼, <code>Task</code>是什么东西, 如果没有去看的朋友们可以去看看前面两讲<a href="https://cainrun.github.io/14980521480137.html">玩转iOS开发：NSURLSession讲解(一)</a>和 <a href="https://cainrun.github.io/14981091675323.html">玩转iOS开发：NSURLSession讲解(二)</a>, 大神就随意啦.</p>
+	  
 
-<p>这里的工程是仿照<a href="https://www.raywenderlich.com">RayWenderlich</a><code>(需要翻墙)</code>的一篇文章<a href="https://www.raywenderlich.com/158106/urlsession-tutorial-getting-started">URLSession Tutorial: Getting Started</a>, 喜欢看原文或者是<code>Swift</code>的朋友也可以去看看, 我这个是<code>Objective-C</code>版本的.</p>
+	  
+	      <div class="ds-thread" data-thread-key="14986613643920.html" data-url="https://cainrun.github.io/14986613643920.html" data-title="玩转iOS开发：iOS中的Socket编程(一)"></div>
+	  
 
-<p><strong>注意: 本工程是在<code>Xcode 9 beta 2</code>, <code>iOS 11</code>的环境下运行的.</strong></p>
-
-
-
-			 
-			<a href="14986211698053.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-22T13:26:07+08:00" itemprop="datePublished">2017/6/22</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86.html'>iOS网络知识</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14981091675323.html" itemprop="url">
-		玩转iOS开发：NSURLSession讲解(二)</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">继续观看知识</h3>
-
-<p>接着上一篇文章继续, 如果没看过的朋友可以去看看<a href="https://cainrun.github.io/14980521480137.html">玩转iOS开发：NSURLSession讲解(一)</a>, 不然的话会不知头不知尾, 那么接来下继续讲.</p>
-
-
-
-			 
-			<a href="14981091675323.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-21T21:35:48+08:00" itemprop="datePublished">2017/6/21</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86.html'>iOS网络知识</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14980521480137.html" itemprop="url">
-		玩转iOS开发：NSURLSession讲解(一)</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">NSURLSession</h3>
-
-<p>在2013年的时候, 苹果推出了<code>iOS 7</code>, 这个版本的<code>iOS</code>被称为革命性的<code>iOS</code>, 而我们以前所用到的<code>NSURLConnection</code>这个网络库也被苹果爸爸给重构, 并且重新命名为<code>NSURLSession</code>.</p>
-
-<p>现在在<code>GitHub</code>里用的最多的两个库<a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a>, <a href="https://github.com/rs/SDWebImage">SDWebImage</a>都是用了<code>NSURLSession</code>.</p>
-
-<p>这里就不废话了, 直接来知识点吧.</p>
-
-
-
-			 
-			<a href="14980521480137.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
-  
-
-</div>
-<nav id="pagenavi">
-	 
-	
-	<div class="center"><a href="archives.html">Blog Archives</a></div>
-
-</nav>
-
-</div>
-
-
-
-        </div>
+	</div>
+</div>        </div>
 			<footer id="footer" class="inner">Copyright &copy; 2017
 Powered by <a target="_blank" href="https://cainrun.github.io">Code For iOS</a> &nbsp;&nbsp;
 Theme by <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a>

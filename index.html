@@ -126,6 +126,43 @@
 	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
 		<div class="meta">
 			<div class="date">
+				<time datetime="2017-06-28T22:49:24+08:00" itemprop="datePublished">2017/6/28</time>
+			</div>
+			<div class="tags">posted in 
+			
+			    <a class='category' href='iOS%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86.html'>iOS网络知识</a>&nbsp;
+			 
+			</div>
+		</div>
+		<h1 class="title" itemprop="name"><a href="14986613643920.html" itemprop="url">
+		玩转iOS开发：iOS中的Socket编程(一)</a></h1>
+		<div class="entry-content" itemprop="articleBody">
+			
+			<h3 id="toc_0">Socket的解释</h3>
+
+<p><code>Socket</code>翻译过来中文称为<code>套接字</code>, 这里我找到了一段比较官方的解释<code>Socket</code>是什么东西: </p>
+
+<blockquote>
+<p><code>Socket</code>是通信的基石，是支持<code>TCP/IP</code>协议的网络通信的基本操作单元，包含进行网络通信必须的五种信息：<code>连接使用的协议</code>，<code>本地主机的IP地址</code>，<code>本地进程的协议端口</code>，<code>远地主机的IP地址</code>，<code>远地进程的协议端口</code>。</p>
+</blockquote>
+
+<p>在实际当中, 肯定是不止一个<code>TCP/IP</code>或者是一个应用程序进程在传输数据, 为了可以区分开来, 系统提供了一套<code>API</code>, 方便<code>TCP/IP</code>与应用程序交互, 一般把这个称为<code>Socket API</code>.</p>
+
+<p>酱紫应用层可以和传输层通过这个<code>Socket API</code>, 区分来自不同的应用程序进程或者是网络通信, 使得数据可以并发传输.</p>
+
+
+
+			 
+			<a href="14986613643920.html#more" class="more-link">Read on &rarr;</a>
+    		
+			
+		</div>
+
+	</article>
+ 
+	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+		<div class="meta">
+			<div class="date">
 				<time datetime="2017-06-28T11:39:29+08:00" itemprop="datePublished">2017/6/28</time>
 			</div>
 			<div class="tags">posted in 
@@ -346,37 +383,6 @@
 
 			 
 			<a href="14975320210226.html#more" class="more-link">Read on &rarr;</a>
-    		
-			
-		</div>
-
-	</article>
- 
-	<article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-		<div class="meta">
-			<div class="date">
-				<time datetime="2017-06-15T11:53:42+08:00" itemprop="datePublished">2017/6/15</time>
-			</div>
-			<div class="tags">posted in 
-			
-			    <a class='category' href='iOS%2010%E7%89%B9%E6%80%A7.html'>iOS 10特性</a>&nbsp;
-			 
-			</div>
-		</div>
-		<h1 class="title" itemprop="name"><a href="14974988224036.html" itemprop="url">
-		玩转iOS开发：iOS 10 新特性《Notification Content Extensions》</a></h1>
-		<div class="entry-content" itemprop="articleBody">
-			
-			<h3 id="toc_0">Notification Content Extensions</h3>
-
-<p>在之前我们就讲过苹果爸爸在<code>iOS 10</code>推出了一个新的<code>UserNotification</code>框架, 但苹果爸爸的野心不小, 不单单推出框架那么简单, 而且连<code>Extension</code>都给你搞了一个, 哼哼, 我看还有谁~</p>
-
-<p>这里所演示的项目是和之前一样的, 如果找不到的盆友可以到<a href="https://cainrun.github.io/14973700585982.html">这里</a>去看看.</p>
-
-
-
-			 
-			<a href="14974988224036.html#more" class="more-link">Read on &rarr;</a>
     		
 			
 		</div>
